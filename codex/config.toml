@@ -1,0 +1,35 @@
+model = "gpt-5.2-codex"
+
+[features]
+web_search_request = true
+
+sandbox_mode = "workspace-write"
+[sandbox_workspace_write]
+exclude_tmpdir_env_var = true
+exclude_slash_tmp = true
+writable_roots = []
+network_access = false
+
+[notice]
+hide_gpt5_1_migration_prompt = true
+"hide_gpt-5.1-codex-max_migration_prompt" = true
+
+[notice.model_migrations]
+"gpt-5.1-codex-max" = "gpt-5.2-codex"
+
+[mcp_servers.context7]
+args = ["-y", "@upstash/context7-mcp", "--api-key", "${CONTEXT7_API_KEY}"]
+command = "npx"
+startup_timeout_ms = 20_000
+
+[mcp_servers.github-mcp-server]
+command = "docker"
+args = ["run", "--rm", "-i", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_MCP_API_TOKEN}", "ghcr.io/github/github-mcp-server"]
+startup_timeout_ms = 15_000
+
+[mcp_servers.notion-mcp-server]
+command = "npx"
+args = ["-y", "@notionhq/notion-mcp-server", "--auth-token", "${NOTION_TOKEN}"]
+
+
+
