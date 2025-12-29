@@ -5,3 +5,7 @@ build-generator:
 gen-docs:
 	$(MAKE) build-generator
 	./bin/generator -input=./docs/ja -output=./out/.codex/
+
+deploy-codex-docs:
+	cp -pr ./out/.codex/skills/* ~/.codex/skills/
+	cp -pr ./out/.codex/agents ~/.codex/.
