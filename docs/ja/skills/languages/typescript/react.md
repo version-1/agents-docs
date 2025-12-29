@@ -1,7 +1,7 @@
-```
-name: react
+---
+name: language-react
 description: React でのコーディングに関するベストプラクティスとガイドラインを定義します。
-```
+---
 
 # React コーディングガイドライン
 

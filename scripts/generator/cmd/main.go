@@ -203,7 +203,6 @@ func generateSkills(inRoot, outRoot string) error {
 
 		found++
 
-		fmt.Println("Processing:", path)
 		excludePaths := []string{
 			"skills/skills.md",
 			"Agents.md",
@@ -215,16 +214,18 @@ func generateSkills(inRoot, outRoot string) error {
 			}
 		}
 
-		// Base name without extension, uppercased (SKILL.md style)
-		outRootPath := strings.Replace(filepath.Dir(path), "docs/ja", "", 1)
-		fmt.Println("Path:", filepath.Dir(path), outRoot, outRootPath)
+		// 拡張子を除いたパス/SKILL.md で出力
+		joinedPath := filepath.Join(filepath.Dir(path), filepath.Base(path[:len(path)-len(filepath.Ext(path))]))
+		outRootPath := strings.Replace(joinedPath, "docs/ja", "", 1)
 		outName := filepath.Join(outRootPath, "SKILL.md")
 		outPath := filepath.Join(outRoot, outName)
+		outDir := filepath.Dir(outPath)
 
-		if err := os.MkdirAll(filepath.Dir(outPath), 0o755); err != nil {
-			return fmt.Errorf("mkdir %q: %w", filepath.Dir(outPath), err)
+		if err := os.MkdirAll(outDir, 0o755); err != nil {
+			return fmt.Errorf("mkdir %q: %w", outDir, err)
 		}
 
+		fmt.Println(path, "	->", outPath)
 		b, err := os.ReadFile(path)
 		if err != nil {
 			return fmt.Errorf("read %q: %w", path, err)
