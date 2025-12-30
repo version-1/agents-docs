@@ -28,6 +28,8 @@ agents/ 配下のドキュメントを読んでコードの設計・実装を行
 
 ## 役割別ドキュメント
 
+相対パスは codex なら ~/.codex` ディレクトリを基準としています。
+
 - `agents/roles/role.md` : エージェントの役割全般に関するガイドライン
 - `agents/roles/planner.md` : Planner エージェントの役割に関するガイドライン
 - `agents/roles/implementer.md` : Implementer エージェントの役割に関するガイドライン
