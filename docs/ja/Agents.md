@@ -35,3 +35,7 @@ agents/ 配下のドキュメントを読んでコードの設計・実装を行
 - `agents/roles/implementer.md` : Implementer エージェントの役割に関するガイドライン
 - `agents/roles/verifier.md` : Verifier エージェントの役割に関するガイドライン
 - `agents/roles/doc.md` : Doc エージェントの役割に関するガイドライン
+
+## 言語別ドキュメント
+
+- `agents/skills/languages/<language>.md` : 各プログラミング言語に関するスキルガイドライン

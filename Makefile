@@ -9,3 +9,4 @@ gen-docs:
 deploy-codex-docs:
 	cp -pr ./out/.codex/skills/* ~/.codex/skills/
 	cp -pr ./out/.codex/agents ~/.codex/.
+	cp -p ./out/.codex/Agents.md ~/.codex/.

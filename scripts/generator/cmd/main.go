@@ -190,7 +190,7 @@ func generateSkills(inRoot, outRoot string) error {
 				return fs.SkipDir
 			}
 
-			if !strings.Contains(path, "skills") && !strings.Contains(path, "docs/ja") {
+			if !strings.Contains(path, "skills") && path != inRoot {
 				fmt.Println("skipping dir:", path)
 				return fs.SkipDir
 			}
