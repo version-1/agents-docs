@@ -13,9 +13,20 @@ agents/ 配下のドキュメントを読んでコードの設計・実装を行
 │   │   ├── implementer.md
 │   │   ├── planner.md
 │   │   ├── role.md
+│   │   ├── scout.md
 │   │   └── verifier.md
-│   └── skills             エージェント共通のスキルガイド
-│       └── skills.md
+│   ├── codestyle          コードスタイルの指針
+│   │   ├── codestyle.md
+│   │   ├── languages
+│   │   │   └── go.md
+│   │   └── layers
+│   │       ├── controller.md
+│   │       ├── entity.md
+│   │       ├── model.md
+│   │       ├── repository.md
+│   │       └── serialize.md
+│   └── testing            テスト方針
+│       └── testing.md
 ├── skills
 │   ├── architectures アーキテクチャ別のスキル
 │   │   └── <name>.md
@@ -24,7 +35,8 @@ agents/ 配下のドキュメントを読んでコードの設計・実装を行
 │   ├── practices     コードレビュー、テスト、デプロイなどのガイドライン
 │   │   └── <name>.md
 │   ├── roles         エージェントの役割(人格)別ドキュメント
-│   │   └── <role>.md
+│   │   ├── <role>.md
+│   │   └── scout.md
 │   └── skills.md     スキル作成ガイドライン
 └── Agents.md
 
@@ -33,14 +45,15 @@ agents/ 配下のドキュメントを読んでコードの設計・実装を行
 
 ## 役割別ドキュメント
 
-相対パスは codex なら ~/.codex` ディレクトリを基準としています。
+相対パスは codex なら `~/.codex` ディレクトリを基準としています。
 
 - `agents/roles/role.md` : エージェントの役割全般に関するガイドライン
 - `agents/roles/planner.md` : Planner エージェントの役割に関するガイドライン
 - `agents/roles/implementer.md` : Implementer エージェントの役割に関するガイドライン
+- `agents/roles/scout.md` : Scout エージェントの役割に関するガイドライン
 - `agents/roles/verifier.md` : Verifier エージェントの役割に関するガイドライン
 - `agents/roles/doc.md` : Doc エージェントの役割に関するガイドライン
 
 ## 言語別ドキュメント
 
-- `agents/skills/languages/<language>.md` : 各プログラミング言語に関するスキルガイドライン
+- `skills/languages/<language>.md` : 各プログラミング言語に関するスキルガイドライン

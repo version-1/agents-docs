@@ -35,7 +35,6 @@
 └── scripts                         ドキュメント生成用スクリプト
 ```
 
-
 ## コマンド
 
 - `make build-skillmaker` コマンドで skills 生成用のバイナリを生成します。
