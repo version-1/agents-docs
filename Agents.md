@@ -40,3 +40,11 @@
 - `make build-skillmaker` コマンドで skills 生成用のバイナリを生成します。
 - `make gen-docs` で環境で使用するドキュメントを生成します。
 - `make deploy-codex-docs` で生成済みのドキュメントを `~/.codex` に反映します。
+
+## テスト実行時の補足
+
+テスト実行でキャッシュ権限エラーが出る場合は、以下の環境変数を指定して実行してください。
+
+```
+GOMODCACHE=/tmp/gomodcache GOCACHE=/tmp/gocache GOTOOLCHAIN=local go test ./...
+```
