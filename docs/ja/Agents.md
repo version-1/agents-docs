@@ -14,11 +14,17 @@ agents/ 配下のドキュメントを読んでコードの設計・実装を行
 │   │   ├── planner.md
 │   │   ├── role.md
 │   │   └── verifier.md
+│   └── skills             エージェント共通のスキルガイド
+│       └── skills.md
 ├── skills
 │   ├── architectures アーキテクチャ別のスキル
+│   │   └── <name>.md
 │   ├── languages     プログラミング言語別のスキル
+│   │   └── <language>.md
 │   ├── practices     コードレビュー、テスト、デプロイなどのガイドライン
+│   │   └── <name>.md
 │   ├── roles         エージェントの役割(人格)別ドキュメント
+│   │   └── <role>.md
 │   └── skills.md     スキル作成ガイドライン
 └── Agents.md
 
