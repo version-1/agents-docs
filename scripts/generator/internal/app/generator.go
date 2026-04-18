@@ -21,12 +21,17 @@ type FileSystem interface {
 	WalkDir(root string, fn iofs.WalkDirFunc) error
 }
 
-type Generator struct {
-	fs FileSystem
+type SkillGenerator interface {
+	Generate(fsys FileSystem, inRoot, outRoot string) error
 }
 
-func NewGenerator(fs FileSystem) *Generator {
-	return &Generator{fs: fs}
+type Generator struct {
+	fs     FileSystem
+	skills SkillGenerator
+}
+
+func NewGenerator(fs FileSystem, skills SkillGenerator) *Generator {
+	return &Generator{fs: fs, skills: skills}
 }
 
 func (g *Generator) Run(inRoot, outRoot string) error {
@@ -56,7 +61,7 @@ func (g *Generator) Run(inRoot, outRoot string) error {
 		return fmt.Errorf("copy docs: %w", err)
 	}
 
-	if err := generateSkills(g.fs, inRoot, outRoot); err != nil {
+	if err := g.skills.Generate(g.fs, inRoot, outRoot); err != nil {
 		return fmt.Errorf("generate skills: %w", err)
 	}
 
@@ -162,7 +167,18 @@ func copyFile(fsys FileSystem, src, dst string, mod os.FileMode) error {
 	return nil
 }
 
-func generateSkills(fsys FileSystem, inRoot, outRoot string) error {
+func ensureTrailingNewline(b []byte) []byte {
+	b = bytes.ReplaceAll(b, []byte("\r\n"), []byte("\n"))
+	if len(b) == 0 || b[len(b)-1] == '\n' {
+		return []byte(b)
+	}
+	return append(b, '\n')
+}
+
+// walkSkills は skills ディレクトリを走査し、各スキルファイルに対して outputPathFn で
+// 出力パスを解決して書き出す共通ロジック。
+// outputPathFn は outRoot、relPath、ファイル内容を受け取り、出力パスを返す。
+func walkSkills(fsys FileSystem, inRoot, outRoot string, outputPathFn func(outRoot, relPath string, content []byte) (string, error)) error {
 	var found int
 
 	walkFn := func(path string, d iofs.DirEntry, walkErr error) error {
@@ -197,17 +213,20 @@ func generateSkills(fsys FileSystem, inRoot, outRoot string) error {
 			return nil
 		}
 
+		b, err := fsys.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("read %q: %w", path, err)
+		}
+
 		found++
-		outPath := domain.SkillOutputPath(outRoot, relPath)
+		outPath, err := outputPathFn(outRoot, relPath, b)
+		if err != nil {
+			return fmt.Errorf("resolve output path for %q: %w", relPath, err)
+		}
 		outDir := filepath.Dir(outPath)
 
 		if err := fsys.MkdirAll(outDir, 0o755); err != nil {
 			return fmt.Errorf("mkdir %q: %w", outDir, err)
-		}
-
-		b, err := fsys.ReadFile(path)
-		if err != nil {
-			return fmt.Errorf("read %q: %w", path, err)
 		}
 
 		b = ensureTrailingNewline(b)
@@ -230,12 +249,4 @@ func generateSkills(fsys FileSystem, inRoot, outRoot string) error {
 
 	fmt.Printf("done: %d file(s)\n", found)
 	return nil
-}
-
-func ensureTrailingNewline(b []byte) []byte {
-	b = bytes.ReplaceAll(b, []byte("\r\n"), []byte("\n"))
-	if len(b) == 0 || b[len(b)-1] == '\n' {
-		return []byte(b)
-	}
-	return append(b, '\n')
 }

@@ -11,12 +11,20 @@ import (
 
 func main() {
 	var (
-		inRoot  = flag.String("input", "", "input root directory to scan (e.g., ./.)")
-		outRoot = flag.String("output", "out/.codex/skills", "output directory (e.g., .out/codex/skills)")
+		inRoot     = flag.String("input", "", "input root directory to scan (e.g., ./.)")
+		outRoot    = flag.String("output", "out/.codex/skills", "output directory (e.g., .out/codex/skills)")
+		flatSkills = flag.Bool("flat-skills", false, "flatten skill directory structure (for Claude)")
 	)
 	flag.Parse()
 
-	gen := app.NewGenerator(infra.OSFS{})
+	var skills app.SkillGenerator
+	if *flatSkills {
+		skills = app.NewFlatSkillGenerator()
+	} else {
+		skills = app.NewPathRespectSkillGenerator()
+	}
+
+	gen := app.NewGenerator(infra.OSFS{}, skills)
 	if err := gen.Run(*inRoot, *outRoot); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)

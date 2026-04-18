@@ -5,7 +5,7 @@ build-generator:
 gen-docs:
 	$(MAKE) build-generator
 	./bin/generator -input=./docs/ja -output=./out/.codex/
-	./bin/generator -input=./docs/ja -output=./out/.claude/
+	./bin/generator -input=./docs/ja -output=./out/.claude/ -flat-skills
 
 tree-out:
 	tree ./out/.codex

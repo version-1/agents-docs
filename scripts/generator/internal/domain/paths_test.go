@@ -63,3 +63,13 @@ func TestSkillOutputPath(t *testing.T) {
 		t.Fatalf("SkillOutputPath(%q, %q) = %q, want %q", outRoot, relPath, got, expected)
 	}
 }
+
+func TestFlatSkillOutputPath(t *testing.T) {
+	t.Parallel()
+
+	outRoot := filepath.FromSlash("out/.claude")
+	expected := filepath.Join("out", ".claude", "skills", "language-go", "SKILL.md")
+	if got := FlatSkillOutputPath(outRoot, "language-go"); got != expected {
+		t.Fatalf("FlatSkillOutputPath(%q, %q) = %q, want %q", outRoot, "language-go", got, expected)
+	}
+}
