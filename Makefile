@@ -4,8 +4,8 @@ build-generator:
 
 gen-docs:
 	$(MAKE) build-generator
-	./bin/generator -input=./docs/ja -output=./out/.codex/
-	./bin/generator -input=./docs/ja -output=./out/.claude/ -flat-skills
+	./bin/generator -input=./docs/ja -output=./out/.codex/ -mode=codex
+	./bin/generator -input=./docs/ja -output=./out/.claude/ -mode=claude
 
 tree-out:
 	tree ./out/.codex

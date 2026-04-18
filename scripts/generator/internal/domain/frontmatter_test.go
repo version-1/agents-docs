@@ -2,24 +2,33 @@ package domain
 
 import "testing"
 
-func TestParseName(t *testing.T) {
+func TestParseFrontmatter(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name      string
-		content   string
-		expected  string
-		expectErr bool
+		name        string
+		content     string
+		wantName    string
+		wantDesc    string
+		expectErr   bool
 	}{
 		{
-			name:     "valid frontmatter",
+			name:     "name and description",
 			content:  "---\nname: language-go\ndescription: Go skill\n---\n# content",
-			expected: "language-go",
+			wantName: "language-go",
+			wantDesc: "Go skill",
 		},
 		{
-			name:     "name with spaces around value",
-			content:  "---\nname:   code-review  \n---\nbody",
-			expected: "code-review",
+			name:     "name only",
+			content:  "---\nname: code-review\n---\nbody",
+			wantName: "code-review",
+			wantDesc: "",
+		},
+		{
+			name:     "spaces around values",
+			content:  "---\nname:   code-review  \ndescription:  some desc  \n---\nbody",
+			wantName: "code-review",
+			wantDesc: "some desc",
 		},
 		{
 			name:      "no frontmatter",
@@ -27,7 +36,7 @@ func TestParseName(t *testing.T) {
 			expectErr: true,
 		},
 		{
-			name:      "frontmatter without name",
+			name:      "missing name",
 			content:   "---\ndescription: something\n---\nbody",
 			expectErr: true,
 		},
@@ -47,18 +56,21 @@ func TestParseName(t *testing.T) {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			got, err := ParseName([]byte(tc.content))
+			got, err := ParseFrontmatter([]byte(tc.content))
 			if tc.expectErr {
 				if err == nil {
-					t.Fatalf("expected error, got %q", got)
+					t.Fatalf("expected error, got %+v", got)
 				}
 				return
 			}
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
-			if got != tc.expected {
-				t.Fatalf("ParseName() = %q, want %q", got, tc.expected)
+			if got.Name != tc.wantName {
+				t.Fatalf("Name = %q, want %q", got.Name, tc.wantName)
+			}
+			if got.Description != tc.wantDesc {
+				t.Fatalf("Description = %q, want %q", got.Description, tc.wantDesc)
 			}
 		})
 	}

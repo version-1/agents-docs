@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"generator/internal/domain"
 	"generator/internal/infra"
 )
 
@@ -47,7 +48,7 @@ func TestGeneratorRun_Nested(t *testing.T) {
 	writeFile(t, filepath.Join(inRoot, "skills", "skills.md"), "skill index")
 	writeFile(t, filepath.Join(inRoot, "skills", "roles", "scout.md"), "---\nname: scout\n---\nscout skill")
 
-	gen := NewGenerator(infra.OSFS{}, NewPathRespectSkillGenerator())
+	gen := NewGenerator(infra.OSFS{}, domain.NewPathRespectSkillGenerator())
 	if err := gen.Run(inRoot, outRoot); err != nil {
 		t.Fatalf("Run() error: %v", err)
 	}
@@ -71,7 +72,7 @@ func TestGeneratorRun_FlatSkills(t *testing.T) {
 	writeFile(t, filepath.Join(inRoot, "skills", "roles", "scout.md"), "---\nname: role-scout\n---\nscout skill")
 	writeFile(t, filepath.Join(inRoot, "skills", "languages", "go", "go.md"), "---\nname: language-go\n---\ngo skill")
 
-	gen := NewGenerator(infra.OSFS{}, NewFlatSkillGenerator())
+	gen := NewGenerator(infra.OSFS{}, domain.NewFlatSkillGenerator())
 	if err := gen.Run(inRoot, outRoot); err != nil {
 		t.Fatalf("Run() error: %v", err)
 	}
@@ -99,7 +100,7 @@ func TestGeneratorRun_FlatSkills_MissingName(t *testing.T) {
 	writeFile(t, filepath.Join(inRoot, "agents", "roles", "role.md"), "role doc")
 	writeFile(t, filepath.Join(inRoot, "skills", "bad.md"), "no frontmatter here")
 
-	gen := NewGenerator(infra.OSFS{}, NewFlatSkillGenerator())
+	gen := NewGenerator(infra.OSFS{}, domain.NewFlatSkillGenerator())
 	if err := gen.Run(inRoot, outRoot); err == nil {
 		t.Fatal("expected error for missing frontmatter name, got nil")
 	}
