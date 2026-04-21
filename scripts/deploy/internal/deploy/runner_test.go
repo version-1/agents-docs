@@ -71,6 +71,189 @@ func TestRunnerDryRunDoesNotWriteFiles(t *testing.T) {
 	}
 }
 
+func TestRunnerExcludesFilesByGlob(t *testing.T) {
+	root := t.TempDir()
+	srcDir := filepath.Join(root, "src")
+	for _, dir := range []string{
+		filepath.Join(srcDir, "nested"),
+		filepath.Join(srcDir, "cache"),
+	} {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			t.Fatal(err)
+		}
+	}
+	for path, content := range map[string]string{
+		filepath.Join(srcDir, "keep.txt"):             "keep",
+		filepath.Join(srcDir, "ignore.tmp"):           "tmp",
+		filepath.Join(srcDir, "nested", "keep.md"):    "md",
+		filepath.Join(srcDir, "nested", "ignore.log"): "log",
+		filepath.Join(srcDir, "cache", "data.txt"):    "cache",
+	} {
+		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {
+      "source": "src",
+      "destination": "dest",
+      "exclude": ["*.tmp", "**/*.log", "cache/**"]
+    }
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runner.Run(config, Options{}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, filepath.Join(root, "dest", "keep.txt"), "keep")
+	assertFileContent(t, filepath.Join(root, "dest", "nested", "keep.md"), "md")
+	assertNotExist(t, filepath.Join(root, "dest", "ignore.tmp"))
+	assertNotExist(t, filepath.Join(root, "dest", "nested", "ignore.log"))
+	assertNotExist(t, filepath.Join(root, "dest", "cache", "data.txt"))
+	if !strings.Contains(out.String(), "SKIP") {
+		t.Fatalf("expected skip output, got:\n%s", out.String())
+	}
+}
+
+func TestRunnerExcludesSingleFileByGlob(t *testing.T) {
+	root := t.TempDir()
+	src := filepath.Join(root, "secret.txt")
+	if err := os.WriteFile(src, []byte("secret"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "secret.txt", "destination": "dest.txt", "exclude": ["secret.*"]}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runner.Run(config, Options{}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertNotExist(t, filepath.Join(root, "dest.txt"))
+	if !strings.Contains(out.String(), "SKIP") {
+		t.Fatalf("expected skip output, got:\n%s", out.String())
+	}
+}
+
+func TestRunnerReplaceRemovesDestinationBeforeCopyingDirectory(t *testing.T) {
+	root := t.TempDir()
+	srcDir := filepath.Join(root, "src")
+	dstDir := filepath.Join(root, "dest")
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(dstDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(srcDir, "current.txt"), []byte("current"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dstDir, "stale.txt"), []byte("stale"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "src", "destination": "dest", "replace": true}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runner.Run(config, Options{}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, filepath.Join(dstDir, "current.txt"), "current")
+	assertNotExist(t, filepath.Join(dstDir, "stale.txt"))
+	if !strings.Contains(out.String(), "REMOVE") {
+		t.Fatalf("expected remove output, got:\n%s", out.String())
+	}
+}
+
+func TestRunnerKeepsDestinationExtrasWhenReplaceIsFalse(t *testing.T) {
+	root := t.TempDir()
+	srcDir := filepath.Join(root, "src")
+	dstDir := filepath.Join(root, "dest")
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(dstDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(srcDir, "current.txt"), []byte("current"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dstDir, "stale.txt"), []byte("stale"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "src", "destination": "dest"}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runner.Run(config, Options{}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, filepath.Join(dstDir, "current.txt"), "current")
+	assertFileContent(t, filepath.Join(dstDir, "stale.txt"), "stale")
+}
+
+func TestRunnerDryRunReplaceDoesNotRemoveDestination(t *testing.T) {
+	root := t.TempDir()
+	srcDir := filepath.Join(root, "src")
+	dstDir := filepath.Join(root, "dest")
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(dstDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(srcDir, "current.txt"), []byte("current"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dstDir, "stale.txt"), []byte("stale"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "src", "destination": "dest", "replace": true}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runner.Run(config, Options{DryRun: true}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, filepath.Join(dstDir, "stale.txt"), "stale")
+	if !strings.Contains(out.String(), "REMOVE") {
+		t.Fatalf("expected remove output, got:\n%s", out.String())
+	}
+}
+
 func TestLoadConfigRequiresItems(t *testing.T) {
 	root := t.TempDir()
 	config := filepath.Join(root, "deploy.json")
@@ -79,6 +262,13 @@ func TestLoadConfigRequiresItems(t *testing.T) {
 	_, err := LoadConfig(config)
 	if err == nil {
 		t.Fatal("expected error")
+	}
+}
+
+func assertNotExist(t *testing.T, path string) {
+	t.Helper()
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		t.Fatalf("expected %s not to exist: %v", path, err)
 	}
 }
 

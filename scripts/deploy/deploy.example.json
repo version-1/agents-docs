@@ -2,11 +2,16 @@
   "items": [
     {
       "source": "../../out/.codex/skills",
-      "destination": "~/.codex/skills"
+      "destination": "~/.codex/skills",
+      "replace": true,
+      "exclude": [
+        "**/.DS_Store"
+      ]
     },
     {
       "source": "../../out/.codex/agents",
-      "destination": "~/.codex/agents"
+      "destination": "~/.codex/agents",
+      "replace": true
     },
     {
       "source": "../../out/.codex/Agents.md",
@@ -18,11 +23,13 @@
     },
     {
       "source": "../../out/.claude/skills",
-      "destination": "~/.claude/skills"
+      "destination": "~/.claude/skills",
+      "replace": true
     },
     {
       "source": "../../out/.claude/agents",
-      "destination": "~/.claude/agents"
+      "destination": "~/.claude/agents",
+      "replace": true
     },
     {
       "source": "../../claude/CLAUDE.md",

@@ -36,7 +36,7 @@ make build-deploy
 | フラグ | 必須 | 説明 |
 |---|---|---|
 | `-config` | Yes | コピー元とコピー先を書いた JSON 設定ファイル |
-| `-dry-run` | No | 実際にはコピーせず、予定される `MKDIR` / `COPY` を出力する |
+| `-dry-run` | No | 実際にはコピーせず、予定される `REMOVE` / `MKDIR` / `COPY` / `SKIP` を出力する |
 
 ### 設定ファイル
 
@@ -47,11 +47,17 @@ make build-deploy
   "items": [
     {
       "source": "../../out/.codex/skills",
-      "destination": "~/.codex/skills"
+      "destination": "~/.codex/skills",
+      "replace": true,
+      "exclude": [
+        "**/.DS_Store",
+        "**/*.tmp"
+      ]
     },
     {
       "source": "../../out/.codex/agents",
-      "destination": "~/.codex/agents"
+      "destination": "~/.codex/agents",
+      "replace": true
     },
     {
       "source": "../../out/.codex/Agents.md",
@@ -67,12 +73,45 @@ make build-deploy
 
 `items` は上から順番に処理されます。ディレクトリもファイルも同じ `source` / `destination` 形式で指定できます。
 
+`replace` は省略可能です。`true` の場合、コピー前に `destination` を削除してから配置します。`false` または未指定の場合は既存ファイルを上書きするだけで、コピー先にある余分なファイルは残します。
+
+`exclude` は省略可能です。コピー元の中で除外したいファイルやディレクトリを glob で指定します。
+
+- パターンは `source` からの相対パスに対して評価します。
+- パス区切りは `/` で指定します。
+- `*` は `/` を含まない任意の文字列に一致します。
+- `?` は `/` を含まない任意の 1 文字に一致します。
+- `**` は `/` を含む任意の文字列に一致します。
+- `/` を含まないパターンはファイル名・ディレクトリ名だけにも一致します。
+- ディレクトリに一致した場合、その配下はまとめてスキップします。
+
+例:
+
+```json
+{
+  "items": [
+    {
+      "source": "./src",
+      "destination": "./dest",
+      "replace": true,
+      "exclude": [
+        "*.tmp",
+        "**/*.log",
+        "cache/**"
+      ]
+    }
+  ]
+}
+```
+
 ### dry-run の出力例
 
 ```text
 DRY-RUN item[0] dir  /repo/out/.codex/skills -> /Users/me/.codex/skills
+REMOVE   /Users/me/.codex/skills
 MKDIR    /Users/me/.codex/skills
 COPY     /repo/out/.codex/skills/example/SKILL.md -> /Users/me/.codex/skills/example/SKILL.md
+SKIP     /repo/out/.codex/skills/example/debug.tmp
 DRY-RUN item[1] file /repo/codex/config.toml -> /Users/me/.codex/config.toml
 COPY     /repo/codex/config.toml -> /Users/me/.codex/config.toml
 ```
@@ -82,5 +121,7 @@ COPY     /repo/codex/config.toml -> /Users/me/.codex/config.toml
 - `source` がファイルの場合、`destination` を配置先ファイルパスとしてコピーします。
 - `source` がディレクトリの場合、ディレクトリの中身を `destination` ディレクトリ配下へコピーします。
 - 既存ファイルは上書きします。
-- コピー先にある余分なファイルは削除しません。
+- `replace` が `false` または未指定の場合、コピー先にある余分なファイルは削除しません。
+- `replace` が `true` の場合、コピー前に `destination` を削除します。
 - 通常ファイルとディレクトリ以外はスキップします。
+- `exclude` に一致したファイルやディレクトリはスキップします。

@@ -11,8 +11,10 @@ type Config struct {
 }
 
 type Item struct {
-	Source      string `json:"source"`
-	Destination string `json:"destination"`
+	Source      string   `json:"source"`
+	Destination string   `json:"destination"`
+	Exclude     []string `json:"exclude"`
+	Replace     bool     `json:"replace"`
 }
 
 func LoadConfig(path string) (Config, error) {
