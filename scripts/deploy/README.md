@@ -21,7 +21,7 @@ go run ./cmd -config=deploy.json -dry-run
 go run ./cmd -config=deploy.json
 ```
 
-`-dry-run` を付けると、実際にはコピーせずに作成予定のディレクトリとコピー予定のファイルを出力します。
+`-dry-run` を付けると、実際にはコピーせずにバックアップ、削除、作成予定のディレクトリとコピー予定のファイルを出力します。
 
 ビルド済みバイナリを使う場合:
 
@@ -73,6 +73,8 @@ make build-deploy
 
 `items` は上から順番に処理されます。ディレクトリもファイルも同じ `source` / `destination` 形式で指定できます。
 
+コピー先に既存のファイルまたはディレクトリがある場合は、コピー前にバックアップします。バックアップは 1 回の実行につき 1 つのタイムスタンプ付きディレクトリにまとめて作成され、`destination` の絶対パス構造を再現します。バックアップ先は設定ファイルと同じディレクトリ配下の `.deploy-backups/<timestamp>/` です。
+
 `replace` は省略可能です。`true` の場合、コピー前に `destination` を削除してから配置します。`false` または未指定の場合は既存ファイルを上書きするだけで、コピー先にある余分なファイルは残します。
 
 `exclude` は省略可能です。コピー元の中で除外したいファイルやディレクトリを glob で指定します。
@@ -108,6 +110,7 @@ make build-deploy
 
 ```text
 DRY-RUN item[0] dir  /repo/out/.codex/skills -> /Users/me/.codex/skills
+BACKUP   /Users/me/.codex/skills -> /repo/scripts/deploy/.deploy-backups/20260421-142600/Users/me/.codex/skills
 REMOVE   /Users/me/.codex/skills
 MKDIR    /Users/me/.codex/skills
 COPY     /repo/out/.codex/skills/example/SKILL.md -> /Users/me/.codex/skills/example/SKILL.md
@@ -120,6 +123,9 @@ COPY     /repo/codex/config.toml -> /Users/me/.codex/config.toml
 
 - `source` がファイルの場合、`destination` を配置先ファイルパスとしてコピーします。
 - `source` がディレクトリの場合、ディレクトリの中身を `destination` ディレクトリ配下へコピーします。
+- コピー先に既存のファイルまたはディレクトリがある場合、コピー前にバックアップします。
+- バックアップ先は `.deploy-backups/<timestamp>/` 配下で、`destination` の絶対パス構造を再現します。
+- 実行時には `BACKUP <destination> -> <backup path>` を出力します。
 - 既存ファイルは上書きします。
 - `replace` が `false` または未指定の場合、コピー先にある余分なファイルは削除しません。
 - `replace` が `true` の場合、コピー前に `destination` を削除します。
