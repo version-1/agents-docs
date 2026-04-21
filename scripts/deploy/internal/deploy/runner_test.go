@@ -32,7 +32,7 @@ func TestRunnerCopiesFilesAndDirectoryContents(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -59,7 +59,7 @@ func TestRunnerDryRunDoesNotWriteFiles(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{DryRun: true}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{DryRun: true, NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -90,7 +90,7 @@ func TestRunnerResolvesSourceFromCurrentDirectory(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -133,7 +133,7 @@ func TestRunnerExcludesFilesByGlob(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -163,7 +163,7 @@ func TestRunnerExcludesSingleFileByGlob(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -199,7 +199,7 @@ func TestRunnerReplaceRemovesDestinationBeforeCopyingDirectory(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -236,7 +236,7 @@ func TestRunnerKeepsDestinationExtrasWhenReplaceIsFalse(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -270,7 +270,7 @@ func TestRunnerDryRunReplaceDoesNotRemoveDestination(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{DryRun: true}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{DryRun: true, NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -300,7 +300,7 @@ func TestRunnerBacksUpExistingDestinationFile(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -338,7 +338,7 @@ func TestRunnerBacksUpExistingDestinationDirectoryBeforeReplace(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -368,7 +368,7 @@ func TestRunnerDryRunBackupDoesNotWriteBackup(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{DryRun: true}) }); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{DryRun: true, NoColor: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
