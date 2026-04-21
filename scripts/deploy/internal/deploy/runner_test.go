@@ -254,6 +254,103 @@ func TestRunnerDryRunReplaceDoesNotRemoveDestination(t *testing.T) {
 	}
 }
 
+func TestRunnerBacksUpExistingDestinationFile(t *testing.T) {
+	root := t.TempDir()
+	src := filepath.Join(root, "src.txt")
+	dst := filepath.Join(root, "dest.txt")
+	if err := os.WriteFile(src, []byte("new"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(dst, []byte("old"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "src.txt", "destination": "dest.txt"}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runner.Run(config, Options{}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, dst, "new")
+	backupPath := backupPathFromOutput(t, out.String())
+	assertFileContent(t, backupPath, "old")
+	if !strings.Contains(backupPath, filepath.Join(".deploy-backups")) {
+		t.Fatalf("expected backup path under .deploy-backups, got %s", backupPath)
+	}
+}
+
+func TestRunnerBacksUpExistingDestinationDirectoryBeforeReplace(t *testing.T) {
+	root := t.TempDir()
+	srcDir := filepath.Join(root, "src")
+	dstDir := filepath.Join(root, "dest")
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(dstDir, "nested"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(srcDir, "current.txt"), []byte("current"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dstDir, "nested", "old.txt"), []byte("old"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "src", "destination": "dest", "replace": true}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runner.Run(config, Options{}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, filepath.Join(dstDir, "current.txt"), "current")
+	assertNotExist(t, filepath.Join(dstDir, "nested", "old.txt"))
+	backupPath := backupPathFromOutput(t, out.String())
+	assertFileContent(t, filepath.Join(backupPath, "nested", "old.txt"), "old")
+}
+
+func TestRunnerDryRunBackupDoesNotWriteBackup(t *testing.T) {
+	root := t.TempDir()
+	src := filepath.Join(root, "src.txt")
+	dst := filepath.Join(root, "dest.txt")
+	if err := os.WriteFile(src, []byte("new"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(dst, []byte("old"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "src.txt", "destination": "dest.txt"}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runner.Run(config, Options{DryRun: true}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, dst, "old")
+	backupPath := backupPathFromOutput(t, out.String())
+	assertNotExist(t, backupPath)
+}
+
 func TestLoadConfigRequiresItems(t *testing.T) {
 	root := t.TempDir()
 	config := filepath.Join(root, "deploy.json")
@@ -263,6 +360,21 @@ func TestLoadConfigRequiresItems(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error")
 	}
+}
+
+func backupPathFromOutput(t *testing.T, output string) string {
+	t.Helper()
+	for _, line := range strings.Split(output, "\n") {
+		if strings.HasPrefix(line, "BACKUP") {
+			parts := strings.Split(line, " -> ")
+			if len(parts) != 2 {
+				t.Fatalf("unexpected backup output: %s", line)
+			}
+			return parts[1]
+		}
+	}
+	t.Fatalf("backup output not found:\n%s", output)
+	return ""
 }
 
 func assertNotExist(t *testing.T, path string) {
