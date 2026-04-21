@@ -42,33 +42,45 @@ func (r Runner) Run(configPath string, opts Options) error {
 			return fmt.Errorf("resolve destination for items[%d]: %w", i, err)
 		}
 
-		if err := r.deployItem(i, src, dst, opts); err != nil {
+		matcher, err := newExcludeMatcher(item.Exclude)
+		if err != nil {
+			return fmt.Errorf("items[%d]: %w", i, err)
+		}
+
+		if err := r.deployItem(i, src, dst, matcher, item.Replace, opts); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (r Runner) deployItem(index int, src, dst string, opts Options) error {
+func (r Runner) deployItem(index int, src, dst string, matcher excludeMatcher, replace bool, opts Options) error {
 	info, err := os.Stat(src)
 	if err != nil {
 		return fmt.Errorf("stat source for items[%d] %q: %w", index, src, err)
 	}
 
 	if info.IsDir() {
-		return r.deployDir(index, src, dst, opts)
+		return r.deployDir(index, src, dst, matcher, replace, opts)
 	}
 	if info.Mode().IsRegular() {
-		return r.deployFile(index, src, dst, info.Mode(), opts)
+		if matcher.Match(filepath.Base(src)) {
+			fmt.Fprintf(r.out, "SKIP     %s\n", src)
+			return nil
+		}
+		return r.deployFile(index, src, dst, info.Mode(), replace, opts)
 	}
 	return fmt.Errorf("unsupported source for items[%d] %q: only regular files and directories are supported", index, src)
 }
 
-func (r Runner) deployDir(index int, src, dst string, opts Options) error {
+func (r Runner) deployDir(index int, src, dst string, matcher excludeMatcher, replace bool, opts Options) error {
 	if opts.DryRun {
 		fmt.Fprintf(r.out, "DRY-RUN item[%d] dir  %s -> %s\n", index, src, dst)
 	} else {
 		fmt.Fprintf(r.out, "DEPLOY  item[%d] dir  %s -> %s\n", index, src, dst)
+	}
+	if err := r.replaceDestination(dst, replace, opts); err != nil {
+		return err
 	}
 
 	return filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
@@ -79,6 +91,13 @@ func (r Runner) deployDir(index int, src, dst string, opts Options) error {
 		rel, err := filepath.Rel(src, path)
 		if err != nil {
 			return err
+		}
+		if matcher.Match(rel) {
+			fmt.Fprintf(r.out, "SKIP     %s\n", path)
+			if d.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
 		}
 		target := filepath.Join(dst, rel)
 
@@ -99,11 +118,14 @@ func (r Runner) deployDir(index int, src, dst string, opts Options) error {
 	})
 }
 
-func (r Runner) deployFile(index int, src, dst string, mode os.FileMode, opts Options) error {
+func (r Runner) deployFile(index int, src, dst string, mode os.FileMode, replace bool, opts Options) error {
 	if opts.DryRun {
 		fmt.Fprintf(r.out, "DRY-RUN item[%d] file %s -> %s\n", index, src, dst)
 	} else {
 		fmt.Fprintf(r.out, "DEPLOY  item[%d] file %s -> %s\n", index, src, dst)
+	}
+	if err := r.replaceDestination(dst, replace, opts); err != nil {
+		return err
 	}
 	return r.copyFile(src, dst, mode, opts)
 }
@@ -138,5 +160,20 @@ func (r Runner) copyFile(src, dst string, mode os.FileMode, opts Options) error 
 	}
 
 	fmt.Fprintf(r.out, "COPY     %s -> %s\n", src, dst)
+	return nil
+}
+
+func (r Runner) replaceDestination(dst string, replace bool, opts Options) error {
+	if !replace {
+		return nil
+	}
+	if opts.DryRun {
+		fmt.Fprintf(r.out, "REMOVE   %s\n", dst)
+		return nil
+	}
+	if err := os.RemoveAll(dst); err != nil {
+		return fmt.Errorf("remove %q: %w", dst, err)
+	}
+	fmt.Fprintf(r.out, "REMOVE   %s\n", dst)
 	return nil
 }
