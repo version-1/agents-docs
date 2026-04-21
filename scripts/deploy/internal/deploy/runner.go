@@ -33,10 +33,15 @@ func (r Runner) Run(configPath string, opts Options) error {
 		return err
 	}
 
+	cwd, err := os.Getwd()
+	if err != nil {
+		return fmt.Errorf("get current directory: %w", err)
+	}
+
 	configDir := filepath.Dir(absConfigPath)
 	backupRoot := filepath.Join(configDir, ".deploy-backups", time.Now().Format("20060102-150405"))
 	for i, item := range cfg.Items {
-		src, err := resolveItemPath(configDir, item.Source)
+		src, err := resolveSourcePath(cwd, item.Source)
 		if err != nil {
 			return fmt.Errorf("resolve source for items[%d]: %w", i, err)
 		}

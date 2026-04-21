@@ -40,13 +40,13 @@ make build-deploy
 
 ### 設定ファイル
 
-設定ファイルは JSON です。相対パスは設定ファイルのあるディレクトリから解決されます。`~/` から始まるパスはホームディレクトリへ展開されます。
+設定ファイルは JSON です。`source` の相対パスは deploy コマンドを実行したカレントディレクトリから解決されます。`destination` の相対パスは設定ファイルのあるディレクトリから解決されます。`~/` から始まるパスはホームディレクトリへ展開されます。
 
 ```json
 {
   "items": [
     {
-      "source": "../../out/.codex/skills",
+      "source": "out/.codex/skills",
       "destination": "~/.codex/skills",
       "replace": true,
       "exclude": [
@@ -55,16 +55,16 @@ make build-deploy
       ]
     },
     {
-      "source": "../../out/.codex/agents",
+      "source": "out/.codex/agents",
       "destination": "~/.codex/agents",
       "replace": true
     },
     {
-      "source": "../../out/.codex/Agents.md",
+      "source": "out/.codex/Agents.md",
       "destination": "~/.codex/Agents.md"
     },
     {
-      "source": "../../codex/config.toml",
+      "source": "codex/config.toml",
       "destination": "~/.codex/config.toml"
     }
   ]
@@ -74,6 +74,8 @@ make build-deploy
 `items` は上から順番に処理されます。ディレクトリもファイルも同じ `source` / `destination` 形式で指定できます。
 
 コピー先に既存のファイルまたはディレクトリがある場合は、コピー前にバックアップします。バックアップは 1 回の実行につき 1 つのタイムスタンプ付きディレクトリにまとめて作成され、`destination` の絶対パス構造を再現します。バックアップ先は設定ファイルと同じディレクトリ配下の `.deploy-backups/<timestamp>/` です。
+
+リポジトリルートから `./bin/deploy -config=./scripts/deploy/deploy.example.json` を実行する場合、`source` は `out/.codex/skills` のようにリポジトリルート基準で指定します。
 
 `replace` は省略可能です。`true` の場合、コピー前に `destination` を削除してから配置します。`false` または未指定の場合は既存ファイルを上書きするだけで、コピー先にある余分なファイルは残します。
 
