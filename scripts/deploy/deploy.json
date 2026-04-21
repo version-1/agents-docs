@@ -9,14 +9,6 @@
       ]
     },
     {
-      "source": "codex/prompts",
-      "destination": "~/.codex/prompts",
-      "replace": true,
-      "exclude": [
-        "**/.DS_Store"
-      ]
-    },
-    {
       "source": "codex/rules",
       "destination": "~/.codex/rules",
       "replace": false

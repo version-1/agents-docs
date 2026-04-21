@@ -1,3 +1,8 @@
+---
+name: cmd-rmbranch
+description: main, develop ブランチ以外のGitブランチを削除し、リポジトリを整理するためのスキル
+---
+
 main, develop ブランチ以外のGitブランチを削除し、リポジトリを整理してください。
 
 ## このスキルが提供するもの

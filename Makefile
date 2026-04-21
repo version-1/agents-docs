@@ -10,6 +10,8 @@ deploy-docs:
 	$(MAKE) build-deploy
 	./bin/deploy -config=./scripts/deploy/deploy.json
 
+apply: deploy-docs
+
 tree-out:
 	tree ./out/.codex
 	tree ./out/.claude
