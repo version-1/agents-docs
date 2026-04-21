@@ -36,7 +36,7 @@ make build-deploy
 | フラグ | 必須 | 説明 |
 |---|---|---|
 | `-config` | Yes | コピー元とコピー先を書いた JSON 設定ファイル |
-| `-dry-run` | No | 実際にはコピーせず、予定される `REMOVE` / `MKDIR` / `COPY` / `SKIP` を出力する |
+| `-dry-run` | No | 実際にはコピーせず、item ごとの予定と件数サマリを出力する |
 
 ### 設定ファイル
 
@@ -111,14 +111,17 @@ make build-deploy
 ### dry-run の出力例
 
 ```text
-DRY-RUN item[0] dir  /repo/out/.codex/skills -> /Users/me/.codex/skills
-BACKUP   /Users/me/.codex/skills -> /repo/scripts/deploy/.deploy-backups/20260421-142600/Users/me/.codex/skills
-REMOVE   /Users/me/.codex/skills
-MKDIR    /Users/me/.codex/skills
-COPY     /repo/out/.codex/skills/example/SKILL.md -> /Users/me/.codex/skills/example/SKILL.md
-SKIP     /repo/out/.codex/skills/example/debug.tmp
-DRY-RUN item[1] file /repo/codex/config.toml -> /Users/me/.codex/config.toml
-COPY     /repo/codex/config.toml -> /Users/me/.codex/config.toml
+[DRY-RUN] item[0] dir
+  source:      /repo/out/.codex/skills
+  destination: /Users/me/.codex/skills
+  backup: /repo/scripts/deploy/.deploy-backups/20260421-142600/Users/me/.codex/skills
+  replace: remove existing destination
+  summary: 18 copied, 12 dirs, 1 skipped
+
+[DRY-RUN] item[1] file
+  source:      /repo/codex/config.toml
+  destination: /Users/me/.codex/config.toml
+  summary: 1 copied, 0 dirs, 0 skipped
 ```
 
 ### コピー仕様
@@ -127,7 +130,7 @@ COPY     /repo/codex/config.toml -> /Users/me/.codex/config.toml
 - `source` がディレクトリの場合、ディレクトリの中身を `destination` ディレクトリ配下へコピーします。
 - コピー先に既存のファイルまたはディレクトリがある場合、コピー前にバックアップします。
 - バックアップ先は `.deploy-backups/<timestamp>/` 配下で、`destination` の絶対パス構造を再現します。
-- 実行時には `BACKUP <destination> -> <backup path>` を出力します。
+- 実行時には `backup: <backup path>` を出力します。
 - 既存ファイルは上書きします。
 - `replace` が `false` または未指定の場合、コピー先にある余分なファイルは削除しません。
 - `replace` が `true` の場合、コピー前に `destination` を削除します。

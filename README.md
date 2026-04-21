@@ -60,12 +60,12 @@ make deploy-docs
 - コピー先に既存のファイルまたはディレクトリがある場合、コピー前にバックアップします。
 - バックアップ先は設定ファイルと同じディレクトリ配下の `.deploy-backups/<timestamp>/` です。
 - バックアップは 1 回の実行につき 1 つのタイムスタンプ付きディレクトリにまとめ、`destination` の絶対パス構造を再現します。
-- 実行時には `BACKUP <destination> -> <backup path>` を出力します。
+- 実行時には `backup: <backup path>` を出力します。
 - `replace` は省略可能で、`true` の場合はコピー前に `destination` を削除します。
 - `replace` が `false` または未指定の場合、コピー先にある余分なファイルは残します。
 - `exclude` は省略可能で、`source` からの相対パスに対する glob として評価します。
 - `exclude` では `*` / `?` / `**` を指定できます。
-- dry-run では実際にはコピーせず、予定される `BACKUP` / `REMOVE` / `MKDIR` / `COPY` / `SKIP` を出力します。
+- dry-run では実際にはコピーせず、item ごとの予定と件数サマリを出力します。
 
 ### replace による洗い替え
 
@@ -97,9 +97,10 @@ make deploy-docs
 dry-run では削除は実行されず、削除予定として `REMOVE` が出力されます。
 
 ```text
-DRY-RUN item[0] dir  /repo/out/.codex/agents -> /Users/me/.codex/agents
-BACKUP   /Users/me/.codex/agents -> /repo/scripts/deploy/.deploy-backups/20260421-142600/Users/me/.codex/agents
-REMOVE   /Users/me/.codex/agents
-MKDIR    /Users/me/.codex/agents
-COPY     /repo/out/.codex/agents/roles/role.md -> /Users/me/.codex/agents/roles/role.md
+[DRY-RUN] item[0] dir
+  source:      /repo/out/.codex/agents
+  destination: /Users/me/.codex/agents
+  backup: /repo/scripts/deploy/.deploy-backups/20260421-142600/Users/me/.codex/agents
+  replace: remove existing destination
+  summary: 8 copied, 4 dirs, 0 skipped
 ```

@@ -66,7 +66,7 @@ func TestRunnerDryRunDoesNotWriteFiles(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(root, "dest.txt")); !os.IsNotExist(err) {
 		t.Fatalf("dry-run wrote destination file: %v", err)
 	}
-	if !strings.Contains(out.String(), "DRY-RUN") || !strings.Contains(out.String(), "COPY") {
+	if !strings.Contains(out.String(), "DRY-RUN") || !strings.Contains(out.String(), "copied") {
 		t.Fatalf("expected dry-run copy output, got:\n%s", out.String())
 	}
 }
@@ -142,7 +142,7 @@ func TestRunnerExcludesFilesByGlob(t *testing.T) {
 	assertNotExist(t, filepath.Join(root, "dest", "ignore.tmp"))
 	assertNotExist(t, filepath.Join(root, "dest", "nested", "ignore.log"))
 	assertNotExist(t, filepath.Join(root, "dest", "cache", "data.txt"))
-	if !strings.Contains(out.String(), "SKIP") {
+	if !strings.Contains(out.String(), "skipped") {
 		t.Fatalf("expected skip output, got:\n%s", out.String())
 	}
 }
@@ -168,7 +168,7 @@ func TestRunnerExcludesSingleFileByGlob(t *testing.T) {
 	}
 
 	assertNotExist(t, filepath.Join(root, "dest.txt"))
-	if !strings.Contains(out.String(), "SKIP") {
+	if !strings.Contains(out.String(), "skipped") {
 		t.Fatalf("expected skip output, got:\n%s", out.String())
 	}
 }
@@ -205,7 +205,7 @@ func TestRunnerReplaceRemovesDestinationBeforeCopyingDirectory(t *testing.T) {
 
 	assertFileContent(t, filepath.Join(dstDir, "current.txt"), "current")
 	assertNotExist(t, filepath.Join(dstDir, "stale.txt"))
-	if !strings.Contains(out.String(), "REMOVE") {
+	if !strings.Contains(out.String(), "replace:") {
 		t.Fatalf("expected remove output, got:\n%s", out.String())
 	}
 }
@@ -275,7 +275,7 @@ func TestRunnerDryRunReplaceDoesNotRemoveDestination(t *testing.T) {
 	}
 
 	assertFileContent(t, filepath.Join(dstDir, "stale.txt"), "stale")
-	if !strings.Contains(out.String(), "REMOVE") {
+	if !strings.Contains(out.String(), "replace:") {
 		t.Fatalf("expected remove output, got:\n%s", out.String())
 	}
 }
@@ -391,12 +391,9 @@ func TestLoadConfigRequiresItems(t *testing.T) {
 func backupPathFromOutput(t *testing.T, output string) string {
 	t.Helper()
 	for _, line := range strings.Split(output, "\n") {
-		if strings.HasPrefix(line, "BACKUP") {
-			parts := strings.Split(line, " -> ")
-			if len(parts) != 2 {
-				t.Fatalf("unexpected backup output: %s", line)
-			}
-			return parts[1]
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "backup: ") {
+			return strings.TrimPrefix(line, "backup: ")
 		}
 	}
 	t.Fatalf("backup output not found:\n%s", output)
