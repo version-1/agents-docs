@@ -1,0 +1,77 @@
+{
+  "items": [
+    {
+      "source": "codex/skills",
+      "destination": "~/.codex/skills",
+      "replace": true,
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    },
+    {
+      "source": "codex/prompts",
+      "destination": "~/.codex/prompts",
+      "replace": true,
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    },
+    {
+      "source": "codex/rules",
+      "destination": "~/.codex/rules",
+      "replace": false
+    },
+    {
+      "source": "codex/agents",
+      "destination": "~/.codex/agents",
+      "replace": true,
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    },
+    {
+      "source": "codex/Agents.md",
+      "destination": "~/.codex/Agents.md",
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    },
+    {
+      "source": "codex/config.toml",
+      "destination": "~/.codex/config.toml",
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    },
+    {
+      "source": "claude/skills",
+      "destination": "~/.claude/skills",
+      "replace": true,
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    },
+    {
+      "source": "claude/agents",
+      "destination": "~/.claude/agents",
+      "replace": true,
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    },
+    {
+      "source": "claude/CLAUDE.md",
+      "destination": "~/.claude/CLAUDE.md",
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    },
+    {
+      "source": "claude/settings.json",
+      "destination": "~/.claude/settings.json",
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    }
+  ]
+}
