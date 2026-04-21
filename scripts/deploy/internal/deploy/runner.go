@@ -11,7 +11,8 @@ import (
 )
 
 type Options struct {
-	DryRun bool
+	DryRun  bool
+	NoColor bool
 }
 
 type Runner struct {
@@ -23,6 +24,16 @@ type itemReport struct {
 	createdDirs int
 	skipped     int
 }
+
+const (
+	colorReset   = "\033[0m"
+	colorFaint   = "\033[2m"
+	colorGreen   = "\033[32m"
+	colorYellow  = "\033[33m"
+	colorBlue    = "\033[34m"
+	colorMagenta = "\033[35m"
+	colorCyan    = "\033[36m"
+)
 
 func NewRunner(out io.Writer) Runner {
 	return Runner{out: out}
@@ -82,7 +93,7 @@ func (r Runner) deployItem(index int, src, dst string, matcher excludeMatcher, r
 		if matcher.Match(filepath.Base(src)) {
 			r.printItemHeader(index, "file", src, dst, opts)
 			report.skipped++
-			r.printSummary(report)
+			r.printSummary(report, opts)
 			return nil
 		}
 		return r.deployFile(index, src, dst, info.Mode(), replace, backupRoot, report, opts)
@@ -143,7 +154,7 @@ func (r Runner) deployDir(index int, src, dst string, matcher excludeMatcher, re
 	if err != nil {
 		return err
 	}
-	r.printSummary(report)
+	r.printSummary(report, opts)
 	return nil
 }
 
@@ -159,7 +170,7 @@ func (r Runner) deployFile(index int, src, dst string, mode os.FileMode, replace
 		return err
 	}
 	report.copiedFiles++
-	r.printSummary(report)
+	r.printSummary(report, opts)
 	return nil
 }
 
@@ -203,7 +214,7 @@ func (r Runner) backupDestination(dst, backupRoot string, opts Options) error {
 
 	backupPath := backupPathFor(backupRoot, dst)
 	if opts.DryRun {
-		fmt.Fprintf(r.out, "  backup: %s\n", backupPath)
+		r.printBackup(backupPath, opts)
 		return nil
 	}
 
@@ -219,7 +230,7 @@ func (r Runner) backupDestination(dst, backupRoot string, opts Options) error {
 		return nil
 	}
 
-	fmt.Fprintf(r.out, "  backup: %s\n", backupPath)
+	r.printBackup(backupPath, opts)
 	return nil
 }
 
@@ -228,28 +239,52 @@ func (r Runner) replaceDestination(dst string, replace bool, opts Options) error
 		return nil
 	}
 	if opts.DryRun {
-		fmt.Fprintf(r.out, "  replace: remove existing destination\n")
+		r.printReplace("remove existing destination", opts)
 		return nil
 	}
 	if err := os.RemoveAll(dst); err != nil {
 		return fmt.Errorf("remove %q: %w", dst, err)
 	}
-	fmt.Fprintf(r.out, "  replace: removed existing destination\n")
+	r.printReplace("removed existing destination", opts)
 	return nil
 }
 
 func (r Runner) printItemHeader(index int, kind, src, dst string, opts Options) {
 	mode := "DEPLOY"
+	modeColor := colorGreen
 	if opts.DryRun {
 		mode = "DRY-RUN"
+		modeColor = colorYellow
 	}
-	fmt.Fprintf(r.out, "\n[%s] item[%d] %s\n", mode, index, kind)
-	fmt.Fprintf(r.out, "  source:      %s\n", src)
-	fmt.Fprintf(r.out, "  destination: %s\n", dst)
+	fmt.Fprintf(r.out, "\n%s item[%d] %s\n", colorize("["+mode+"]", modeColor, opts), index, colorize(kind, colorCyan, opts))
+	fmt.Fprintf(r.out, "  %s      %s\n", colorize("source:", colorFaint, opts), src)
+	fmt.Fprintf(r.out, "  %s %s\n", colorize("destination:", colorFaint, opts), dst)
 }
 
-func (r Runner) printSummary(report *itemReport) {
-	fmt.Fprintf(r.out, "  summary: %d copied, %d dirs, %d skipped\n", report.copiedFiles, report.createdDirs, report.skipped)
+func (r Runner) printBackup(path string, opts Options) {
+	fmt.Fprintf(r.out, "  %s %s\n", colorize("backup:", colorBlue, opts), path)
+}
+
+func (r Runner) printReplace(message string, opts Options) {
+	fmt.Fprintf(r.out, "  %s %s\n", colorize("replace:", colorMagenta, opts), message)
+}
+
+func (r Runner) printSummary(report *itemReport, opts Options) {
+	fmt.Fprintf(
+		r.out,
+		"  %s %s, %s, %s\n",
+		colorize("summary:", colorFaint, opts),
+		colorize(fmt.Sprintf("%d copied", report.copiedFiles), colorGreen, opts),
+		colorize(fmt.Sprintf("%d dirs", report.createdDirs), colorCyan, opts),
+		colorize(fmt.Sprintf("%d skipped", report.skipped), colorYellow, opts),
+	)
+}
+
+func colorize(s, color string, opts Options) string {
+	if opts.NoColor {
+		return s
+	}
+	return color + s + colorReset
 }
 
 func backupPathFor(backupRoot, dst string) string {

@@ -37,6 +37,7 @@ make build-deploy
 |---|---|---|
 | `-config` | Yes | コピー元とコピー先を書いた JSON 設定ファイル |
 | `-dry-run` | No | 実際にはコピーせず、item ごとの予定と件数サマリを出力する |
+| `-no-color` | No | ANSI カラー出力を無効にする |
 
 ### 設定ファイル
 
@@ -123,6 +124,8 @@ make build-deploy
   destination: /Users/me/.codex/config.toml
   summary: 1 copied, 0 dirs, 0 skipped
 ```
+
+通常の出力は見出し、バックアップ、洗い替え、サマリを色分けします。CI やログ保存などで ANSI エスケープを避けたい場合は `-no-color` を指定します。
 
 ### コピー仕様
 
