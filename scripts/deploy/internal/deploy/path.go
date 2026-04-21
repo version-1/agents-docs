@@ -26,6 +26,17 @@ func resolveItemPath(configDir, path string) (string, error) {
 	return filepath.Clean(filepath.Join(configDir, expanded)), nil
 }
 
+func resolveSourcePath(cwd, path string) (string, error) {
+	expanded, err := expandHome(path)
+	if err != nil {
+		return "", err
+	}
+	if filepath.IsAbs(expanded) {
+		return filepath.Clean(expanded), nil
+	}
+	return filepath.Clean(filepath.Join(cwd, expanded)), nil
+}
+
 func expandHome(path string) (string, error) {
 	if path == "~" {
 		home, err := os.UserHomeDir()

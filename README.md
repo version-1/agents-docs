@@ -41,7 +41,7 @@ make deploy-docs
 {
   "items": [
     {
-      "source": "../../out/.codex/skills",
+      "source": "out/.codex/skills",
       "destination": "~/.codex/skills",
       "replace": true,
       "exclude": [
@@ -55,6 +55,8 @@ make deploy-docs
 
 - `source` がファイルの場合、`destination` を配置先ファイルパスとしてコピーします。
 - `source` がディレクトリの場合、ディレクトリの中身を `destination` ディレクトリ配下へコピーします。
+- `source` の相対パスは deploy コマンドを実行したカレントディレクトリから解決します。
+- `destination` の相対パスは設定ファイルのあるディレクトリから解決します。
 - コピー先に既存のファイルまたはディレクトリがある場合、コピー前にバックアップします。
 - バックアップ先は設定ファイルと同じディレクトリ配下の `.deploy-backups/<timestamp>/` です。
 - バックアップは 1 回の実行につき 1 つのタイムスタンプ付きディレクトリにまとめ、`destination` の絶対パス構造を再現します。

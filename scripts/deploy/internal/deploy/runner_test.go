@@ -32,7 +32,7 @@ func TestRunnerCopiesFilesAndDirectoryContents(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -59,7 +59,7 @@ func TestRunnerDryRunDoesNotWriteFiles(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{DryRun: true}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{DryRun: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -69,6 +69,32 @@ func TestRunnerDryRunDoesNotWriteFiles(t *testing.T) {
 	if !strings.Contains(out.String(), "DRY-RUN") || !strings.Contains(out.String(), "COPY") {
 		t.Fatalf("expected dry-run copy output, got:\n%s", out.String())
 	}
+}
+
+func TestRunnerResolvesSourceFromCurrentDirectory(t *testing.T) {
+	root := t.TempDir()
+	configDir := filepath.Join(root, "config")
+	if err := os.MkdirAll(configDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "src.txt"), []byte("src"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(configDir, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "src.txt", "destination": "../dest.txt"}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, filepath.Join(root, "dest.txt"), "src")
 }
 
 func TestRunnerExcludesFilesByGlob(t *testing.T) {
@@ -107,7 +133,7 @@ func TestRunnerExcludesFilesByGlob(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -137,7 +163,7 @@ func TestRunnerExcludesSingleFileByGlob(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -173,7 +199,7 @@ func TestRunnerReplaceRemovesDestinationBeforeCopyingDirectory(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -210,7 +236,7 @@ func TestRunnerKeepsDestinationExtrasWhenReplaceIsFalse(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -244,7 +270,7 @@ func TestRunnerDryRunReplaceDoesNotRemoveDestination(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{DryRun: true}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{DryRun: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -274,7 +300,7 @@ func TestRunnerBacksUpExistingDestinationFile(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -312,7 +338,7 @@ func TestRunnerBacksUpExistingDestinationDirectoryBeforeReplace(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -342,7 +368,7 @@ func TestRunnerDryRunBackupDoesNotWriteBackup(t *testing.T) {
 
 	var out bytes.Buffer
 	runner := NewRunner(&out)
-	if err := runner.Run(config, Options{DryRun: true}); err != nil {
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{DryRun: true}) }); err != nil {
 		t.Fatal(err)
 	}
 
@@ -375,6 +401,25 @@ func backupPathFromOutput(t *testing.T, output string) string {
 	}
 	t.Fatalf("backup output not found:\n%s", output)
 	return ""
+}
+
+func runFromDir(t *testing.T, dir string, fn func() error) error {
+	t.Helper()
+
+	current, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(dir); err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if err := os.Chdir(current); err != nil {
+			t.Fatal(err)
+		}
+	}()
+
+	return fn()
 }
 
 func assertNotExist(t *testing.T, path string) {
