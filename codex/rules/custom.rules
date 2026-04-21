@@ -1,0 +1,289 @@
+# ========================================
+# Codex Rules (Safe & Practical Baseline)
+# ========================================
+
+# ----------------------------------------
+# ❌ 破壊的コマンド（完全禁止）
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["rm", "-rf"],
+    decision = "forbidden",
+    justification = "ディレクトリ削除は危険"
+)
+
+prefix_rule(
+    pattern = ["sudo", "rm"],
+    decision = "forbidden",
+    justification = "root削除は禁止"
+)
+
+prefix_rule(
+    pattern = ["git", "push", "--force"],
+    decision = "forbidden",
+    justification = "履歴破壊防止"
+)
+
+prefix_rule(
+    pattern = ["git", "clean", "-fd"],
+    decision = "forbidden",
+    justification = "未追跡ファイル削除防止"
+)
+
+prefix_rule(
+    pattern = ["docker", "system", "prune"],
+    decision = "forbidden",
+    justification = "Dockerリソース削除防止"
+)
+
+prefix_rule(
+    pattern = ["terraform", "destroy"],
+    decision = "forbidden",
+    justification = "インフラ破壊防止"
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "delete"],
+    decision = "forbidden",
+    justification = "リポジトリ削除防止"
+)
+
+# ----------------------------------------
+# ⚠️ Git操作（要確認）
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "リモート反映前に確認"
+)
+
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "prompt",
+    justification = "意図しないコミット防止"
+)
+
+prefix_rule(
+    pattern = ["git", "rebase"],
+    decision = "prompt",
+    justification = "履歴変更確認"
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "prompt",
+    justification = "作業内容消失防止"
+)
+
+prefix_rule(
+    pattern = ["git", "checkout", "-b"],
+    decision = "allow",
+    justification = "ブランチ作成は安全"
+)
+
+# ----------------------------------------
+# ⚠️ GitHub / PR操作
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "pr", "create"],
+    decision = "prompt",
+    justification = "PR作成前に確認"
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "prompt",
+    justification = "マージ前に確認"
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "view"],
+    decision = "allow",
+    justification = "閲覧のみ"
+)
+
+# ----------------------------------------
+# ⚠️ インフラ / デプロイ
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["terraform", "apply"],
+    decision = "prompt",
+    justification = "本番影響の可能性"
+)
+
+prefix_rule(
+    pattern = ["kubectl"],
+    decision = "prompt",
+    justification = "クラスタ操作は確認"
+)
+
+prefix_rule(
+    pattern = ["aws"],
+    decision = "prompt",
+    justification = "課金・本番影響の可能性"
+)
+
+prefix_rule(
+    pattern = ["gcloud"],
+    decision = "prompt",
+    justification = "GCP操作は確認"
+)
+
+prefix_rule(
+    pattern = ["vercel", "deploy"],
+    decision = "prompt",
+    justification = "デプロイ確認"
+)
+
+# ----------------------------------------
+# ⚠️ DB操作
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["psql"],
+    decision = "prompt",
+    justification = "DB操作は慎重に"
+)
+
+prefix_rule(
+    pattern = ["mysql"],
+    decision = "prompt",
+    justification = "DB操作は慎重に"
+)
+
+prefix_rule(
+    pattern = ["drop"],
+    decision = "forbidden",
+    justification = "データ削除禁止"
+)
+
+prefix_rule(
+    pattern = ["truncate"],
+    decision = "forbidden",
+    justification = "データ削除禁止"
+)
+
+# ----------------------------------------
+# ⚠️ パッケージ公開
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["npm", "publish"],
+    decision = "prompt",
+    justification = "公開前確認"
+)
+
+prefix_rule(
+    pattern = ["pnpm", "publish"],
+    decision = "prompt",
+    justification = "公開前確認"
+)
+
+prefix_rule(
+    pattern = ["gem", "push"],
+    decision = "prompt",
+    justification = "公開前確認"
+)
+
+prefix_rule(
+    pattern = ["docker", "push"],
+    decision = "prompt",
+    justification = "イメージ公開確認"
+)
+
+# ----------------------------------------
+# ⚠️ ファイル操作（中リスク）
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["mv"],
+    decision = "prompt",
+    justification = "移動ミス防止"
+)
+
+prefix_rule(
+    pattern = ["cp", "-r"],
+    decision = "prompt",
+    justification = "大量コピー防止"
+)
+
+prefix_rule(
+    pattern = ["chmod"],
+    decision = "prompt",
+    justification = "権限変更確認"
+)
+
+prefix_rule(
+    pattern = ["chown"],
+    decision = "forbidden",
+    justification = "権限変更は禁止"
+)
+
+# ----------------------------------------
+# ⚠️ ネットワーク
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["curl"],
+    decision = "prompt",
+    justification = "外部アクセス確認"
+)
+
+prefix_rule(
+    pattern = ["wget"],
+    decision = "prompt",
+    justification = "外部取得確認"
+)
+
+prefix_rule(
+    pattern = ["scp"],
+    decision = "forbidden",
+    justification = "ファイル送信禁止"
+)
+
+prefix_rule(
+    pattern = ["ssh"],
+    decision = "prompt",
+    justification = "接続先確認"
+)
+
+# ----------------------------------------
+# ✅ 安全コマンド（常時許可）
+# ----------------------------------------
+
+prefix_rule(
+    pattern = [["ls", "tree", "rg", "cat", "less"]],
+    decision = "allow",
+    justification = "参照系は安全"
+)
+
+prefix_rule(
+    pattern = ["git", ["status", "diff", "log"]],
+    decision = "allow",
+    justification = "参照のみ"
+)
+
+prefix_rule(
+    pattern = [["npm", "pnpm", "yarn"], ["test", "install"]],
+    decision = "allow",
+    justification = "ローカル操作は安全"
+)
+
+prefix_rule(
+    pattern = ["bundle", ["exec", "install"]],
+    decision = "allow",
+    justification = "Ruby操作は安全"
+)
+
+prefix_rule(
+    pattern = ["make"],
+    decision = "allow",
+    justification = "ビルド/テストは安全"
+)
+
+# ========================================
+# End of Rules
+# ========================================
