@@ -1,0 +1,36 @@
+{
+  "items": [
+    {
+      "source": "../../out/.codex/skills",
+      "destination": "~/.codex/skills"
+    },
+    {
+      "source": "../../out/.codex/agents",
+      "destination": "~/.codex/agents"
+    },
+    {
+      "source": "../../out/.codex/Agents.md",
+      "destination": "~/.codex/Agents.md"
+    },
+    {
+      "source": "../../codex/config.toml",
+      "destination": "~/.codex/config.toml"
+    },
+    {
+      "source": "../../out/.claude/skills",
+      "destination": "~/.claude/skills"
+    },
+    {
+      "source": "../../out/.claude/agents",
+      "destination": "~/.claude/agents"
+    },
+    {
+      "source": "../../claude/CLAUDE.md",
+      "destination": "~/.claude/CLAUDE.md"
+    },
+    {
+      "source": "../../claude/settings.json",
+      "destination": "~/.claude/settings.json"
+    }
+  ]
+}
