@@ -2,10 +2,21 @@
 build-generator:
 	cd scripts/generator && go build -o ../../bin/generator cmd/main.go
 
+build-deploy:
+	cd scripts/deploy && go build -o ../../bin/deploy cmd/main.go
+
 gen-docs:
 	$(MAKE) build-generator
 	./bin/generator -input=./docs/ja -output=./out/.codex/ -mode=codex
 	./bin/generator -input=./docs/ja -output=./out/.claude/ -mode=claude
+
+deploy-docs-dry-run:
+	$(MAKE) build-deploy
+	./bin/deploy -config=./scripts/deploy/deploy.example.json -dry-run
+
+deploy-docs:
+	$(MAKE) build-deploy
+	./bin/deploy -config=./scripts/deploy/deploy.example.json
 
 tree-out:
 	tree ./out/.codex
