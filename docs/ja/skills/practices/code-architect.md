@@ -3,7 +3,6 @@ name: code-architect
 description: アーキテクチャ設計・改善の際の思考の枠組み・判断基準を定義します。システム全体の構造と依存関係を整理し、望ましい形に導くためのガイドラインを提供します。
 ---
 
-
 # Architecture Dependency Skill
 
 ## 目的
