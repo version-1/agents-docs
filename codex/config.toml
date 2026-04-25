@@ -1,4 +1,4 @@
-model = "gpt-5.4-codex"
+model = "gpt-5.5"
 personality = "pragmatic"
 web_search = "live"
 
@@ -7,13 +7,6 @@ sandbox_mode = "workspace-write"
 exclude_tmpdir_env_var = true
 exclude_slash_tmp = true
 writable_roots = []
-
-[notice]
-hide_gpt5_1_migration_prompt = true
-"hide_gpt-5.1-codex-max_migration_prompt" = true
-
-[notice.model_migrations]
-"gpt-5.1-codex-max" = "gpt-5.2-codex"
 
 [mcp_servers.context7]
 args = ["-y", "@upstash/context7-mcp", "--api-key", "${CONTEXT7_API_KEY}"]
