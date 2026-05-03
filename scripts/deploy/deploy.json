@@ -39,6 +39,7 @@
       "source": "claude/skills",
       "destination": "~/.claude/skills",
       "replace": true,
+      "flatten": true,
       "exclude": [
         "**/.DS_Store"
       ]
