@@ -50,6 +50,7 @@ make build-deploy
       "source": "out/.codex/skills",
       "destination": "~/.codex/skills",
       "replace": true,
+      "flatten": true,
       "exclude": [
         "**/.DS_Store",
         "**/*.tmp"
@@ -79,6 +80,8 @@ make build-deploy
 リポジトリルートから `./bin/deploy -config=./scripts/deploy/deploy.example.json` を実行する場合、`source` は `out/.codex/skills` のようにリポジトリルート基準で指定します。
 
 `replace` は省略可能です。`true` の場合、コピー前に `destination` を削除してから配置します。`false` または未指定の場合は既存ファイルを上書きするだけで、コピー先にある余分なファイルは残します。
+
+`flatten` は省略可能です。`true` の場合、`source` 配下から `SKILL.md` を持つディレクトリを探し、そのディレクトリを `destination/<ディレクトリ名>` に配置します。例えば `source/internal/role-planner/SKILL.md` は `destination/role-planner/SKILL.md` として配置されます。`flatten` はディレクトリの `source` でのみ使用できます。同じディレクトリ名の skill が複数見つかった場合は、上書きせずエラーにします。
 
 `exclude` は省略可能です。コピー元の中で除外したいファイルやディレクトリを glob で指定します。
 
@@ -131,6 +134,7 @@ make build-deploy
 
 - `source` がファイルの場合、`destination` を配置先ファイルパスとしてコピーします。
 - `source` がディレクトリの場合、ディレクトリの中身を `destination` ディレクトリ配下へコピーします。
+- `flatten` が `true` の場合、`source` 配下の `SKILL.md` を持つディレクトリだけを `destination` 直下へフラットにコピーします。
 - コピー先に既存のファイルまたはディレクトリがある場合、コピー前にバックアップします。
 - バックアップ先は `.deploy-backups/<timestamp>/` 配下で、`destination` の絶対パス構造を再現します。
 - 実行時には `backup: <backup path>` を出力します。

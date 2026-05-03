@@ -4,6 +4,7 @@
       "source": "out/.codex/skills",
       "destination": "~/.codex/skills",
       "replace": true,
+      "flatten": true,
       "exclude": [
         "**/.DS_Store"
       ]
@@ -24,7 +25,8 @@
     {
       "source": "out/.claude/skills",
       "destination": "~/.claude/skills",
-      "replace": true
+      "replace": true,
+      "flatten": true
     },
     {
       "source": "out/.claude/agents",

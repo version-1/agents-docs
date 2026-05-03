@@ -25,6 +25,11 @@ type itemReport struct {
 	skipped     int
 }
 
+type flattenedSkillDir struct {
+	source string
+	target string
+}
+
 const (
 	colorReset   = "\033[0m"
 	colorFaint   = "\033[2m"
@@ -72,14 +77,14 @@ func (r Runner) Run(configPath string, opts Options) error {
 			return fmt.Errorf("items[%d]: %w", i, err)
 		}
 
-		if err := r.deployItem(i, src, dst, matcher, item.Replace, backupRoot, opts); err != nil {
+		if err := r.deployItem(i, src, dst, matcher, item.Replace, item.Flatten, backupRoot, opts); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (r Runner) deployItem(index int, src, dst string, matcher excludeMatcher, replace bool, backupRoot string, opts Options) error {
+func (r Runner) deployItem(index int, src, dst string, matcher excludeMatcher, replace, flatten bool, backupRoot string, opts Options) error {
 	info, err := os.Stat(src)
 	if err != nil {
 		return fmt.Errorf("stat source for items[%d] %q: %w", index, src, err)
@@ -87,7 +92,13 @@ func (r Runner) deployItem(index int, src, dst string, matcher excludeMatcher, r
 
 	report := &itemReport{}
 	if info.IsDir() {
+		if flatten {
+			return r.deployFlattenedSkillDirs(index, src, dst, matcher, replace, backupRoot, report, opts)
+		}
 		return r.deployDir(index, src, dst, matcher, replace, backupRoot, report, opts)
+	}
+	if flatten {
+		return fmt.Errorf("items[%d]: flatten requires a directory source", index)
 	}
 	if info.Mode().IsRegular() {
 		if matcher.Match(filepath.Base(src)) {
@@ -99,6 +110,136 @@ func (r Runner) deployItem(index int, src, dst string, matcher excludeMatcher, r
 		return r.deployFile(index, src, dst, info.Mode(), replace, backupRoot, report, opts)
 	}
 	return fmt.Errorf("unsupported source for items[%d] %q: only regular files and directories are supported", index, src)
+}
+
+func (r Runner) deployFlattenedSkillDirs(index int, src, dst string, matcher excludeMatcher, replace bool, backupRoot string, report *itemReport, opts Options) error {
+	r.printItemHeader(index, "flattened-skill-dirs", src, dst, opts)
+	skillDirs, err := findFlattenedSkillDirs(src, dst, matcher, report)
+	if err != nil {
+		return err
+	}
+
+	if err := r.backupDestination(dst, backupRoot, opts); err != nil {
+		return err
+	}
+	if err := r.replaceDestination(dst, replace, opts); err != nil {
+		return err
+	}
+
+	for _, skillDir := range skillDirs {
+		if err := r.copySkillDir(skillDir.source, src, skillDir.target, matcher, report, opts); err != nil {
+			return err
+		}
+	}
+	r.printSummary(report, opts)
+	return nil
+}
+
+func findFlattenedSkillDirs(src, dst string, matcher excludeMatcher, report *itemReport) ([]flattenedSkillDir, error) {
+	targets := map[string]string{}
+	var skillDirs []flattenedSkillDir
+	err := filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		rel, err := filepath.Rel(src, path)
+		if err != nil {
+			return err
+		}
+		if matcher.Match(rel) {
+			report.skipped++
+			if d.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		if !d.IsDir() {
+			return nil
+		}
+
+		skillFile := filepath.Join(path, "SKILL.md")
+		skillRel, err := filepath.Rel(src, skillFile)
+		if err != nil {
+			return err
+		}
+		if matcher.Match(skillRel) {
+			report.skipped++
+			return nil
+		}
+		info, err := os.Stat(skillFile)
+		if err != nil {
+			if os.IsNotExist(err) {
+				return nil
+			}
+			return fmt.Errorf("stat skill file %q: %w", skillFile, err)
+		}
+		if !info.Mode().IsRegular() {
+			report.skipped++
+			return nil
+		}
+
+		target := filepath.Join(dst, filepath.Base(path))
+		if existing, ok := targets[target]; ok {
+			return fmt.Errorf("flatten target conflict %q from %q and %q", target, existing, path)
+		}
+		targets[target] = path
+		skillDirs = append(skillDirs, flattenedSkillDir{source: path, target: target})
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return skillDirs, nil
+}
+
+func (r Runner) copySkillDir(skillDir, sourceRoot, targetRoot string, matcher excludeMatcher, report *itemReport, opts Options) error {
+	return filepath.WalkDir(skillDir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		sourceRel, err := filepath.Rel(sourceRoot, path)
+		if err != nil {
+			return err
+		}
+		if matcher.Match(sourceRel) {
+			report.skipped++
+			if d.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+
+		skillRel, err := filepath.Rel(skillDir, path)
+		if err != nil {
+			return err
+		}
+		target := filepath.Join(targetRoot, skillRel)
+
+		info, err := d.Info()
+		if err != nil {
+			return err
+		}
+
+		switch {
+		case d.IsDir():
+			if err := r.ensureDir(target, info.Mode(), opts); err != nil {
+				return err
+			}
+			report.createdDirs++
+			return nil
+		case info.Mode().IsRegular():
+			if err := r.copyFile(path, target, info.Mode(), opts); err != nil {
+				return err
+			}
+			report.copiedFiles++
+			return nil
+		default:
+			report.skipped++
+			return nil
+		}
+	})
 }
 
 func (r Runner) deployDir(index int, src, dst string, matcher excludeMatcher, replace bool, backupRoot string, report *itemReport, opts Options) error {

@@ -244,6 +244,94 @@ func TestRunnerKeepsDestinationExtrasWhenReplaceIsFalse(t *testing.T) {
 	assertFileContent(t, filepath.Join(dstDir, "stale.txt"), "stale")
 }
 
+func TestRunnerFlattenCopiesSkillDirsToDestinationRoot(t *testing.T) {
+	root := t.TempDir()
+	srcDir := filepath.Join(root, "src")
+	for _, dir := range []string{
+		filepath.Join(srcDir, "internal", "role-planner", "assets"),
+		filepath.Join(srcDir, "external", "empirical-prompt-tuning"),
+		filepath.Join(srcDir, "internal", "not-a-skill"),
+	} {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			t.Fatal(err)
+		}
+	}
+	for path, content := range map[string]string{
+		filepath.Join(srcDir, "internal", "role-planner", "SKILL.md"):              "planner",
+		filepath.Join(srcDir, "internal", "role-planner", "assets", "prompt.md"):   "prompt",
+		filepath.Join(srcDir, "external", "empirical-prompt-tuning", "SKILL.md"):   "external",
+		filepath.Join(srcDir, "internal", "not-a-skill", "README.md"):              "readme",
+		filepath.Join(srcDir, "internal", "role-planner", "assets", "ignored.tmp"): "tmp",
+		filepath.Join(srcDir, "external", "empirical-prompt-tuning", ".DS_Store"):  "store",
+	} {
+		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {
+      "source": "src",
+      "destination": "dest",
+      "flatten": true,
+      "exclude": ["*.tmp", "**/.DS_Store"]
+    }
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, filepath.Join(root, "dest", "role-planner", "SKILL.md"), "planner")
+	assertFileContent(t, filepath.Join(root, "dest", "role-planner", "assets", "prompt.md"), "prompt")
+	assertFileContent(t, filepath.Join(root, "dest", "empirical-prompt-tuning", "SKILL.md"), "external")
+	assertNotExist(t, filepath.Join(root, "dest", "internal", "role-planner", "SKILL.md"))
+	assertNotExist(t, filepath.Join(root, "dest", "not-a-skill", "README.md"))
+	assertNotExist(t, filepath.Join(root, "dest", "role-planner", "assets", "ignored.tmp"))
+	assertNotExist(t, filepath.Join(root, "dest", "empirical-prompt-tuning", ".DS_Store"))
+	if !strings.Contains(out.String(), "flattened-skill-dirs") {
+		t.Fatalf("expected flatten output, got:\n%s", out.String())
+	}
+}
+
+func TestRunnerFlattenRejectsDuplicateSkillDirNames(t *testing.T) {
+	root := t.TempDir()
+	for _, dir := range []string{
+		filepath.Join(root, "src", "internal", "same"),
+		filepath.Join(root, "src", "external", "same"),
+	} {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(dir, "SKILL.md"), []byte(filepath.Base(filepath.Dir(dir))), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "src", "destination": "dest", "flatten": true}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) })
+	if err == nil {
+		t.Fatal("expected duplicate target error")
+	}
+	if !strings.Contains(err.Error(), "flatten target conflict") {
+		t.Fatalf("expected conflict error, got %v", err)
+	}
+	assertNotExist(t, filepath.Join(root, "dest"))
+}
+
 func TestRunnerDryRunReplaceDoesNotRemoveDestination(t *testing.T) {
 	root := t.TempDir()
 	srcDir := filepath.Join(root, "src")
