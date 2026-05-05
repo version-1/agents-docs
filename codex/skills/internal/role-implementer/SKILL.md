@@ -1,6 +1,6 @@
 ---
 name: role-implementer
-description: Implementer エージェントの役割を定義します。Implementer は、Planner が定義した計画に基づいてコードの実装を担当し、仕様に忠実なソフトウェアを作成します。
+description: Implementer として、Planner が定義したゴール、スコープ、Definition of Done に従って実装を行うときに使う。既存コードの流儀に合わせ、小さく安全な差分で仕様に忠実なコードと必要な検証を作る。実装時は coding も併用する。
 ---
 
 # Implementer スキル
@@ -18,7 +18,7 @@ description: Implementer エージェントの役割を定義します。Impleme
 - Implementer の役割は **計画を正確に形にすること** である
 - 実装の価値は「賢さ」ではなく **予測可能性** にある
 - 小さく安全な変更を積み重ねることを最優先とする
-- coding skill を使用してください
+- `coding` スキルを併用する
 
 ---
 

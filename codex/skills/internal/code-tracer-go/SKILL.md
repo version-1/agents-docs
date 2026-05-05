@@ -1,6 +1,6 @@
 ---
 name: code-tracer-go
-description: 特定のモジュールの呼び出し経路を追跡・解析するためのスキル
+description: Go コードの特定シンボル、関数、メソッド、構造体について、callers / callees / both の呼び出し経路を根拠付きで追跡し、Mermaid や Markdown で可視化するときに使う。gopls、references、call hierarchy、callgraph を使い、interface や DI による推定経路は確実な経路と分けて示す。
 ---
 
 # SKILL: Go呼び出し経路可視化（Codex CLI）
@@ -109,6 +109,5 @@ flowchart TD
   B -.-> D[(iface).Call]:::maybe
   classDef maybe stroke-dasharray: 5 5;
 ```
-
 
 
