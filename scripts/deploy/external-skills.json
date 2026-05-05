@@ -1,0 +1,12 @@
+[
+  {
+    "name": "grill-me",
+    "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
+    "type": "git"
+  },
+  {
+    "name": "empirical-prompt-tuning",
+    "url": "https://github.com/mizchi/skills/blame/main/empirical-prompt-tuning",
+    "type": "git"
+  }
+]
