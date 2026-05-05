@@ -7,18 +7,18 @@
 リポジトリルートから実行する場合:
 
 ```bash
-make deploy-docs-dry-run
-make deploy-docs
+make deploy-dry-run
+make deploy
 ```
 
-`make deploy-docs-dry-run` は `scripts/deploy/deploy.example.json` を使って、コピー予定の内容だけを表示します。
-`make deploy-docs` は同じ設定ファイルを使って実際にコピーします。
+`make deploy-dry-run` は repo root の `deploy.json` と `external-skills.json` を使って、コピー予定の内容だけを表示します。
+`make deploy` は同じ設定ファイルを使って実際にコピーします。
 
-`scripts/deploy` ディレクトリで直接実行する場合:
+Go コマンドで直接実行する場合:
 
 ```bash
-go run ./cmd -config=deploy.json -dry-run
-go run ./cmd -config=deploy.json
+go run ./scripts/deploy/cmd -config=deploy.json -external-skills=external-skills.json -dry-run
+go run ./scripts/deploy/cmd -config=deploy.json -external-skills=external-skills.json
 ```
 
 `-dry-run` を付けると、実際にはコピーせずにバックアップ、削除、作成予定のディレクトリとコピー予定のファイルを出力します。
@@ -27,8 +27,8 @@ go run ./cmd -config=deploy.json
 
 ```bash
 make build-deploy
-./bin/deploy -config=./scripts/deploy/deploy.example.json -dry-run
-./bin/deploy -config=./scripts/deploy/deploy.example.json
+./bin/deploy -config=./deploy.json -external-skills=./external-skills.json -dry-run
+./bin/deploy -config=./deploy.json -external-skills=./external-skills.json
 ```
 
 ### オプション
@@ -36,6 +36,7 @@ make build-deploy
 | フラグ | 必須 | 説明 |
 |---|---|---|
 | `-config` | Yes | コピー元とコピー先を書いた JSON 設定ファイル |
+| `-external-skills` | No | 外部 skill を取得して配布する JSON 設定ファイル |
 | `-dry-run` | No | 実際にはコピーせず、item ごとの予定と件数サマリを出力する |
 | `-no-color` | No | ANSI カラー出力を無効にする |
 
@@ -47,22 +48,21 @@ make build-deploy
 {
   "items": [
     {
-      "source": "out/.codex/skills",
+      "source": "codex/skills",
       "destination": "~/.codex/skills",
       "replace": true,
-      "flatten": true,
       "exclude": [
         "**/.DS_Store",
         "**/*.tmp"
       ]
     },
     {
-      "source": "out/.codex/agents",
+      "source": "codex/agents",
       "destination": "~/.codex/agents",
       "replace": true
     },
     {
-      "source": "out/.codex/Agents.md",
+      "source": "codex/Agents.md",
       "destination": "~/.codex/Agents.md"
     },
     {
@@ -77,7 +77,7 @@ make build-deploy
 
 コピー先に既存のファイルまたはディレクトリがある場合は、コピー前にバックアップします。バックアップは 1 回の実行につき 1 つのタイムスタンプ付きディレクトリにまとめて作成され、`destination` の絶対パス構造を再現します。バックアップ先は設定ファイルと同じディレクトリ配下の `.deploy-backups/<timestamp>/` です。
 
-リポジトリルートから `./bin/deploy -config=./scripts/deploy/deploy.example.json` を実行する場合、`source` は `out/.codex/skills` のようにリポジトリルート基準で指定します。
+リポジトリルートから `./bin/deploy -config=./deploy.json` を実行する場合、`source` は `codex/skills` のようにリポジトリルート基準で指定します。
 
 `replace` は省略可能です。`true` の場合、コピー前に `destination` を削除してから配置します。`false` または未指定の場合は既存ファイルを上書きするだけで、コピー先にある余分なファイルは残します。
 
@@ -116,7 +116,7 @@ make build-deploy
 
 ```text
 [DRY-RUN] item[0] dir
-  source:      /repo/out/.codex/skills
+  source:      /repo/codex/skills
   destination: /Users/me/.codex/skills
   backup: /repo/scripts/deploy/.deploy-backups/20260421-142600/Users/me/.codex/skills
   replace: remove existing destination
@@ -129,6 +129,28 @@ make build-deploy
 ```
 
 通常の出力は見出し、バックアップ、洗い替え、サマリを色分けします。CI やログ保存などで ANSI エスケープを避けたい場合は `-no-color` を指定します。
+
+### 外部 skill 設定
+
+`-external-skills` を指定すると、外部の skill をネットワーク経由で取得して `destination` に配布します。未指定の場合、従来どおり `-config` の内容だけを処理します。
+
+```json
+[
+  {
+    "name": "grill-me",
+    "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
+    "type": "git",
+    "destination": [
+      "~/.codex/skills/external/grill-me",
+      "~/.claude/skills/grill-me"
+    ]
+  }
+]
+```
+
+`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式だけを受け付けます。dry-run でも取得と `SKILL.md` の存在確認を行うため、URL が不正、取得できない、または取得先に `SKILL.md` がない場合はエラーになります。
+
+外部 skill 同士の `name` 重複、内部 skill と外部 skill の同名衝突、外部 skill の `destination` 重複は上書きせずエラーにします。
 
 ### コピー仕様
 
