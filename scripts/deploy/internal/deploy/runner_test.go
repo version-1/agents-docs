@@ -2,11 +2,28 @@ package deploy
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 )
+
+type fakeExternalSkillFetcher struct {
+	sources map[string]string
+	errs    map[string]error
+}
+
+func (f fakeExternalSkillFetcher) Fetch(skill ExternalSkill, workDir string) (string, error) {
+	if err := f.errs[skill.Name]; err != nil {
+		return "", err
+	}
+	source, ok := f.sources[skill.Name]
+	if !ok {
+		return "", fmt.Errorf("missing fake source")
+	}
+	return source, nil
+}
 
 func TestRunnerCopiesFilesAndDirectoryContents(t *testing.T) {
 	root := t.TempDir()
@@ -68,6 +85,193 @@ func TestRunnerDryRunDoesNotWriteFiles(t *testing.T) {
 	}
 	if !strings.Contains(out.String(), "DRY-RUN") || !strings.Contains(out.String(), "copied") {
 		t.Fatalf("expected dry-run copy output, got:\n%s", out.String())
+	}
+}
+
+func TestRunnerDeploysExternalSkills(t *testing.T) {
+	root := t.TempDir()
+	writeSkill(t, filepath.Join(root, "codex", "skills", "internal", "coding"), "coding", "internal")
+	externalSource := filepath.Join(root, "external-source", "grill-me")
+	writeSkill(t, externalSource, "grill-me", "external")
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "codex/skills", "destination": "dest/codex-skills"}
+  ]
+}`)
+	externalConfig := filepath.Join(root, "external-skills.json")
+	writeConfig(t, externalConfig, `[
+  {
+    "name": "grill-me",
+    "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
+    "type": "git",
+    "destination": ["dest/external/grill-me"]
+  }
+]`)
+
+	var out bytes.Buffer
+	runner := newRunnerWithFetcher(&out, fakeExternalSkillFetcher{sources: map[string]string{"grill-me": externalSource}})
+	if err := runFromDir(t, root, func() error {
+		return runner.Run(config, Options{ExternalSkillsPath: externalConfig, NoColor: true})
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, filepath.Join(root, "dest", "external", "grill-me", "SKILL.md"), skillContent("grill-me", "external"))
+	if !strings.Contains(out.String(), "external-skill") || !strings.Contains(out.String(), "grill-me") {
+		t.Fatalf("expected external skill output, got:\n%s", out.String())
+	}
+}
+
+func TestRunnerExternalSkillsRequiresValidGitHubTreeURL(t *testing.T) {
+	root := t.TempDir()
+	writeSkill(t, filepath.Join(root, "codex", "skills", "internal", "coding"), "coding", "internal")
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
+	externalConfig := filepath.Join(root, "external-skills.json")
+	writeConfig(t, externalConfig, `[
+  {"name":"bad","url":"https://github.com/owner/repo/blob/main/skill","type":"git","destination":["dest/bad"]}
+]`)
+
+	var out bytes.Buffer
+	runner := newRunnerWithFetcher(&out, fakeExternalSkillFetcher{})
+	err := runFromDir(t, root, func() error {
+		return runner.Run(config, Options{ExternalSkillsPath: externalConfig, NoColor: true})
+	})
+	if err == nil {
+		t.Fatal("expected invalid URL error")
+	}
+	if !strings.Contains(err.Error(), "expected https://github.com/<owner>/<repo>/tree/<ref>/<path>") {
+		t.Fatalf("expected URL error, got %v", err)
+	}
+}
+
+func TestRunnerExternalSkillsRejectsFetchFailure(t *testing.T) {
+	root := t.TempDir()
+	writeSkill(t, filepath.Join(root, "codex", "skills", "internal", "coding"), "coding", "internal")
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
+	externalConfig := filepath.Join(root, "external-skills.json")
+	writeConfig(t, externalConfig, `[
+  {"name":"grill-me","url":"https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me","type":"git","destination":["dest/grill-me"]}
+]`)
+
+	var out bytes.Buffer
+	runner := newRunnerWithFetcher(&out, fakeExternalSkillFetcher{errs: map[string]error{"grill-me": fmt.Errorf("network failed")}})
+	err := runFromDir(t, root, func() error {
+		return runner.Run(config, Options{ExternalSkillsPath: externalConfig, DryRun: true, NoColor: true})
+	})
+	if err == nil {
+		t.Fatal("expected fetch error")
+	}
+	if !strings.Contains(err.Error(), "network failed") {
+		t.Fatalf("expected fetch failure, got %v", err)
+	}
+}
+
+func TestRunnerExternalSkillsRequiresSkillFile(t *testing.T) {
+	root := t.TempDir()
+	writeSkill(t, filepath.Join(root, "codex", "skills", "internal", "coding"), "coding", "internal")
+	externalSource := filepath.Join(root, "external-source", "missing-skill")
+	if err := os.MkdirAll(externalSource, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
+	externalConfig := filepath.Join(root, "external-skills.json")
+	writeConfig(t, externalConfig, `[
+  {"name":"missing-skill","url":"https://github.com/owner/repo/tree/main/missing-skill","type":"git","destination":["dest/missing-skill"]}
+]`)
+
+	var out bytes.Buffer
+	runner := newRunnerWithFetcher(&out, fakeExternalSkillFetcher{sources: map[string]string{"missing-skill": externalSource}})
+	err := runFromDir(t, root, func() error {
+		return runner.Run(config, Options{ExternalSkillsPath: externalConfig, NoColor: true})
+	})
+	if err == nil {
+		t.Fatal("expected missing SKILL.md error")
+	}
+	if !strings.Contains(err.Error(), "does not contain SKILL.md") {
+		t.Fatalf("expected missing SKILL.md error, got %v", err)
+	}
+}
+
+func TestRunnerExternalSkillsRejectsNameMismatch(t *testing.T) {
+	root := t.TempDir()
+	writeSkill(t, filepath.Join(root, "codex", "skills", "internal", "coding"), "coding", "internal")
+	externalSource := filepath.Join(root, "external-source", "wrong")
+	writeSkill(t, externalSource, "actual-name", "external")
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
+	externalConfig := filepath.Join(root, "external-skills.json")
+	writeConfig(t, externalConfig, `[
+  {"name":"configured-name","url":"https://github.com/owner/repo/tree/main/configured-name","type":"git","destination":["dest/configured-name"]}
+]`)
+
+	var out bytes.Buffer
+	runner := newRunnerWithFetcher(&out, fakeExternalSkillFetcher{sources: map[string]string{"configured-name": externalSource}})
+	err := runFromDir(t, root, func() error {
+		return runner.Run(config, Options{ExternalSkillsPath: externalConfig, NoColor: true})
+	})
+	if err == nil {
+		t.Fatal("expected name mismatch error")
+	}
+	if !strings.Contains(err.Error(), "name mismatch") {
+		t.Fatalf("expected name mismatch error, got %v", err)
+	}
+}
+
+func TestRunnerExternalSkillsRejectsInternalNameConflict(t *testing.T) {
+	root := t.TempDir()
+	writeSkill(t, filepath.Join(root, "codex", "skills", "internal", "coding"), "coding", "internal")
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
+	externalConfig := filepath.Join(root, "external-skills.json")
+	writeConfig(t, externalConfig, `[
+  {"name":"coding","url":"https://github.com/owner/repo/tree/main/coding","type":"git","destination":["dest/coding"]}
+]`)
+
+	var out bytes.Buffer
+	runner := newRunnerWithFetcher(&out, fakeExternalSkillFetcher{})
+	err := runFromDir(t, root, func() error {
+		return runner.Run(config, Options{ExternalSkillsPath: externalConfig, NoColor: true})
+	})
+	if err == nil {
+		t.Fatal("expected conflict error")
+	}
+	if !strings.Contains(err.Error(), "conflicts with internal skill") {
+		t.Fatalf("expected internal conflict error, got %v", err)
+	}
+}
+
+func TestRunnerExternalSkillsRejectsDestinationConflict(t *testing.T) {
+	root := t.TempDir()
+	writeSkill(t, filepath.Join(root, "codex", "skills", "internal", "coding"), "coding", "internal")
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
+	externalConfig := filepath.Join(root, "external-skills.json")
+	writeConfig(t, externalConfig, `[
+  {"name":"one","url":"https://github.com/owner/repo/tree/main/one","type":"git","destination":["dest/same"]},
+  {"name":"two","url":"https://github.com/owner/repo/tree/main/two","type":"git","destination":["dest/same"]}
+]`)
+
+	var out bytes.Buffer
+	runner := newRunnerWithFetcher(&out, fakeExternalSkillFetcher{})
+	err := runFromDir(t, root, func() error {
+		return runner.Run(config, Options{ExternalSkillsPath: externalConfig, NoColor: true})
+	})
+	if err == nil {
+		t.Fatal("expected destination conflict error")
+	}
+	if !strings.Contains(err.Error(), "destination conflict") {
+		t.Fatalf("expected destination conflict error, got %v", err)
 	}
 }
 
@@ -519,6 +723,20 @@ func writeConfig(t *testing.T, path, content string) {
 	if err := os.WriteFile(path, []byte(content), 0644); err != nil {
 		t.Fatal(err)
 	}
+}
+
+func writeSkill(t *testing.T, dir, name, body string) {
+	t.Helper()
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "SKILL.md"), []byte(skillContent(name, body)), 0644); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func skillContent(name, body string) string {
+	return fmt.Sprintf("---\nname: %s\ndescription: test\n---\n\n%s", name, body)
 }
 
 func assertFileContent(t *testing.T, path, want string) {

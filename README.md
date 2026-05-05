@@ -14,28 +14,28 @@ docs 配下にはスキルなどの元となるドキュメントが置かれて
 - `make build-deploy` で deploy 用のバイナリを生成します。
 - `make gen-docs` で環境で使用するドキュメントを生成します。
 - `make deploy-codex-docs` で生成済みのドキュメントを `~/.codex` に反映します。
-- `make deploy-docs-dry-run` で `scripts/deploy/deploy.example.json` に基づくコピー予定を確認します。
-- `make deploy-docs` で `scripts/deploy/deploy.example.json` に基づいて生成済みドキュメントを配置します。
+- `make deploy-dry-run` で `deploy.json` と `external-skills.json` に基づくコピー予定を確認します。
+- `make deploy` で `deploy.json` と `external-skills.json` に基づいて設定とスキルを配置します。
   - generator の詳細は `scripts/generator/README.md` を参照してください。
   - deploy の詳細は `scripts/deploy/README.md` を参照してください。
 
 ## デプロイ手順
 
 1. `make gen-docs` を実行して `docs/ja` から生成物を作成します。
-2. `make deploy-docs-dry-run` を実行して、コピー予定のファイルとディレクトリを確認します。
-3. `make deploy-docs` を実行して、Codex / Claude 用の設定とドキュメントを反映します。
+2. `make deploy-dry-run` を実行して、コピー予定のファイルとディレクトリを確認します。
+3. `make deploy` を実行して、Codex / Claude 用の設定とスキルを反映します。
 
 生成と反映は一続きの手順なので、通常はこの2コマンドを続けて実行します。
 
 ```bash
 make gen-docs
-make deploy-docs-dry-run
-make deploy-docs
+make deploy-dry-run
+make deploy
 ```
 
 ## deploy 設定
 
-`scripts/deploy/deploy.example.json` の `items` に、コピー元とコピー先を設定します。
+`deploy.json` の `items` に、コピー元とコピー先を設定します。
 
 ```json
 {

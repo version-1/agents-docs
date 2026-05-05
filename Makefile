@@ -2,21 +2,21 @@
 build-deploy:
 	cd scripts/deploy && go build -o ../../bin/deploy cmd/main.go
 
-deploy-docs-dry-run:
+deploy-dry-run:
 	$(MAKE) build-deploy
-	./bin/deploy -config=./scripts/deploy/deploy.json -dry-run
+	./bin/deploy -config=./deploy.json -external-skills=./external-skills.json -dry-run
 
-deploy-docs:
+deploy:
 	$(MAKE) build-deploy
-	./bin/deploy -config=./scripts/deploy/deploy.json
+	./bin/deploy -config=./deploy.json -external-skills=./external-skills.json
 
-apply: deploy-docs
+apply: deploy
 
 tree-out:
 	tree ./out/.codex
 	tree ./out/.claude
 
-# Depricated: manual copy is error-prone, use deploy-docs instead
+# Depricated: manual copy is error-prone, use deploy instead
 # build-generator:
 # 	cd scripts/generator && go build -o ../../bin/generator cmd/main.go
 #

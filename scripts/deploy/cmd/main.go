@@ -10,9 +10,10 @@ import (
 
 func main() {
 	var (
-		configPath = flag.String("config", "", "deployment config file path")
-		dryRun     = flag.Bool("dry-run", false, "print planned copies without writing files")
-		noColor    = flag.Bool("no-color", false, "disable ANSI color output")
+		configPath         = flag.String("config", "", "deployment config file path")
+		externalSkillsPath = flag.String("external-skills", "", "external skills config file path")
+		dryRun             = flag.Bool("dry-run", false, "print planned copies without writing files")
+		noColor            = flag.Bool("no-color", false, "disable ANSI color output")
 	)
 	flag.Parse()
 
@@ -22,7 +23,7 @@ func main() {
 	}
 
 	runner := deploy.NewRunner(os.Stdout)
-	if err := runner.Run(*configPath, deploy.Options{DryRun: *dryRun, NoColor: *noColor}); err != nil {
+	if err := runner.Run(*configPath, deploy.Options{DryRun: *dryRun, NoColor: *noColor, ExternalSkillsPath: *externalSkillsPath}); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
 	}
