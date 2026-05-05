@@ -37,7 +37,7 @@
     },
     {
       "source": "claude/skills",
-      "destination": "~/.claude/skills",
+      "destination": "~/.codex/skills",
       "replace": true,
       "flatten": true,
       "exclude": [
