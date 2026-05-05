@@ -1,6 +1,6 @@
 ---
 name: pr-description
-description: 変更内容をレビューしやすいように自動生成するためのスキル
+description: GitHub Pull Request の description を作成・更新するときに使う。PR 番号、diff、コミット履歴をもとに、Summary、主な変更点、やったこと、動作確認、レビュアー向けチェックリスト、必要に応じた Mermaid 図を一貫したテンプレートへ整理する。
 ---
 
 ## 目的
