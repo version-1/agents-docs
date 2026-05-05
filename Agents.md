@@ -38,8 +38,7 @@
 ## コマンド
 
 - `make build-skillmaker` コマンドで skills 生成用のバイナリを生成します。
-- `make gen-docs` で環境で使用するドキュメントを生成します。
-- `make deploy-codex-docs` で生成済みのドキュメントを `~/.codex` に反映します。
+- `make deploy` で Codex / Claude 用のドキュメント・skill・agent を配布します。
 
 ## テスト実行時の補足
 

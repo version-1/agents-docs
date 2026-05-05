@@ -48,22 +48,21 @@ make build-deploy
 {
   "items": [
     {
-      "source": "out/.codex/skills",
+      "source": "codex/skills",
       "destination": "~/.codex/skills",
       "replace": true,
-      "flatten": true,
       "exclude": [
         "**/.DS_Store",
         "**/*.tmp"
       ]
     },
     {
-      "source": "out/.codex/agents",
+      "source": "codex/agents",
       "destination": "~/.codex/agents",
       "replace": true
     },
     {
-      "source": "out/.codex/Agents.md",
+      "source": "codex/Agents.md",
       "destination": "~/.codex/Agents.md"
     },
     {
@@ -117,7 +116,7 @@ make build-deploy
 
 ```text
 [DRY-RUN] item[0] dir
-  source:      /repo/out/.codex/skills
+  source:      /repo/codex/skills
   destination: /Users/me/.codex/skills
   backup: /repo/scripts/deploy/.deploy-backups/20260421-142600/Users/me/.codex/skills
   replace: remove existing destination

@@ -1,21 +1,20 @@
 {
   "items": [
     {
-      "source": "out/.codex/skills",
+      "source": "codex/skills",
       "destination": "~/.codex/skills",
       "replace": true,
-      "flatten": true,
       "exclude": [
         "**/.DS_Store"
       ]
     },
     {
-      "source": "out/.codex/agents",
+      "source": "codex/agents",
       "destination": "~/.codex/agents",
       "replace": true
     },
     {
-      "source": "out/.codex/Agents.md",
+      "source": "codex/Agents.md",
       "destination": "~/.codex/Agents.md"
     },
     {
@@ -23,13 +22,13 @@
       "destination": "~/.codex/config.toml"
     },
     {
-      "source": "out/.claude/skills",
+      "source": "codex/skills",
       "destination": "~/.claude/skills",
       "replace": true,
       "flatten": true
     },
     {
-      "source": "out/.claude/agents",
+      "source": "claude/agents",
       "destination": "~/.claude/agents",
       "replace": true
     },
