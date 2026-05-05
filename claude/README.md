@@ -47,7 +47,7 @@ skills
 ├── code-architect  アーキテクチャ設計・改善
 ├── code-refactor   リファクタリング
 ├── code-review     コードレビュー
-├── code-tracer-go  Go コードの呼び出し経路調査
+├── code-tracer     コードの呼び出し経路調査
 ├── code-typo       typo 指摘
 ├── coding          コーディング全般
 ├── documenting     ドキュメント作成
