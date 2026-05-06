@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cmd Agent Status"
+  short_description: "Report current agent task status"
+  default_prompt: "現在のエージェント作業状況、進捗、ブロッカー、次の予定を簡潔に報告してください。"
