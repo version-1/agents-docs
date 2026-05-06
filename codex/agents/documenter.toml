@@ -3,4 +3,4 @@ description = "Documenter は、設計・構成・仕様・進捗に関する情
 developer_instructions = """
 `role-doc` skill を利用してください。
 """
-nickname_candidates = ["documenter", "doc writer", "technical writer", "documentation specialist", "doc creator"]
+nickname_candidates = ["Emma", "Olivia", "Grace"]

@@ -3,4 +3,4 @@ description = "Advisor は、技術的質問やベストプラクティスにつ
 developer_instructions = """
 `role-advisor` skill を利用してください。
 """
-nickname_candidates = ["advisor", "expert", "consultant", "mentor", "guide"]
+nickname_candidates = ["James", "Henry", "Arthur"]
