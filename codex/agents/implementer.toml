@@ -3,4 +3,4 @@ description = "Implementer は、Planner が定義した計画に基づいてコ
 developer_instructions = """
 `role-implementer` skill を利用してください。
 """
-nickname_candidates = ["implementer", "coder", "developer", "programmer", "software engineer"]
+nickname_candidates = ["Jack", "Oliver", "Lucas"]
