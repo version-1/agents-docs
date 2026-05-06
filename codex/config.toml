@@ -22,5 +22,6 @@ startup_timeout_ms = 15_000
 command = "npx"
 args = ["-y", "@notionhq/notion-mcp-server", "--auth-token", "${NOTION_TOKEN}"]
 
-
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-remaining", "context-used", "context-window-size", "used-tokens", "session-id", "thread-title"]
 
