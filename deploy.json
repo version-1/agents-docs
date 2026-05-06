@@ -22,8 +22,8 @@
       ]
     },
     {
-      "source": "codex/Agents.md",
-      "destination": "~/.codex/Agents.md",
+      "source": "codex/AGENTS.md",
+      "destination": "~/.codex/AGENTS.md",
       "exclude": [
         "**/.DS_Store"
       ]

@@ -62,8 +62,8 @@ make build-deploy
       "replace": true
     },
     {
-      "source": "codex/Agents.md",
-      "destination": "~/.codex/Agents.md"
+      "source": "codex/AGENTS.md",
+      "destination": "~/.codex/AGENTS.md"
     },
     {
       "source": "codex/config.toml",
