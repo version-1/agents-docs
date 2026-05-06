@@ -1,27 +1,33 @@
-package deploy
+package external
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"deploy/internal/config"
+	"deploy/internal/matcher"
+	"deploy/internal/pathutil"
 )
 
-type ExternalSkill struct {
+type Skill struct {
 	Name        string   `json:"name"`
 	URL         string   `json:"url"`
 	Type        string   `json:"type"`
 	Destination []string `json:"destination"`
 }
 
-type externalSkillFetcher interface {
-	Fetch(skill ExternalSkill, workDir string) (string, error)
+type Fetcher interface {
+	Fetch(skill Skill, workDir string) (string, error)
 }
 
-type gitExternalSkillFetcher struct{}
+type GitFetcher struct{}
 
 type githubTreeURL struct {
 	owner string
@@ -30,45 +36,52 @@ type githubTreeURL struct {
 	path  string
 }
 
-func LoadExternalSkills(path string) ([]ExternalSkill, error) {
+func Load(path string) ([]Skill, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("read external skills %q: %w", path, err)
 	}
 
-	var skills []ExternalSkill
+	var skills []Skill
 	if err := json.Unmarshal(b, &skills); err != nil {
 		return nil, fmt.Errorf("parse external skills %q: %w", path, err)
 	}
 	for i, skill := range skills {
-		if skill.Name == "" {
-			return nil, fmt.Errorf("externalSkills[%d].name is required", i)
-		}
-		if skill.URL == "" {
-			return nil, fmt.Errorf("externalSkills[%d].url is required", i)
-		}
-		if skill.Type == "" {
-			return nil, fmt.Errorf("externalSkills[%d].type is required", i)
-		}
-		if skill.Type != "git" {
-			return nil, fmt.Errorf("externalSkills[%d].type %q is not supported", i, skill.Type)
-		}
-		if len(skill.Destination) == 0 {
-			return nil, fmt.Errorf("externalSkills[%d].destination must include at least one path", i)
-		}
-		for j, destination := range skill.Destination {
-			if destination == "" {
-				return nil, fmt.Errorf("externalSkills[%d].destination[%d] is required", i, j)
-			}
-		}
-		if _, err := parseGitHubTreeURL(skill.URL); err != nil {
-			return nil, fmt.Errorf("externalSkills[%d].url: %w", i, err)
+		if err := validateConfigSkill(i, skill); err != nil {
+			return nil, err
 		}
 	}
 	return skills, nil
 }
 
-func validateExternalSkillConflicts(skills []ExternalSkill, cfg Config, cwd string) error {
+func validateConfigSkill(i int, skill Skill) error {
+	if skill.Name == "" {
+		return fmt.Errorf("externalSkills[%d].name is required", i)
+	}
+	if skill.URL == "" {
+		return fmt.Errorf("externalSkills[%d].url is required", i)
+	}
+	if skill.Type == "" {
+		return fmt.Errorf("externalSkills[%d].type is required", i)
+	}
+	if skill.Type != "git" {
+		return fmt.Errorf("externalSkills[%d].type %q is not supported", i, skill.Type)
+	}
+	if len(skill.Destination) == 0 {
+		return fmt.Errorf("externalSkills[%d].destination must include at least one path", i)
+	}
+	for j, destination := range skill.Destination {
+		if destination == "" {
+			return fmt.Errorf("externalSkills[%d].destination[%d] is required", i, j)
+		}
+	}
+	if _, err := parseGitHubTreeURL(skill.URL); err != nil {
+		return fmt.Errorf("externalSkills[%d].url: %w", i, err)
+	}
+	return nil
+}
+
+func ValidateConflicts(skills []Skill, cfg config.Config, cwd string) error {
 	names := map[string]string{}
 	for i, skill := range skills {
 		if previous, ok := names[skill.Name]; ok {
@@ -90,7 +103,7 @@ func validateExternalSkillConflicts(skills []ExternalSkill, cfg Config, cwd stri
 	destinations := map[string]string{}
 	for i, skill := range skills {
 		for j, destination := range skill.Destination {
-			expanded, err := expandHome(destination)
+			expanded, err := pathutil.ExpandHome(destination)
 			if err != nil {
 				return fmt.Errorf("externalSkills[%d].destination[%d]: %w", i, j, err)
 			}
@@ -104,10 +117,10 @@ func validateExternalSkillConflicts(skills []ExternalSkill, cfg Config, cwd stri
 	return nil
 }
 
-func collectInternalSkillNames(cfg Config, cwd string) (map[string]string, error) {
+func collectInternalSkillNames(cfg config.Config, cwd string) (map[string]string, error) {
 	names := map[string]string{}
 	for i, item := range cfg.Items {
-		src, err := resolveSourcePath(cwd, item.Source)
+		src, err := pathutil.ResolveSourcePath(cwd, item.Source)
 		if err != nil {
 			return nil, fmt.Errorf("resolve source for items[%d]: %w", i, err)
 		}
@@ -118,7 +131,7 @@ func collectInternalSkillNames(cfg Config, cwd string) (map[string]string, error
 		if !info.IsDir() {
 			continue
 		}
-		matcher, err := newExcludeMatcher(item.Exclude)
+		excludeMatcher, err := matcher.New(item.Exclude)
 		if err != nil {
 			return nil, fmt.Errorf("items[%d]: %w", i, err)
 		}
@@ -130,7 +143,7 @@ func collectInternalSkillNames(cfg Config, cwd string) (map[string]string, error
 			if err != nil {
 				return err
 			}
-			if matcher.Match(rel) {
+			if excludeMatcher.Match(rel) {
 				if d.IsDir() {
 					return filepath.SkipDir
 				}
@@ -144,7 +157,7 @@ func collectInternalSkillNames(cfg Config, cwd string) (map[string]string, error
 			if err != nil {
 				return err
 			}
-			if matcher.Match(skillRel) {
+			if excludeMatcher.Match(skillRel) {
 				return nil
 			}
 			info, err := os.Stat(skillFile)
@@ -165,7 +178,7 @@ func collectInternalSkillNames(cfg Config, cwd string) (map[string]string, error
 	return names, nil
 }
 
-func validateFetchedExternalSkill(skill ExternalSkill, src string) error {
+func ValidateFetched(skill Skill, src string) error {
 	skillFile := filepath.Join(src, "SKILL.md")
 	info, err := os.Stat(skillFile)
 	if err != nil {
@@ -177,7 +190,7 @@ func validateFetchedExternalSkill(skill ExternalSkill, src string) error {
 	if !info.Mode().IsRegular() {
 		return fmt.Errorf("external skill %q SKILL.md is not a regular file", skill.Name)
 	}
-	actualName, err := readSkillName(skillFile)
+	actualName, err := ReadSkillName(skillFile)
 	if err != nil {
 		return fmt.Errorf("read external skill %q name: %w", skill.Name, err)
 	}
@@ -187,16 +200,27 @@ func validateFetchedExternalSkill(skill ExternalSkill, src string) error {
 	return nil
 }
 
-func readSkillName(path string) (string, error) {
-	b, err := os.ReadFile(path)
+func ReadSkillName(path string) (string, error) {
+	file, err := os.Open(path)
 	if err != nil {
 		return "", err
 	}
-	lines := strings.Split(string(b), "\n")
-	if len(lines) == 0 || strings.TrimSpace(lines[0]) != "---" {
+	defer file.Close()
+
+	reader := bufio.NewReader(file)
+	line, err := reader.ReadString('\n')
+	if err != nil && err != io.EOF {
+		return "", err
+	}
+	if strings.TrimSpace(line) != "---" {
 		return "", nil
 	}
-	for _, line := range lines[1:] {
+
+	for err != io.EOF {
+		line, err = reader.ReadString('\n')
+		if err != nil && err != io.EOF {
+			return "", err
+		}
 		line = strings.TrimSpace(line)
 		if line == "---" {
 			return "", nil
@@ -208,7 +232,7 @@ func readSkillName(path string) (string, error) {
 	return "", nil
 }
 
-func (gitExternalSkillFetcher) Fetch(skill ExternalSkill, workDir string) (string, error) {
+func (GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
 	treeURL, err := parseGitHubTreeURL(skill.URL)
 	if err != nil {
 		return "", err

@@ -1,4 +1,4 @@
-package deploy
+package matcher
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type excludeMatcher struct {
+type Matcher struct {
 	patterns []excludePattern
 }
 
@@ -18,8 +18,8 @@ type excludePattern struct {
 	basenameRe *regexp.Regexp
 }
 
-func newExcludeMatcher(patterns []string) (excludeMatcher, error) {
-	matcher := excludeMatcher{}
+func New(patterns []string) (Matcher, error) {
+	matcher := Matcher{}
 	for _, pattern := range patterns {
 		normalized := normalizeGlobPattern(pattern)
 		if normalized == "" {
@@ -28,23 +28,19 @@ func newExcludeMatcher(patterns []string) (excludeMatcher, error) {
 
 		re, err := compileGlob(normalized)
 		if err != nil {
-			return excludeMatcher{}, fmt.Errorf("compile exclude pattern %q: %w", pattern, err)
+			return Matcher{}, fmt.Errorf("compile exclude pattern %q: %w", pattern, err)
 		}
 
 		exclude := excludePattern{raw: normalized, re: re}
 		if !strings.Contains(normalized, "/") {
-			basenameRe, err := compileGlob(normalized)
-			if err != nil {
-				return excludeMatcher{}, fmt.Errorf("compile exclude pattern %q: %w", pattern, err)
-			}
-			exclude.basenameRe = basenameRe
+			exclude.basenameRe = re
 		}
 		matcher.patterns = append(matcher.patterns, exclude)
 	}
 	return matcher, nil
 }
 
-func (m excludeMatcher) Match(rel string) bool {
+func (m Matcher) Match(rel string) bool {
 	rel = normalizeRelPath(rel)
 	if rel == "." || rel == "" {
 		return false

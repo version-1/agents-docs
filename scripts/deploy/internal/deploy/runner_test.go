@@ -7,6 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	cfgpkg "deploy/internal/config"
+	"deploy/internal/external"
 )
 
 type fakeExternalSkillFetcher struct {
@@ -14,7 +17,7 @@ type fakeExternalSkillFetcher struct {
 	errs    map[string]error
 }
 
-func (f fakeExternalSkillFetcher) Fetch(skill ExternalSkill, workDir string) (string, error) {
+func (f fakeExternalSkillFetcher) Fetch(skill external.Skill, workDir string) (string, error) {
 	if err := f.errs[skill.Name]; err != nil {
 		return "", err
 	}
@@ -55,6 +58,7 @@ func TestRunnerCopiesFilesAndDirectoryContents(t *testing.T) {
 
 	assertFileContent(t, filepath.Join(root, "dest", "dir", "nested", "a.txt"), "a")
 	assertFileContent(t, filepath.Join(root, "dest", "single.txt"), "single")
+	assertFileMode(t, filepath.Join(root, "dest", "single.txt"), 0600)
 	if !strings.Contains(out.String(), "DEPLOY") {
 		t.Fatalf("expected deploy output, got:\n%s", out.String())
 	}
@@ -674,7 +678,7 @@ func TestLoadConfigRequiresItems(t *testing.T) {
 	config := filepath.Join(root, "deploy.json")
 	writeConfig(t, config, `{"items":[]}`)
 
-	_, err := LoadConfig(config)
+	_, err := cfgpkg.Load(config)
 	if err == nil {
 		t.Fatal("expected error")
 	}
@@ -747,5 +751,16 @@ func assertFileContent(t *testing.T, path, want string) {
 	}
 	if string(b) != want {
 		t.Fatalf("content mismatch for %s: got %q want %q", path, string(b), want)
+	}
+}
+
+func assertFileMode(t *testing.T, path string, want os.FileMode) {
+	t.Helper()
+	info, err := os.Stat(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := info.Mode().Perm(); got != want {
+		t.Fatalf("mode mismatch for %s: got %v want %v", path, got, want)
 	}
 }

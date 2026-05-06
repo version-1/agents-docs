@@ -1,4 +1,4 @@
-package deploy
+package config
 
 import (
 	"encoding/json"
@@ -18,7 +18,7 @@ type Item struct {
 	Flatten     bool     `json:"flatten"`
 }
 
-func LoadConfig(path string) (Config, error) {
+func Load(path string) (Config, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {
 		return Config{}, fmt.Errorf("read config %q: %w", path, err)
