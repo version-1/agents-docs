@@ -23,5 +23,5 @@ command = "npx"
 args = ["-y", "@notionhq/notion-mcp-server", "--auth-token", "${NOTION_TOKEN}"]
 
 [tui]
-status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-remaining", "context-used", "context-window-size", "used-tokens", "session-id", "thread-title"]
+status_line = ["git-branch", "session-id", "context-remaining", "used-tokens", "thread-title"]
 
