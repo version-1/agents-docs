@@ -1,4 +1,4 @@
 interface:
-  display_name: "Cmd Batch"
+  display_name: "cmd-batch"
   short_description: "Coordinate broad multi-agent codebase work"
   default_prompt: "広範囲のコードベースに対して、複数エージェントで調査や編集を分担し、競合を避けながら統合してください。"
