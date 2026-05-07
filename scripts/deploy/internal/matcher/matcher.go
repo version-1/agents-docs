@@ -5,6 +5,7 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -66,6 +67,20 @@ func normalizeGlobPattern(pattern string) string {
 	pattern = strings.TrimPrefix(pattern, "./")
 	pattern = strings.TrimSuffix(pattern, "/")
 	return pattern
+}
+
+// CacheKeyPatterns normalizes exclude patterns for order-independent cache keys.
+// Matcher semantics are currently order-independent; update this if that changes.
+func CacheKeyPatterns(patterns []string) []string {
+	normalized := make([]string, 0, len(patterns))
+	for _, pattern := range patterns {
+		pattern = normalizeGlobPattern(pattern)
+		if pattern != "" {
+			normalized = append(normalized, pattern)
+		}
+	}
+	sort.Strings(normalized)
+	return normalized
 }
 
 func compileGlob(pattern string) (*regexp.Regexp, error) {

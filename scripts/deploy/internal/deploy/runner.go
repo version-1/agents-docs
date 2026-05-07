@@ -3,7 +3,6 @@ package deploy
 import (
 	"fmt"
 	"io"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -14,6 +13,7 @@ import (
 	"deploy/internal/fileops"
 	"deploy/internal/matcher"
 	"deploy/internal/pathutil"
+	"deploy/internal/skillscan"
 )
 
 type Options struct {
@@ -37,6 +37,11 @@ type flattenedSkillDir struct {
 type fetchedExternalSkill struct {
 	skill  external.Skill
 	source string
+}
+
+type headerField struct {
+	label string
+	value string
 }
 
 const (
@@ -76,40 +81,81 @@ func (r Runner) Run(configPath string, opts Options) error {
 	configDir := filepath.Dir(absConfigPath)
 	backupRoot := filepath.Join(configDir, ".deploy-backups", time.Now().Format("20060102-150405"))
 
-	var externalSkills []fetchedExternalSkill
-	var externalConfigDir string
-	var cleanupExternalSkills func()
-	if opts.ExternalSkillsPath != "" {
-		externalSkills, externalConfigDir, cleanupExternalSkills, err = r.prepareExternalSkills(opts.ExternalSkillsPath, cfg, cwd)
-		if err != nil {
-			return err
-		}
+	externalSkills, externalConfigDir, cleanupExternalSkills, err := r.prepareOptionalExternalSkills(opts.ExternalSkillsPath, cfg, cwd)
+	if err != nil {
+		return err
+	}
+	if cleanupExternalSkills != nil {
 		defer cleanupExternalSkills()
 	}
 
+	if err := r.deployConfiguredItems(cfg, cwd, configDir, backupRoot, opts); err != nil {
+		return err
+	}
+	return r.deployExternalSkills(externalSkills, externalConfigDir, len(cfg.Items), backupRoot, opts)
+}
+
+func (r Runner) prepareOptionalExternalSkills(path string, cfg config.Config, cwd string) ([]fetchedExternalSkill, string, func(), error) {
+	var cleanup func()
+	var skills []fetchedExternalSkill
+	var configDir string
+	var err error
+	if path == "" {
+		return nil, "", nil, nil
+	}
+	skills, configDir, cleanup, err = r.prepareExternalSkills(path, cfg, cwd)
+	if err != nil {
+		return nil, "", nil, err
+	}
+	return skills, configDir, cleanup, nil
+}
+
+func (r Runner) deployConfiguredItems(cfg config.Config, cwd, configDir, backupRoot string, opts Options) error {
 	for i, item := range cfg.Items {
-		src, err := pathutil.ResolveSourcePath(cwd, item.Source)
+		src, dst, excludeMatcher, err := resolveDeployItem(i, item, cwd, configDir)
 		if err != nil {
-			return fmt.Errorf("resolve source for items[%d]: %w", i, err)
+			return err
 		}
-		dst, err := pathutil.ResolveItemPath(configDir, item.Destination)
-		if err != nil {
-			return fmt.Errorf("resolve destination for items[%d]: %w", i, err)
-		}
-
-		excludeMatcher, err := matcher.New(item.Exclude)
-		if err != nil {
-			return fmt.Errorf("items[%d]: %w", i, err)
-		}
-
 		if err := r.deployItem(i, src, dst, excludeMatcher, item.Replace, item.Flatten, backupRoot, opts); err != nil {
 			return err
 		}
 	}
+	return nil
+}
 
-	if len(externalSkills) > 0 {
-		if err := r.deployExternalSkills(externalSkills, externalConfigDir, len(cfg.Items), backupRoot, opts); err != nil {
-			return err
+func resolveDeployItem(index int, item config.Item, cwd, configDir string) (string, string, matcher.Matcher, error) {
+	src, err := pathutil.ResolveSourcePath(cwd, item.Source)
+	if err != nil {
+		return "", "", matcher.Matcher{}, fmt.Errorf("resolve source for items[%d]: %w", index, err)
+	}
+	dst, err := pathutil.ResolveItemPath(configDir, item.Destination)
+	if err != nil {
+		return "", "", matcher.Matcher{}, fmt.Errorf("resolve destination for items[%d]: %w", index, err)
+	}
+
+	excludeMatcher, err := matcher.New(item.Exclude)
+	if err != nil {
+		return "", "", matcher.Matcher{}, fmt.Errorf("items[%d]: %w", index, err)
+	}
+	return src, dst, excludeMatcher, nil
+}
+
+func (r Runner) deployExternalSkills(skills []fetchedExternalSkill, externalConfigDir string, startIndex int, backupRoot string, opts Options) error {
+	if len(skills) == 0 {
+		return nil
+	}
+	index := startIndex
+	for i, fetched := range skills {
+		for j, destination := range fetched.skill.Destination {
+			dst, err := pathutil.ResolveItemPath(externalConfigDir, destination)
+			if err != nil {
+				return fmt.Errorf("resolve destination for externalSkills[%d].destination[%d]: %w", i, j, err)
+			}
+			report := &itemReport{}
+			if err := r.deployExternalSkill(index, fetched.skill, fetched.source, dst, backupRoot, report, opts); err != nil {
+				return err
+			}
+			index++
 		}
 	}
 	return nil
@@ -153,24 +199,6 @@ func (r Runner) prepareExternalSkills(path string, cfg config.Config, cwd string
 
 	cleanupOnError = false
 	return fetched, filepath.Dir(absExternalPath), func() { _ = os.RemoveAll(workDir) }, nil
-}
-
-func (r Runner) deployExternalSkills(skills []fetchedExternalSkill, externalConfigDir string, startIndex int, backupRoot string, opts Options) error {
-	index := startIndex
-	for i, fetched := range skills {
-		for j, destination := range fetched.skill.Destination {
-			dst, err := pathutil.ResolveItemPath(externalConfigDir, destination)
-			if err != nil {
-				return fmt.Errorf("resolve destination for externalSkills[%d].destination[%d]: %w", i, j, err)
-			}
-			report := &itemReport{}
-			if err := r.deployExternalSkill(index, fetched.skill, fetched.source, dst, backupRoot, report, opts); err != nil {
-				return err
-			}
-			index++
-		}
-	}
-	return nil
 }
 
 func (r Runner) deployExternalSkill(index int, skill external.Skill, src, dst, backupRoot string, report *itemReport, opts Options) error {
@@ -250,53 +278,17 @@ func (r Runner) deployFlattenedSkillDirs(index int, src, dst string, excludeMatc
 func findFlattenedSkillDirs(src, dst string, excludeMatcher matcher.Matcher, report *itemReport) ([]flattenedSkillDir, error) {
 	targets := map[string]string{}
 	var skillDirs []flattenedSkillDir
-	err := filepath.WalkDir(src, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-
-		rel, err := filepath.Rel(src, path)
-		if err != nil {
-			return err
-		}
-		if excludeMatcher.Match(rel) {
-			report.Skipped++
-			if d.IsDir() {
-				return filepath.SkipDir
-			}
-			return nil
-		}
-		if !d.IsDir() {
-			return nil
-		}
-
-		skillFile := filepath.Join(path, "SKILL.md")
-		skillRel, err := filepath.Rel(src, skillFile)
-		if err != nil {
-			return err
-		}
-		if excludeMatcher.Match(skillRel) {
-			report.Skipped++
-			return nil
-		}
-		info, err := os.Stat(skillFile)
-		if err != nil {
-			if os.IsNotExist(err) {
-				return nil
-			}
-			return fmt.Errorf("stat skill file %q: %w", skillFile, err)
-		}
-		if !info.Mode().IsRegular() {
-			report.Skipped++
-			return nil
-		}
-
-		target := filepath.Join(dst, filepath.Base(path))
+	err := skillscan.WalkSkillDirs(skillscan.Options{
+		Root:    src,
+		Matcher: excludeMatcher,
+		OnSkip:  func(string, skillscan.SkipReason) { report.Skipped++ },
+	}, func(dir skillscan.Dir) error {
+		target := filepath.Join(dst, dir.Name)
 		if existing, ok := targets[target]; ok {
-			return fmt.Errorf("flatten target conflict %q from %q and %q", target, existing, path)
+			return fmt.Errorf("flatten target conflict %q from %q and %q", target, existing, dir.Path)
 		}
-		targets[target] = path
-		skillDirs = append(skillDirs, flattenedSkillDir{source: path, target: target})
+		targets[target] = dir.Path
+		skillDirs = append(skillDirs, flattenedSkillDir{source: dir.Path, target: target})
 		return nil
 	})
 	if err != nil {
@@ -347,16 +339,12 @@ func (r Runner) deployFile(index int, src, dst string, mode os.FileMode, replace
 	if err := r.replaceDestination(dst, replace, opts); err != nil {
 		return err
 	}
-	if err := r.copyFile(src, dst, mode, opts); err != nil {
+	if err := fileops.CopyFile(src, dst, mode, fileOptions(opts)); err != nil {
 		return err
 	}
 	report.CopiedFiles++
 	r.printSummary(report, opts)
 	return nil
-}
-
-func (r Runner) copyFile(src, dst string, mode os.FileMode, opts Options) error {
-	return fileops.CopyFile(src, dst, mode, fileOptions(opts))
 }
 
 func (r Runner) backupDestination(dst, backupRoot string, opts Options) error {
@@ -406,6 +394,22 @@ func (r Runner) replaceDestination(dst string, replace bool, opts Options) error
 }
 
 func (r Runner) printItemHeader(index int, kind, src, dst string, opts Options) {
+	r.printHeader(index, kind, []headerField{
+		{label: "source", value: src},
+		{label: "destination", value: dst},
+	}, opts)
+}
+
+func (r Runner) printExternalSkillHeader(index int, skill external.Skill, src, dst string, opts Options) {
+	r.printHeader(index, "external-skill", []headerField{
+		{label: "name", value: skill.Name},
+		{label: "url", value: skill.URL},
+		{label: "source", value: src},
+		{label: "destination", value: dst},
+	}, opts)
+}
+
+func (r Runner) printHeader(index int, kind string, fields []headerField, opts Options) {
 	mode := "DEPLOY"
 	modeColor := colorGreen
 	if opts.DryRun {
@@ -413,22 +417,22 @@ func (r Runner) printItemHeader(index int, kind, src, dst string, opts Options) 
 		modeColor = colorYellow
 	}
 	fmt.Fprintf(r.out, "\n%s item[%d] %s\n", colorize("["+mode+"]", modeColor, opts), index, colorize(kind, colorCyan, opts))
-	fmt.Fprintf(r.out, "  %s      %s\n", colorize("source:", colorFaint, opts), src)
-	fmt.Fprintf(r.out, "  %s %s\n", colorize("destination:", colorFaint, opts), dst)
+	labelWidth := maxHeaderLabelWidth(fields)
+	for _, field := range fields {
+		label := field.label + ":"
+		padding := strings.Repeat(" ", labelWidth-len(field.label)+1)
+		fmt.Fprintf(r.out, "  %s%s%s\n", colorize(label, colorFaint, opts), padding, field.value)
+	}
 }
 
-func (r Runner) printExternalSkillHeader(index int, skill external.Skill, src, dst string, opts Options) {
-	mode := "DEPLOY"
-	modeColor := colorGreen
-	if opts.DryRun {
-		mode = "DRY-RUN"
-		modeColor = colorYellow
+func maxHeaderLabelWidth(fields []headerField) int {
+	width := 0
+	for _, field := range fields {
+		if len(field.label) > width {
+			width = len(field.label)
+		}
 	}
-	fmt.Fprintf(r.out, "\n%s item[%d] %s\n", colorize("["+mode+"]", modeColor, opts), index, colorize("external-skill", colorCyan, opts))
-	fmt.Fprintf(r.out, "  %s       %s\n", colorize("name:", colorFaint, opts), skill.Name)
-	fmt.Fprintf(r.out, "  %s        %s\n", colorize("url:", colorFaint, opts), skill.URL)
-	fmt.Fprintf(r.out, "  %s     %s\n", colorize("source:", colorFaint, opts), src)
-	fmt.Fprintf(r.out, "  %s %s\n", colorize("destination:", colorFaint, opts), dst)
+	return width
 }
 
 func (r Runner) printBackup(path string, opts Options) {

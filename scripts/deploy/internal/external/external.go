@@ -14,6 +14,7 @@ import (
 	"deploy/internal/config"
 	"deploy/internal/matcher"
 	"deploy/internal/pathutil"
+	"deploy/internal/skillscan"
 )
 
 type Skill struct {
@@ -119,63 +120,63 @@ func ValidateConflicts(skills []Skill, cfg config.Config, cwd string) error {
 
 func collectInternalSkillNames(cfg config.Config, cwd string) (map[string]string, error) {
 	names := map[string]string{}
+	scans := map[string]map[string]string{}
 	for i, item := range cfg.Items {
 		src, err := pathutil.ResolveSourcePath(cwd, item.Source)
 		if err != nil {
 			return nil, fmt.Errorf("resolve source for items[%d]: %w", i, err)
 		}
+		key := internalSkillScanKey(src, item.Exclude)
+		scannedNames, ok := scans[key]
+		if ok {
+			mergeInternalSkillNames(names, scannedNames)
+			continue
+		}
+
 		info, err := os.Stat(src)
 		if err != nil {
 			return nil, fmt.Errorf("stat source for items[%d] %q: %w", i, src, err)
 		}
 		if !info.IsDir() {
+			scans[key] = map[string]string{}
 			continue
 		}
 		excludeMatcher, err := matcher.New(item.Exclude)
 		if err != nil {
 			return nil, fmt.Errorf("items[%d]: %w", i, err)
 		}
-		if err := filepath.WalkDir(src, func(path string, d os.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-			rel, err := filepath.Rel(src, path)
-			if err != nil {
-				return err
-			}
-			if excludeMatcher.Match(rel) {
-				if d.IsDir() {
-					return filepath.SkipDir
-				}
-				return nil
-			}
-			if !d.IsDir() {
-				return nil
-			}
-			skillFile := filepath.Join(path, "SKILL.md")
-			skillRel, err := filepath.Rel(src, skillFile)
-			if err != nil {
-				return err
-			}
-			if excludeMatcher.Match(skillRel) {
-				return nil
-			}
-			info, err := os.Stat(skillFile)
-			if err != nil {
-				if os.IsNotExist(err) {
-					return nil
-				}
-				return err
-			}
-			if info.Mode().IsRegular() {
-				names[filepath.Base(path)] = path
-			}
-			return nil
-		}); err != nil {
+		scannedNames, err = scanInternalSkillNames(src, excludeMatcher)
+		if err != nil {
 			return nil, err
 		}
+		scans[key] = scannedNames
+		mergeInternalSkillNames(names, scannedNames)
 	}
 	return names, nil
+}
+
+func mergeInternalSkillNames(dst, src map[string]string) {
+	for name, path := range src {
+		dst[name] = path
+	}
+}
+
+func scanInternalSkillNames(src string, excludeMatcher matcher.Matcher) (map[string]string, error) {
+	names := map[string]string{}
+	if err := skillscan.WalkSkillDirs(skillscan.Options{
+		Root:    src,
+		Matcher: excludeMatcher,
+	}, func(dir skillscan.Dir) error {
+		names[dir.Name] = dir.Path
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+	return names, nil
+}
+
+func internalSkillScanKey(src string, exclude []string) string {
+	return src + "\x00" + strings.Join(matcher.CacheKeyPatterns(exclude), "\x00")
 }
 
 func ValidateFetched(skill Skill, src string) error {

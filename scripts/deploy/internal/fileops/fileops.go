@@ -103,7 +103,8 @@ func CopyDir(src, dst string) error {
 		case d.IsDir():
 			return os.MkdirAll(target, info.Mode())
 		case info.Mode().IsRegular():
-			return CopyFileWithParents(path, target, info.Mode())
+			// WalkDir visits parent directories before their files, so the parent exists here.
+			return CopyFileWithoutMkdir(path, target, info.Mode())
 		default:
 			return nil
 		}
