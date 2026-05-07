@@ -1,0 +1,4 @@
+interface:
+  display_name: "code-next-developer-review"
+  short_description: "次に開発する人が困らないかをレビュー"
+  default_prompt: "Use $code-next-developer-review to review this diff from the perspective of the next developer who must understand and change it."
