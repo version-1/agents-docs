@@ -1,4 +1,4 @@
-package deploy
+package pathutil
 
 import (
 	"fmt"
@@ -7,16 +7,16 @@ import (
 	"strings"
 )
 
-func resolveConfigPath(path string) (string, error) {
-	expanded, err := expandHome(path)
+func ResolveConfigPath(path string) (string, error) {
+	expanded, err := ExpandHome(path)
 	if err != nil {
 		return "", err
 	}
 	return filepath.Abs(expanded)
 }
 
-func resolveItemPath(configDir, path string) (string, error) {
-	expanded, err := expandHome(path)
+func ResolveItemPath(configDir, path string) (string, error) {
+	expanded, err := ExpandHome(path)
 	if err != nil {
 		return "", err
 	}
@@ -26,8 +26,8 @@ func resolveItemPath(configDir, path string) (string, error) {
 	return filepath.Clean(filepath.Join(configDir, expanded)), nil
 }
 
-func resolveSourcePath(cwd, path string) (string, error) {
-	expanded, err := expandHome(path)
+func ResolveSourcePath(cwd, path string) (string, error) {
+	expanded, err := ExpandHome(path)
 	if err != nil {
 		return "", err
 	}
@@ -37,7 +37,7 @@ func resolveSourcePath(cwd, path string) (string, error) {
 	return filepath.Clean(filepath.Join(cwd, expanded)), nil
 }
 
-func expandHome(path string) (string, error) {
+func ExpandHome(path string) (string, error) {
 	if path == "~" {
 		home, err := os.UserHomeDir()
 		if err != nil {

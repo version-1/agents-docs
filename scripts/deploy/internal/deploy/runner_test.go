@@ -7,6 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	cfgpkg "deploy/internal/config"
+	"deploy/internal/external"
 )
 
 type fakeExternalSkillFetcher struct {
@@ -14,7 +17,7 @@ type fakeExternalSkillFetcher struct {
 	errs    map[string]error
 }
 
-func (f fakeExternalSkillFetcher) Fetch(skill ExternalSkill, workDir string) (string, error) {
+func (f fakeExternalSkillFetcher) Fetch(skill external.Skill, workDir string) (string, error) {
 	if err := f.errs[skill.Name]; err != nil {
 		return "", err
 	}
@@ -55,6 +58,7 @@ func TestRunnerCopiesFilesAndDirectoryContents(t *testing.T) {
 
 	assertFileContent(t, filepath.Join(root, "dest", "dir", "nested", "a.txt"), "a")
 	assertFileContent(t, filepath.Join(root, "dest", "single.txt"), "single")
+	assertFileMode(t, filepath.Join(root, "dest", "single.txt"), 0600)
 	if !strings.Contains(out.String(), "DEPLOY") {
 		t.Fatalf("expected deploy output, got:\n%s", out.String())
 	}
@@ -455,6 +459,8 @@ func TestRunnerFlattenCopiesSkillDirsToDestinationRoot(t *testing.T) {
 		filepath.Join(srcDir, "internal", "role-planner", "assets"),
 		filepath.Join(srcDir, "external", "empirical-prompt-tuning"),
 		filepath.Join(srcDir, "internal", "not-a-skill"),
+		filepath.Join(srcDir, "internal", "ignored"),
+		filepath.Join(srcDir, "internal", "hidden"),
 	} {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			t.Fatal(err)
@@ -465,12 +471,17 @@ func TestRunnerFlattenCopiesSkillDirsToDestinationRoot(t *testing.T) {
 		filepath.Join(srcDir, "internal", "role-planner", "assets", "prompt.md"):   "prompt",
 		filepath.Join(srcDir, "external", "empirical-prompt-tuning", "SKILL.md"):   "external",
 		filepath.Join(srcDir, "internal", "not-a-skill", "README.md"):              "readme",
+		filepath.Join(srcDir, "internal", "ignored", "SKILL.md"):                   "ignored",
+		filepath.Join(srcDir, "internal", "hidden", "SKILL.md"):                    "hidden",
 		filepath.Join(srcDir, "internal", "role-planner", "assets", "ignored.tmp"): "tmp",
 		filepath.Join(srcDir, "external", "empirical-prompt-tuning", ".DS_Store"):  "store",
 	} {
 		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
 			t.Fatal(err)
 		}
+	}
+	if err := os.MkdirAll(filepath.Join(srcDir, "internal", "not-regular", "SKILL.md"), 0755); err != nil {
+		t.Fatal(err)
 	}
 
 	config := filepath.Join(root, "deploy.json")
@@ -480,7 +491,7 @@ func TestRunnerFlattenCopiesSkillDirsToDestinationRoot(t *testing.T) {
       "source": "src",
       "destination": "dest",
       "flatten": true,
-      "exclude": ["*.tmp", "**/.DS_Store"]
+      "exclude": ["*.tmp", "**/.DS_Store", "internal/ignored", "internal/hidden/SKILL.md"]
     }
   ]
 }`)
@@ -496,10 +507,17 @@ func TestRunnerFlattenCopiesSkillDirsToDestinationRoot(t *testing.T) {
 	assertFileContent(t, filepath.Join(root, "dest", "empirical-prompt-tuning", "SKILL.md"), "external")
 	assertNotExist(t, filepath.Join(root, "dest", "internal", "role-planner", "SKILL.md"))
 	assertNotExist(t, filepath.Join(root, "dest", "not-a-skill", "README.md"))
+	assertNotExist(t, filepath.Join(root, "dest", "ignored", "SKILL.md"))
+	assertNotExist(t, filepath.Join(root, "dest", "hidden", "SKILL.md"))
+	assertNotExist(t, filepath.Join(root, "dest", "not-regular", "SKILL.md"))
 	assertNotExist(t, filepath.Join(root, "dest", "role-planner", "assets", "ignored.tmp"))
 	assertNotExist(t, filepath.Join(root, "dest", "empirical-prompt-tuning", ".DS_Store"))
 	if !strings.Contains(out.String(), "flattened-skill-dirs") {
 		t.Fatalf("expected flatten output, got:\n%s", out.String())
+	}
+	const expectedFlattenSkipped = 5 // ignored dir, hidden SKILL.md, non-regular SKILL.md, ignored tmp, .DS_Store
+	if !strings.Contains(out.String(), fmt.Sprintf("%d skipped", expectedFlattenSkipped)) {
+		t.Fatalf("expected skipped count, got:\n%s", out.String())
 	}
 }
 
@@ -674,7 +692,7 @@ func TestLoadConfigRequiresItems(t *testing.T) {
 	config := filepath.Join(root, "deploy.json")
 	writeConfig(t, config, `{"items":[]}`)
 
-	_, err := LoadConfig(config)
+	_, err := cfgpkg.Load(config)
 	if err == nil {
 		t.Fatal("expected error")
 	}
@@ -747,5 +765,16 @@ func assertFileContent(t *testing.T, path, want string) {
 	}
 	if string(b) != want {
 		t.Fatalf("content mismatch for %s: got %q want %q", path, string(b), want)
+	}
+}
+
+func assertFileMode(t *testing.T, path string, want os.FileMode) {
+	t.Helper()
+	info, err := os.Stat(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := info.Mode().Perm(); got != want {
+		t.Fatalf("mode mismatch for %s: got %v want %v", path, got, want)
 	}
 }
