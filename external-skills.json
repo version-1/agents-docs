@@ -1,5 +1,11 @@
 [
   {
+    "name": "skill-creator",
+    "url": "https://github.com/anthropics/skills/tree/main/skills/skill-creator",
+    "type": "git",
+    "destination": ["~/.codex/skills/external/skill-creator"]
+  },
+  {
     "name": "grill-me",
     "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
     "type": "git",
