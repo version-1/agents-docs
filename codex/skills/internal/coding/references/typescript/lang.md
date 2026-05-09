@@ -18,10 +18,23 @@
 - TypeScript の最新バージョンを使用し、新しい言語機能を積極的に取り入れる。
 - Immutable データ構造を優先し、副作用の少ない関数型プログラミングの原則を取り入れる。
 
+## 文字列固定値の扱い
+
+文字列固定値は、Enum を使用する代わりに、オブジェクトを使用して定義することが推奨されます。これにより、コードの可読性が向上し、型安全性も確保されます。
+
+```typescript
+// Enum の代わりにオブジェクトを使用して文字列固定値を定義する例
+const Status = {
+  Active: 'active',
+  Inactive: 'inactive',
+  Pending: 'pending',
+} as const;
+```
+
 
 # 推奨ライブラリ
 
-- `tsxe`: TypeScript ファイルを直接実行するためのツール。
+- `tsx`: TypeScript ファイルを直接実行するためのツール。
 - `biome`: TypeScript 用の ESLint プラグインと設定。
 - `zod`: スキーマベースの型検証ライブラリ。
 - `vitest`: TypeScript 向けの高速テストランナー。
