@@ -31,7 +31,11 @@ Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、
 │   ├── agents                     Claude agent 定義
 │   └── settings.json              Claude 設定
 ├── docs                           設計ドキュメント
-│   └── design.md
+│   ├── design.md
+│   ├── design-skill.md
+│   ├── skill-library.md           skill の用途一覧
+│   └── memo                       メモ類
+│       └── skill.md
 └── scripts
     └── deploy                     deploy コマンドの Go 実装
         ├── cmd
@@ -64,6 +68,7 @@ make deploy
 
 - `codex/skills/internal/<name>/SKILL.md` が Codex skill の本体です。
 - `codex/skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも内容に合わせます。
+- skill の追加・更新時は [`docs/skill-library.md`](docs/skill-library.md) の一覧も更新します。
 - `codex/agents/*.toml` の `nickname_candidates` は覚えやすい英語の人名を 3 件ずつ設定します。
 - `deploy.json` は内部ファイルの配布先、`external-skills.json` は外部 skill の取得先を管理します。
 - `claude/agents/implemnter.md` と `codex/agents/scount.toml` は現状のファイル名です。リネームする場合は配布設定や参照も合わせて確認します。
