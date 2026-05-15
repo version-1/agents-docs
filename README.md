@@ -30,3 +30,4 @@ make deploy
 
 - deploy コマンドの詳細: `scripts/deploy/README.md`
 - レポジトリ設計: `docs/design.md`
+- skill 一覧: `docs/skill-library.md`
