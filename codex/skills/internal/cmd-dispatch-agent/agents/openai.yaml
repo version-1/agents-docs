@@ -1,0 +1,4 @@
+interface:
+  display_name: "cmd-dispatch-agent"
+  short_description: "Start a specified agent without waiting"
+  default_prompt: "Use $cmd-dispatch-agent to start a specified agent and continue without waiting for its result."
