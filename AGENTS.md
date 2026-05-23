@@ -34,8 +34,8 @@ Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、
 │   ├── design.md
 │   ├── design-skill.md
 │   ├── skill-library.md           skill の用途一覧
-│   └── memo                       メモ類
-│       └── skill.md
+│   └── guide                      ガイド類
+│       └── skill-category.md      skill の類型ガイド
 └── scripts
     └── deploy                     deploy コマンドの Go 実装
         ├── cmd
