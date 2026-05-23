@@ -22,6 +22,7 @@
 | `cmd-commit` | 変更内容を確認し、適切な粒度とメッセージで安全に Git commit を作成する。 | commit 作成を依頼されたとき。未確認の変更や unrelated changes を含めず、stage 対象と message を整理する。 |
 | `cmd-dispatch-agent` | 指定された agent を起動し、結果を待たずにタスクを投げる。 | ユーザーが agent 起動、worker への委譲、投げっぱなし実行を明示したとき。明示がなくても、単純で不明瞭な点がない自己完結タスクを任せたいとき。 |
 | `cmd-rmbranch` | `main` と `develop` を残し、不要なローカルブランチを安全に削除する。 | ローカルブランチ整理を依頼されたとき。未マージブランチは確認してから扱う。 |
+| `beautify-commit` | ベースブランチまたは基準 commit との差分を、意味のある変更単位の commit へ安全に整理する。 | commit 分割、履歴整理、大きすぎる差分の再 commit、ベースブランチや commit hash を基準にした差分整理、interactive rebase や reset を伴う整理を依頼されたとき。 |
 | `code-simplifier` | 挙動を変えずにコードを簡略化、リファクタリングする。 | レビュー指摘、diff、指定ファイルをもとに可読性や保守性を改善するとき。 |
 | `code-test` | テスト設計、回帰テスト追加、テストコードレビュー、テスト戦略を整理する。 | 正常系、異常系、境界値、flake、モック方針を検討するとき。 |
 | `code-tracer` | 特定シンボルや関数の callers / callees / both を根拠付きで追跡する。 | 呼び出し経路、影響範囲、依存関係を Markdown や Mermaid で可視化したいとき。 |
