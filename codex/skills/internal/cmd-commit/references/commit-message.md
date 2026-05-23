@@ -39,6 +39,7 @@ commit message の体裁に迷う場合は、このデフォルトを使う。
 ### Title
 
 形式を指定されていない場合は、次の形にする。
+タイトルだけの commit は作らず、必ず本文も付ける。
 
 ```text
 <prefix>: <変更の目的を短く説明する>
@@ -70,8 +71,8 @@ fix: 無関係な変更が commit に混ざらないようにする
 
 ### Body
 
-本文が必要な場合は、空行を挟んで次の形式にする。
-単純な変更でタイトルだけで十分なら本文は省略してよい。
+本文は必ず付ける。
+空行を挟んで次の形式にする。
 
 ```text
 <prefix>: <変更の目的を短く説明する>
@@ -126,7 +127,8 @@ Title rules:
 
 ### Body
 
-Use a body only when the title is not enough to explain the reason, impact, or verification.
+Always include a body.
+Use this format after a blank line.
 
 ```text
 <prefix>: <short imperative summary>
