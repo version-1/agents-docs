@@ -13,11 +13,6 @@ args = ["-y", "@upstash/context7-mcp", "--api-key", "${CONTEXT7_API_KEY}"]
 command = "npx"
 startup_timeout_ms = 20_000
 
-[mcp_servers.github-mcp-server]
-command = "docker"
-args = ["run", "--rm", "-i", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_MCP_API_TOKEN}", "ghcr.io/github/github-mcp-server"]
-startup_timeout_ms = 15_000
-
 [mcp_servers.notion-mcp-server]
 command = "npx"
 args = ["-y", "@notionhq/notion-mcp-server", "--auth-token", "${NOTION_TOKEN}"]
