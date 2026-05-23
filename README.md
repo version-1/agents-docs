@@ -1,7 +1,19 @@
 
 ## Agents-docs
 
-AI にコードを書かせる際のルールやコンテキストをまとめるレポジトリです。
+Codex / Claude などの AI エージェントに配布するルール、プロンプト、skill、agent 定義を管理するレポジトリです。
+
+このリポジトリでは、主に次の項目を管理しています。
+
+- Codex / Claude 向けの共通指示
+- agent の役割定義とメタデータ
+- skill の本体と UI 表示用メタデータ
+- 再利用するプロンプトとルール
+- ローカル環境へ配布するための設定と deploy ツール
+
+## skill 一覧
+
+- [docs/skill-library.md](docs/skill-library.md)
 
 ## コマンド
 
@@ -28,6 +40,5 @@ make deploy
 
 ## 関連ドキュメント
 
-- deploy コマンドの詳細: `scripts/deploy/README.md`
-- レポジトリ設計: `docs/design.md`
-- skill 一覧: `docs/skill-library.md`
+- deploy コマンドの詳細: [scripts/deploy/README.md](scripts/deploy/README.md)
+- レポジトリ設計: [docs/design.md](docs/design.md)
