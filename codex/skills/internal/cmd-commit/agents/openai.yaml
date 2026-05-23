@@ -1,0 +1,4 @@
+interface:
+  display_name: "cmd-commit"
+  short_description: "Create focused Git commits safely"
+  default_prompt: "Use $cmd-commit to review the current Git changes and create a focused commit with an appropriate message."
