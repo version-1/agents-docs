@@ -1,0 +1,4 @@
+interface:
+  display_name: "beautify-commit"
+  short_description: "Split large Git commits safely"
+  default_prompt: "Use $beautify-commit to organize the diff from a base branch or commit into focused commits."
