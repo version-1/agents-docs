@@ -59,12 +59,6 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", "commit"],
-    decision = "prompt",
-    justification = "意図しないコミット防止"
-)
-
-prefix_rule(
     pattern = ["git", "rebase"],
     decision = "prompt",
     justification = "履歴変更確認"
@@ -103,6 +97,13 @@ prefix_rule(
     decision = "allow",
     justification = "閲覧のみ"
 )
+
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "allow",
+    justification = "コミットは通常安全"
+)
+
 
 # ----------------------------------------
 # ⚠️ インフラ / デプロイ
