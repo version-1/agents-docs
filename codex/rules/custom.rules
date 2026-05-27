@@ -262,9 +262,9 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", ["status", "diff", "log"]],
+    pattern = ["git", ["status", "diff", "log", "fetch"]],
     decision = "allow",
-    justification = "参照のみ"
+    justification = "参照/取得のみ"
 )
 
 prefix_rule(
