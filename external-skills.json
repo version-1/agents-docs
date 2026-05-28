@@ -16,7 +16,7 @@
   },
   {
     "name": "empirical-prompt-tuning",
-    "url": "https://github.com/mizchi/skills/tree/main/empirical-prompt-tuning",
+    "url": "https://github.com/mizchi/skills/tree/main/meta/empirical-prompt-tuning",
     "type": "git",
     "destination": [
       "~/.codex/skills/external/empirical-prompt-tuning",

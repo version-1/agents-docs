@@ -73,6 +73,12 @@ make deploy
 - `deploy.json` は内部ファイルの配布先、`external-skills.json` は外部 skill の取得先を管理します。
 - `claude/agents/implemnter.md` と `codex/agents/scount.toml` は現状のファイル名です。リネームする場合は配布設定や参照も合わせて確認します。
 
+## Git push 時の注意
+
+- エージェントが prompt なしで push する場合は、`git push` や `git push -f` を直接実行せず、`safe-git-push` を使います。
+- `safe-git-push` は引数なしで実行します。内部で `main` / `master` / detached HEAD / 不正な branch / 複数 push URL を拒否し、`git push origin HEAD:<current-branch>` だけを実行します。
+- `safe-git-push` が拒否した場合は、拒否理由を確認してからユーザーに方針を確認します。
+
 ## テスト実行時の補足
 
 Go テストでキャッシュ権限エラーが出る場合は、以下の環境変数を指定して実行してください。
