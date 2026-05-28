@@ -14,6 +14,14 @@
       "replace": false
     },
     {
+      "source": "codex/bin",
+      "destination": "~/.codex/bin",
+      "replace": false,
+      "exclude": [
+        "**/.DS_Store"
+      ]
+    },
+    {
       "source": "codex/agents",
       "destination": "~/.codex/agents",
       "replace": true,

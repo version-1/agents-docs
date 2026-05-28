@@ -1,0 +1,57 @@
+#!/bin/sh
+set -eu
+
+die() {
+  printf 'safe-git-push: %s\n' "$*" >&2
+  exit 1
+}
+
+if [ "$#" -ne 0 ]; then
+  die "arguments are not allowed; run safe-git-push without options"
+fi
+
+command -v git >/dev/null 2>&1 || die "git command not found"
+
+branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null) ||
+  die "current HEAD is detached or not in a git repository"
+
+case "$branch" in
+  main | master)
+    die "refusing to push protected branch: $branch"
+    ;;
+  -*)
+    die "refusing to push branch that starts with '-': $branch"
+    ;;
+esac
+
+git check-ref-format --branch "$branch" >/dev/null 2>&1 ||
+  die "invalid branch name: $branch"
+
+pushurls=$(git config --get-all remote.origin.pushurl || true)
+pushurl_count=$(printf '%s\n' "$pushurls" | sed '/^$/d' | wc -l | tr -d ' ')
+
+if [ "$pushurl_count" -gt 1 ]; then
+  die "refusing to push because remote.origin.pushurl has multiple values"
+fi
+
+if [ "$pushurl_count" -eq 1 ]; then
+  origin_url=$pushurls
+else
+  urls=$(git config --get-all remote.origin.url || true)
+  url_count=$(printf '%s\n' "$urls" | sed '/^$/d' | wc -l | tr -d ' ')
+
+  if [ "$url_count" -eq 0 ]; then
+    die "remote origin is not configured"
+  fi
+  if [ "$url_count" -gt 1 ]; then
+    die "refusing to push because remote.origin.url has multiple values"
+  fi
+
+  origin_url=$urls
+fi
+
+printf 'safe-git-push: branch: %s\n' "$branch" >&2
+printf 'safe-git-push: origin: %s\n' "$origin_url" >&2
+printf 'safe-git-push: running: git push origin HEAD:%s\n' "$branch" >&2
+
+exec git push origin "HEAD:${branch}"
