@@ -82,8 +82,14 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["gh", "pr", "create"],
+    decision = "allow",
+    justification = "PR作成は通常安全"
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "edit"],
     decision = "prompt",
-    justification = "PR作成前に確認"
+    justification = "PR内容変更確認"
 )
 
 prefix_rule(
@@ -96,12 +102,6 @@ prefix_rule(
     pattern = ["gh", "pr", "view"],
     decision = "allow",
     justification = "閲覧のみ"
-)
-
-prefix_rule(
-    pattern = ["git", "commit"],
-    decision = "allow",
-    justification = "コミットは通常安全"
 )
 
 
@@ -262,13 +262,25 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", ["status", "diff", "log", "fetch"]],
+    pattern = ["git", ["status", "diff", "log", "fetch", "pull"]],
     decision = "allow",
     justification = "参照/取得のみ"
 )
 
 prefix_rule(
-    pattern = [["npm", "pnpm", "yarn"], ["test", "install"]],
+    pattern = ["git", ["commit", "add"]],
+    decision = "allow",
+    justification = "コミットは通常安全"
+)
+
+prefix_rule(
+    pattern = [["npm", "pnpm", "yarn", "bun"], ["run", "start"]],
+    decision = "allow",
+    justification = "ローカル操作は安全"
+)
+
+prefix_rule(
+    pattern = [["npm", "pnpm", "yarn", "bun"], ["test", "install", "build"]],
     decision = "allow",
     justification = "ローカル操作は安全"
 )
