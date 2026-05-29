@@ -1,0 +1,4 @@
+interface:
+  display_name: "cmd-start-branch"
+  short_description: "Prepare a fresh Git branch before starting work"
+  default_prompt: "Use $cmd-start-branch to update from the default branch, create a task branch, dispatch local branch cleanup, then report the branch name and wait for task details."
