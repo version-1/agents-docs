@@ -34,9 +34,10 @@ description: Git リポジトリで新しい作業を始める前に、最新の
    - ローカルのデフォルトブランチが behind の場合は `git pull --ff-only` で進める。
    - ローカル差分や競合リスクがある場合は止めて、ブランチ作成前に状況を報告する。
 4. タスク内容からブランチ名を作る。
-   - 形式は原則 `feat/<short-task>`、修正なら `fix/<short-task>`、文書や設定なら `docs/<short-task>` または `chore/<short-task>` にする。
+   - 「ブランチ種別の選び方」の表から、指示内容に最も合う種別を選ぶ。
+   - 形式は `<type>/<short-task>` にする。
    - 英小文字、数字、ハイフンを使う。
-   - 例: `feat/add-start-branch-skill`, `fix/login-timeout`, `docs/update-runbook`
+   - 例: `feat/add-start-branch-skill`, `fix/login-timeout`, `refactor/split-auth-service`
 5. `git checkout -b <branch-name>` で作業ブランチを作成する。
    - 同名ブランチがある場合は、既存ブランチの位置と状態を確認し、上書きせず別名を提案する。
 6. `$cmd-dispatch-agent` を使って、別 agent に `$cmd-rmbranch` を依頼する。
@@ -57,6 +58,24 @@ description: Git リポジトリで新しい作業を始める前に、最新の
 - Issue 番号がある場合は `feat/123-short-task` のように先頭へ入れる。
 - まだ内容が薄い場合は `chore/start-task-branch` のような仮名にし、後で必要なら rename を提案する。
 - 既存ブランチと衝突する場合は末尾に短い識別子を足す。
+
+## ブランチ種別の選び方
+
+指示内容の主目的から 1 つ選ぶ。
+複数に見える場合は、ユーザーにとって主な成果物になる変更を優先する。
+迷う場合は `chore` ではなく、より具体的な種別を選ぶ。
+
+| Type | 使う場面 | 例 |
+|---|---|---|
+| `feat` | 新機能、既存機能へのユーザー向け能力追加 | `feat/report-filter`, `feat/42-export-csv` |
+| `fix` | バグ修正、不具合回避、期待と違う挙動の修正 | `fix/login-timeout`, `fix/price-rounding` |
+| `refactor` | 挙動を変えない構造整理、責務分割、命名整理 | `refactor/split-auth-service`, `refactor/repository-contract` |
+| `test` | テスト追加、テスト修正、fixture や検証手順の整備 | `test/add-order-cases`, `test/stabilize-api-spec` |
+| `perf` | 性能改善、メモリ削減、クエリ最適化 | `perf/cache-rate-lookup`, `perf/reduce-render-cost` |
+| `style` | フォーマット、lint、見た目だけのコード整形。UI 見た目変更は `feat` または `fix` を優先する | `style/format-go-files`, `style/lint-imports` |
+| `ci` | CI、ワークフロー、ビルドパイプライン、リリース自動化 | `ci/add-test-workflow`, `ci/cache-go-build` |
+| `docs` | README、設計メモ、Runbook など文書だけの変更 | `docs/update-runbook`, `docs/add-skill-guide` |
+| `chore` | 依存更新、設定整理、生成物更新、運用上の雑務。上記に当てはまるならそちらを優先する | `chore/update-deps`, `chore/start-task-branch` |
 
 ## 報告に含めること
 
