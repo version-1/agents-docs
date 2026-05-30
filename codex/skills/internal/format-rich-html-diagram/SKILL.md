@@ -1,9 +1,9 @@
 ---
-name: rich-html-diagram
+name: format-rich-html-diagram
 description: コード、アーキテクチャ、React コンポーネント構造、データフロー、状態管理、シーケンス、処理フロー、依存関係、ディレクトリ階層などを、SVG、2D、3D、アニメーション、CDN ライブラリを使ったリッチな単一 index.html として可視化・整理するときに使う。開発者がブラウザで index.html だけを開けば全体像、詳細、関係性、判断材料を理解できる成果物を作る必要がある場合は必ず使う。Markdown だけでは構造や流れを把握しづらい設計説明、コードリーディング結果、実装計画、レビュー補助資料、オンボーディング資料に使う。
 ---
 
-# Rich HTML Diagram
+# Format Rich HTML Diagram
 
 ## 目的
 
