@@ -83,7 +83,7 @@ internal skill を追加または更新した場合は、`SKILL.md` だけで完
 - 追加先の分類は `docs/guide/skill-category.md` の考え方に合っているか。
 - `codex/skills/internal/<skill-name>/evals/evals.json` が必要な skill では、代表的な利用ケースを追加したか。
 - `codex/skills/internal/<skill-name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも `SKILL.md` と矛盾しないように更新したか。
-- 既存 skill との依存や利用順序が増えた場合は、該当 skill の本文や関連ドキュメントから辿れるようにしたか。
+- 既存 skill との依存や利用順序が増えた場合は、`docs/skill-dependency-map.md` と該当 skill の本文から辿れるようにしたか。
 
 外部 skill を追加または更新する場合は、`external-skills.json` の取得元、commit、配布先を更新し、`docs/skill-library.md` の外部 skill 一覧も合わせて確認します。
 
