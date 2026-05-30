@@ -1,0 +1,4 @@
+interface:
+  display_name: "rich-html-diagram"
+  short_description: "開発理解用のリッチな単一HTML図解レポートを作成"
+  default_prompt: "Use $rich-html-diagram to create a single index.html that explains this codebase architecture, component structure, data flow, state management, and processing flow."
