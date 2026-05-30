@@ -72,6 +72,21 @@ git -C .worktrees/1 status --short --branch
 
 実装や文書更新では、既存の構成、命名、文体に合わせます。新しいルールや配置を追加する場合は、入口となる文書から辿れるようにします。
 
+## Skill 追加・更新時のドキュメント更新
+
+internal skill を追加または更新した場合は、`SKILL.md` だけで完結させず、利用者が一覧やガイドから辿れる状態にします。
+
+新しい internal skill を追加した場合は、最低限次を確認します。
+
+- `codex/skills/internal/<skill-name>/SKILL.md` に `name` と `description` があり、trigger 条件が具体的か。
+- `docs/skill-library.md` に skill の用途を追記したか。
+- 追加先の分類は `docs/guide/skill-category.md` の考え方に合っているか。
+- `codex/skills/internal/<skill-name>/evals/evals.json` が必要な skill では、代表的な利用ケースを追加したか。
+- `codex/skills/internal/<skill-name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも `SKILL.md` と矛盾しないように更新したか。
+- 既存 skill との依存や利用順序が増えた場合は、該当 skill の本文や関連ドキュメントから辿れるようにしたか。
+
+外部 skill を追加または更新する場合は、`external-skills.json` の取得元、commit、配布先を更新し、`docs/skill-library.md` の外部 skill 一覧も合わせて確認します。
+
 ## 完了前確認
 
 作業が終わったら、差分と状態を確認します。
