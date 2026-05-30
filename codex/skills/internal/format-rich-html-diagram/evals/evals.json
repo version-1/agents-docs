@@ -4,19 +4,19 @@
     {
       "id": 1,
       "prompt": "この React 画面のコンポーネント構造、props の流れ、状態管理、API 呼び出しを index.html だけで見られる図解にまとめてください。",
-      "expected_output": "単一 index.html に React component tree、data flow、state ownership、API sequence が含まれ、必要なライブラリは CDN で読み込まれている。",
+      "expected_output": "単一 index.html に React component tree、data flow、state ownership、API sequence が含まれ、必要なライブラリは列挙済みの許可リストから CDN で読み込まれている。",
       "files": []
     },
     {
       "id": 2,
       "prompt": "このバックエンド処理のアーキテクチャ、依存関係、正常系と異常系の処理フロー、外部サービスとの sequence をブラウザで読める HTML にしてください。",
-      "expected_output": "単一 index.html に architecture diagram、dependency graph、processing flow、sequence diagram、risks/open questions が含まれている。",
+      "expected_output": "単一 index.html に architecture diagram、dependency graph、processing flow、sequence diagram、risks/open questions が含まれ、許可リスト外の外部ライブラリを使っていない。",
       "files": []
     },
     {
       "id": 3,
       "prompt": "新しく参加する開発者向けに、この機能のディレクトリ構造、主要ファイル、状態遷移、データフローをリッチな index.html で整理してください。",
-      "expected_output": "単一 index.html に overview、structure tree、state transition、data flow、contracts、appendix が含まれている。",
+      "expected_output": "単一 index.html に overview、structure tree、state transition、data flow、contracts、appendix が含まれ、使用 CDN と制限が appendix に記載されている。",
       "files": []
     }
   ]
