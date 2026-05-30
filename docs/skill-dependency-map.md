@@ -35,7 +35,6 @@ internal skills
     │   ├── code-test
     │   └── code-next-developer-review
     ├── code-naming
-    │   ├── coding
     │   └── code-next-developer-review
     ├── code-quality-review
     ├── code-next-developer-review
@@ -74,7 +73,6 @@ internal skills
 | `component-design` | `coding` | UI 設計後に実装へ進む場合に併用する。 |
 | `component-design` | `code-test` | テスト設計やテスト追加で併用する。 |
 | `component-design` | `code-next-developer-review` | 次の開発者の読みやすさを確認する場合に併用する。 |
-| `code-naming` | `coding` | 実装変更やリネーム作業まで行う場合に併用する。 |
 | `code-naming` | `code-next-developer-review` | 次に開発する人の理解しやすさ全体を見る場合に併用する。 |
 | `code-next-developer-review` | `code-review` | 欠陥や重大リスクを見つけた場合に通常レビュー観点として分ける。 |
 | `code-simplifier` | `code-quality-review` | 品質レポートや quality gate の観点から改善候補を拾う。 |
@@ -92,6 +90,7 @@ internal skills
 | `component-design` | `code-test` | テストケース設計だけが目的の場合。 |
 | `code-naming` | `code-typo` | typo や spelling の検査だけが目的の場合。 |
 | `code-naming` | `code-review` | バグ、仕様違反、セキュリティ、データ整合性のレビューが目的の場合。 |
+| `code-naming` | `coding` | 実装変更やリネーム作業まで行う場合。 |
 | `code-quality-review` | `code-review` | 仕様違反、セキュリティ、データ破壊など即時欠陥の検出が主目的の場合。 |
 | `code-quality-review` | `code-next-developer-review` | 次の開発者の迷いやすさが主目的の場合。 |
 | `code-review` | `coding` | 具体的なコード変更の実装方法を相談する場合。 |
@@ -121,7 +120,6 @@ graph TD
     component_design --> code_test["code-test"]
     component_design --> code_next_dev["code-next-developer-review"]
 
-    code_naming --> coding
     code_naming --> code_next_dev
 
     code_next_dev --> code_review
