@@ -1,6 +1,0 @@
-# Allow only the audited wrapper for non-interactive agent pushes.
-prefix_rule(
-    pattern = ["safe-git-push"],
-    decision = "allow",
-    justification = "safe-git-push validates branch and remote before pushing"
-)
