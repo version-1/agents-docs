@@ -4,19 +4,19 @@
     {
       "id": 1,
       "prompt": "この変更を PR にして。まだ commit してない差分があるはず",
-      "expected_output": "git status と diff を確認し、PR に含める差分を読んだうえで cmd-commit を使って commit し、検証、role-reviewer による PR 前レビュー、High 指摘があれば自動対応と再レビュー、safe-git-push、format-pr-description、gh pr create の順に進める。未確認の unrelated changes は含めない。",
+      "expected_output": "git status と diff を確認し、PR に含める差分を読んだうえで cmd-commit を使って commit する。PR 作成前に git fetch origin で base branch を最新化し、head が最新 base を含むか確認する。追従できていない場合は確認なしに rebase や merge commit を作らず、方針を確認する。検証、role-reviewer による PR 前レビュー、High 指摘があれば自動対応と再レビュー、safe-git-push、format-pr-description、gh pr create の順に進める。未確認の unrelated changes は含めない。",
       "files": []
     },
     {
       "id": 2,
       "prompt": "PR 出して。push もお願い",
-      "expected_output": "直接 git push せず、現在の branch / remote / base / 既存 PR の有無を確認し、必要な commit と検証を済ませ、role-reviewer で PR 前レビューを行う。High 指摘があれば自動対応して再検証・再レビューし、High が残っていない状態で引数なしの ~/.codex/bin/safe-git-push を使う。PR 作成後に URL、検証結果、レビュー結果を報告する。",
+      "expected_output": "直接 git push せず、現在の branch / remote / base / 既存 PR の有無を確認し、必要な commit を済ませる。PR 作成前に git fetch origin で base branch を最新化し、head が最新 base を含むか確認する。追従できていない場合は確認なしに rebase や merge commit を作らない。検証と role-reviewer での PR 前レビューを行い、High 指摘があれば自動対応して再検証・再レビューし、High が残っていない状態で引数なしの ~/.codex/bin/safe-git-push を使う。PR 作成後に URL、base 追従状況、検証結果、レビュー結果を報告する。",
       "files": []
     },
     {
       "id": 3,
       "prompt": "このブランチの既存 PR の本文だけ最新の差分に合わせて更新して",
-      "expected_output": "既存 PR の有無を gh pr status または gh pr view で確認し、新規 PR を重複作成しない。本文更新前に最新差分を role-reviewer で確認し、High 指摘があれば自動対応・再検証・再レビューを行い、High が残っていない状態で format-pr-description を使って本文を作成し gh pr edit で更新する。",
+      "expected_output": "既存 PR の有無を gh pr status または gh pr view で確認し、新規 PR を重複作成しない。本文更新前に git fetch origin で base branch を最新化し、head が最新 base を含むか確認する。追従できていない場合は確認なしに rebase や merge commit を作らない。最新差分を role-reviewer で確認し、High 指摘があれば自動対応・再検証・再レビューを行い、High が残っていない状態で format-pr-description を使って本文を作成し gh pr edit で更新する。",
       "files": []
     },
     {
