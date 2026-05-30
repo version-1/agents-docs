@@ -3,6 +3,7 @@
   "autoUpdatesChannel": "stable",
   "language": "japanese",
   "permissions": {
+    "defaultMode": "acceptEdits",
     "allow": [
       "Bash(git checkout -b *)",
       "Bash(git switch *)",
