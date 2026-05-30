@@ -1,6 +1,6 @@
 ---
-name: pr-description
-description: GitHub Pull Request の description を作成・更新するときに使う。PR 番号、diff、コミット履歴をもとに、Summary、主な変更点、やったこと、動作確認、レビュアー向けチェックリスト、必要に応じた Mermaid 図を一貫したテンプレートへ整理する。
+name: format-pr-description
+description: GitHub Pull Request の description を定義済みフォーマットで作成・更新するときに使う。PR 番号、diff、コミット履歴をもとに、Summary、主な変更点、やったこと、動作確認、レビュアー向けチェックリスト、必要に応じた Mermaid 図を一貫したテンプレートへ整理する。PR 本文、PR description、pull request の説明文、レビュー向け説明を整える依頼では必ず使う。
 ---
 
 ## 目的

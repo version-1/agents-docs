@@ -47,7 +47,7 @@
 
 | Skill | 概要 | 使う場面 |
 |---|---|---|
-| `pr-description` | GitHub Pull Request の description を作成、更新する。 | PR 番号、diff、コミット履歴から Summary、変更点、動作確認を整理するとき。 |
+| `format-pr-description` | GitHub Pull Request の description を定義済みフォーマットで作成、更新する。 | PR 番号、diff、コミット履歴から Summary、変更点、動作確認を整理するとき。 |
 
 ### B. 判断定義型
 
