@@ -16,7 +16,7 @@
     {
       "id": 3,
       "prompt": "新しく参加する開発者向けに、この機能のディレクトリ構造、主要ファイル、状態遷移、データフローをリッチな index.html で整理してください。",
-      "expected_output": "単一 index.html に overview、structure tree、state transition、data flow、contracts、appendix が含まれ、使用 CDN と制限が appendix に記載されている。",
+      "expected_output": "単一 index.html に overview、structure tree、state transition、data flow、contracts、appendix が含まれ、使用 CDN、許可済み Google Fonts、制限が appendix に記載されている。",
       "files": []
     }
   ]
