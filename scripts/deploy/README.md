@@ -140,6 +140,7 @@ make build-deploy
     "name": "grill-me",
     "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
     "type": "git",
+    "commit": "e3b90b5238f38cdea5996e16861dcae28ef52eda",
     "destination": [
       "~/.codex/skills/external/grill-me",
       "~/.claude/skills/grill-me"
@@ -148,7 +149,7 @@ make build-deploy
 ]
 ```
 
-`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式だけを受け付けます。dry-run でも取得と `SKILL.md` の存在確認を行うため、URL が不正、取得できない、または取得先に `SKILL.md` がない場合はエラーになります。
+`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式だけを受け付けます。`commit` は必須で、取得後の `HEAD` と照合する 40 文字の hex commit hash を指定します。dry-run でも取得、commit 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、commit が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
 
 外部 skill 同士の `name` 重複、内部 skill と外部 skill の同名衝突、外部 skill の `destination` 重複は上書きせずエラーにします。
 

@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"deploy/internal/config"
@@ -21,6 +22,7 @@ type Skill struct {
 	Name        string   `json:"name"`
 	URL         string   `json:"url"`
 	Type        string   `json:"type"`
+	Commit      string   `json:"commit"`
 	Destination []string `json:"destination"`
 }
 
@@ -28,7 +30,9 @@ type Fetcher interface {
 	Fetch(skill Skill, workDir string) (string, error)
 }
 
-type GitFetcher struct{}
+type GitFetcher struct {
+	runGit func(args ...string) (string, error)
+}
 
 type githubTreeURL struct {
 	owner string
@@ -36,6 +40,8 @@ type githubTreeURL struct {
 	ref   string
 	path  string
 }
+
+var commitHashPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
 
 func Load(path string) ([]Skill, error) {
 	b, err := os.ReadFile(path)
@@ -67,6 +73,12 @@ func validateConfigSkill(i int, skill Skill) error {
 	}
 	if skill.Type != "git" {
 		return fmt.Errorf("externalSkills[%d].type %q is not supported", i, skill.Type)
+	}
+	if skill.Commit == "" {
+		return fmt.Errorf("externalSkills[%d].commit is required", i)
+	}
+	if !commitHashPattern.MatchString(skill.Commit) {
+		return fmt.Errorf("externalSkills[%d].commit must be a 40-character lowercase hex string", i)
 	}
 	if len(skill.Destination) == 0 {
 		return fmt.Errorf("externalSkills[%d].destination must include at least one path", i)
@@ -233,7 +245,7 @@ func ReadSkillName(path string) (string, error) {
 	return "", nil
 }
 
-func (GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
+func (f GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
 	treeURL, err := parseGitHubTreeURL(skill.URL)
 	if err != nil {
 		return "", err
@@ -241,13 +253,28 @@ func (GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
 
 	repoDir := filepath.Join(workDir, safePathName(skill.Name))
 	cloneURL := fmt.Sprintf("https://github.com/%s/%s.git", treeURL.owner, treeURL.repo)
-	if err := runGit("clone", "--depth", "1", "--filter=blob:none", "--sparse", "--branch", treeURL.ref, cloneURL, repoDir); err != nil {
+	if _, err := f.run("clone", "--depth", "1", "--filter=blob:none", "--sparse", "--branch", treeURL.ref, cloneURL, repoDir); err != nil {
 		return "", err
 	}
-	if err := runGit("-C", repoDir, "sparse-checkout", "set", "--", treeURL.path); err != nil {
+	if err := f.verifyCommit(skill, repoDir); err != nil {
+		return "", err
+	}
+	if _, err := f.run("-C", repoDir, "sparse-checkout", "set", "--", treeURL.path); err != nil {
 		return "", err
 	}
 	return filepath.Join(repoDir, filepath.FromSlash(treeURL.path)), nil
+}
+
+func (f GitFetcher) verifyCommit(skill Skill, repoDir string) error {
+	actual, err := f.run("-C", repoDir, "rev-parse", "HEAD")
+	if err != nil {
+		return err
+	}
+	actual = strings.TrimSpace(actual)
+	if !strings.HasPrefix(actual, skill.Commit) {
+		return fmt.Errorf("external skill %q commit mismatch: expected %s, got %s", skill.Name, skill.Commit, actual)
+	}
+	return nil
 }
 
 func parseGitHubTreeURL(raw string) (githubTreeURL, error) {
@@ -270,13 +297,20 @@ func parseGitHubTreeURL(raw string) (githubTreeURL, error) {
 	return githubTreeURL{owner: owner, repo: repo, ref: ref, path: path}, nil
 }
 
-func runGit(args ...string) error {
+func (f GitFetcher) run(args ...string) (string, error) {
+	if f.runGit != nil {
+		return f.runGit(args...)
+	}
+	return runGit(args...)
+}
+
+func runGit(args ...string) (string, error) {
 	cmd := exec.Command("git", args...)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("git %s: %w: %s", strings.Join(args, " "), err, strings.TrimSpace(string(output)))
+		return "", fmt.Errorf("git %s: %w: %s", strings.Join(args, " "), err, strings.TrimSpace(string(output)))
 	}
-	return nil
+	return string(output), nil
 }
 
 func safePathName(name string) string {
