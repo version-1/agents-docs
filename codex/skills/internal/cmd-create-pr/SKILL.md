@@ -19,7 +19,7 @@ GitHub Pull Request を出す前後の作業を、安全で再現しやすい手
 - `safe-git-push` が拒否した場合や見つからない場合は、拒否理由を確認してユーザーに方針を確認する。
 - 既存 PR がある場合は、新規作成ではなく更新を検討する。
 - PR を新規作成または更新する前に `$role-reviewer` で差分をレビューし、High severity の指摘は PR 作成前に自動対応する。
-- PR 本文を作るときは `$pr-description` を使う。
+- PR 本文を作るときは `$format-pr-description` を使う。
 - commit が必要な場合は `$cmd-commit` を使う。
 
 ## 事前確認
@@ -56,7 +56,7 @@ git symbolic-ref refs/remotes/origin/HEAD
 8. High severity の指摘がある場合は、PR 作成前に自動で対応する。対応後は必要な検証を再実行し、必要に応じて `$cmd-commit` で追加 commit を作る。
 9. High 指摘が残っていないことを確認するまで `$role-reviewer` の確認を繰り返す。
 10. `~/.codex/bin/safe-git-push` で current branch を push する。
-11. `$pr-description` で PR description を作る。
+11. `$format-pr-description` で PR description を作る。
 12. 既存 PR がなければ `gh pr create`、既存 PR があれば `gh pr edit` で description を更新する。
 13. `gh pr view` で URL、base、head、state を確認する。
 14. PR URL、含めた commit、検証結果、レビュー結果、未対応事項を報告する。
@@ -111,7 +111,7 @@ PR description には最低限、次を含める。
 - レビュー時に見てほしい点
 - 未対応事項や相談ごと
 
-本文の形式は `$pr-description` のテンプレートを優先する。
+本文の形式は `$format-pr-description` のテンプレートを優先する。
 
 ## 判断ルール
 
