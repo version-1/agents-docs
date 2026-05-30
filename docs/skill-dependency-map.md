@@ -6,46 +6,51 @@
 
 ## 全体図
 
-```mermaid
-graph TD
-    cmd_create_pr["cmd-create-pr"] --> cmd_commit["cmd-commit"]
-    cmd_create_pr --> role_reviewer["role-reviewer"]
-    cmd_create_pr --> code_review["code-review"]
-    cmd_create_pr --> format_pr_description["format-pr-description"]
-
-    cmd_start_branch["cmd-start-branch"] --> cmd_dispatch_agent["cmd-dispatch-agent"]
-    cmd_start_branch --> cmd_rmbranch["cmd-rmbranch"]
-
-    beautify_commit["beautify-commit"] --> cmd_commit
-    beautify_commit --> grill_me["grill-me (external)"]
-
-    role_reviewer --> code_review
-    role_implementer["role-implementer"] --> coding["coding"]
-
-    coding --> code_naming["code-naming"]
-    coding --> code_review
-
-    component_design["component-design"] --> coding
-    component_design --> code_test["code-test"]
-    component_design --> code_review
-    component_design --> code_next_dev["code-next-developer-review"]
-
-    code_naming --> code_typo["code-typo"]
-    code_naming --> code_review
-    code_naming --> coding
-    code_naming --> code_next_dev
-
-    code_quality["code-quality-review"] --> code_review
-    code_quality --> code_next_dev
-
-    code_review --> coding
-    code_review --> code_quality
-
-    code_next_dev --> code_review
-
-    code_simplifier["code-simplifier"] --> code_quality
-    code_simplifier --> code_review
-    code_simplifier --> code_next_dev
+```text
+internal skills
+├── workflow
+│   ├── cmd-create-pr
+│   │   ├── cmd-commit
+│   │   ├── role-reviewer
+│   │   ├── code-review
+│   │   └── format-pr-description
+│   ├── cmd-start-branch
+│   │   ├── cmd-dispatch-agent
+│   │   └── cmd-rmbranch
+│   └── beautify-commit
+│       ├── cmd-commit
+│       └── grill-me (external)
+├── role
+│   ├── role-reviewer
+│   │   └── code-review
+│   └── role-implementer
+│       └── coding
+└── code work
+    ├── coding
+    │   ├── code-naming
+    │   └── code-review
+    ├── component-design
+    │   ├── coding
+    │   ├── code-test
+    │   ├── code-review
+    │   └── code-next-developer-review
+    ├── code-naming
+    │   ├── code-typo
+    │   ├── code-review
+    │   ├── coding
+    │   └── code-next-developer-review
+    ├── code-quality-review
+    │   ├── code-review
+    │   └── code-next-developer-review
+    ├── code-review
+    │   ├── coding
+    │   └── code-quality-review
+    ├── code-next-developer-review
+    │   └── code-review
+    └── code-simplifier
+        ├── code-quality-review
+        ├── code-review
+        └── code-next-developer-review
 ```
 
 ## ワークフロー系
@@ -91,6 +96,50 @@ graph TD
 | `code-simplifier` | `code-review` | 可読性、効率性、テスト容易性などのレビュー観点として使う。 |
 | `code-simplifier` | `code-next-developer-review` | 保守性や次の開発者の理解しやすさの観点として使う。 |
 
+## Mermaid 図
+
+```mermaid
+graph TD
+    cmd_create_pr["cmd-create-pr"] --> cmd_commit["cmd-commit"]
+    cmd_create_pr --> role_reviewer["role-reviewer"]
+    cmd_create_pr --> code_review["code-review"]
+    cmd_create_pr --> format_pr_description["format-pr-description"]
+
+    cmd_start_branch["cmd-start-branch"] --> cmd_dispatch_agent["cmd-dispatch-agent"]
+    cmd_start_branch --> cmd_rmbranch["cmd-rmbranch"]
+
+    beautify_commit["beautify-commit"] --> cmd_commit
+    beautify_commit --> grill_me["grill-me (external)"]
+
+    role_reviewer --> code_review
+    role_implementer["role-implementer"] --> coding["coding"]
+
+    coding --> code_naming["code-naming"]
+    coding --> code_review
+
+    component_design["component-design"] --> coding
+    component_design --> code_test["code-test"]
+    component_design --> code_review
+    component_design --> code_next_dev["code-next-developer-review"]
+
+    code_naming --> code_typo["code-typo"]
+    code_naming --> code_review
+    code_naming --> coding
+    code_naming --> code_next_dev
+
+    code_quality["code-quality-review"] --> code_review
+    code_quality --> code_next_dev
+
+    code_review --> coding
+    code_review --> code_quality
+
+    code_next_dev --> code_review
+
+    code_simplifier["code-simplifier"] --> code_quality
+    code_simplifier --> code_review
+    code_simplifier --> code_next_dev
+```
+
 ## 更新ルール
 
 skill を追加または更新したときに、他 skill を明示的に参照する文を増やした場合は、このドキュメントも更新します。
@@ -99,5 +148,5 @@ skill を追加または更新したときに、他 skill を明示的に参照�
 
 - `SKILL.md` に `$skill-name`、`` `skill-name` ``、または plain text で依存先が書かれているか。
 - 依存が「必ず使う」「必要に応じて併用」「代替として優先」のどれに近いか。
-- Mermaid の全体図と表の両方に同じ関係が載っているか。
+- ツリー図、表、Mermaid 図のすべてに同じ関係が載っているか。
 - 外部 skill への依存は `(external)` と明記しているか。
