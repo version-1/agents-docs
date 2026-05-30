@@ -6,6 +6,8 @@
 
 分類は [docs/guide/skill-category.md](guide/skill-category.md) の考え方に合わせています。複数の性質を持つ skill は、主な用途で分類しています。
 
+skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](skill-dependency-map.md) にまとめています。
+
 ## Internal Skills
 
 ### A. 行動定義型
@@ -105,4 +107,5 @@
 - 複数カテゴリにまたがる skill は、重複掲載せず主分類に置き、必要に応じて概要に複合要素を明記する。
 - `coding` や `code-review` のようにガードレールや思想を含む skill でも、一覧では主な行動や判断の用途を優先して配置する。
 - `codex/skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用の説明も `SKILL.md` と矛盾しないように更新する。
+- 他 skill への明示的な依存や利用順序を追加したら、[docs/skill-dependency-map.md](skill-dependency-map.md) も更新する。
 - deploy 前は `make deploy-dry-run` で配布対象に含まれることを確認する。
