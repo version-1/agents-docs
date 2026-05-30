@@ -3,12 +3,14 @@
     "name": "skill-creator",
     "url": "https://github.com/anthropics/skills/tree/main/skills/skill-creator",
     "type": "git",
+    "commit": "da20c92503b2e8ff1cf28ca81a0df4673debdbf7",
     "destination": ["~/.codex/skills/external/skill-creator"]
   },
   {
     "name": "grill-me",
     "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
     "type": "git",
+    "commit": "e3b90b5238f38cdea5996e16861dcae28ef52eda",
     "destination": [
       "~/.codex/skills/external/grill-me",
       "~/.claude/skills/grill-me"
@@ -18,6 +20,7 @@
     "name": "empirical-prompt-tuning",
     "url": "https://github.com/mizchi/skills/tree/main/meta/empirical-prompt-tuning",
     "type": "git",
+    "commit": "89c1b34018ba0d85a770c065ba22f83a8d004d34",
     "destination": [
       "~/.codex/skills/external/empirical-prompt-tuning",
       "~/.claude/skills/empirical-prompt-tuning"
