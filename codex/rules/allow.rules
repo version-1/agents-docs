@@ -1,0 +1,324 @@
+# ========================================
+# Codex Allow Rules
+# ========================================
+
+# ----------------------------------------
+# Git operations
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["git", "checkout", "-b"],
+    decision = "allow",
+    justification = "ブランチ作成は安全"
+)
+
+prefix_rule(
+    pattern = ["git", "switch"],
+    decision = "allow",
+    justification = "ブランチ切り替えは通常安全"
+)
+
+prefix_rule(
+    pattern = ["git", ["status", "diff", "log", "fetch", "pull"]],
+    decision = "allow",
+    justification = "参照/取得のみ"
+)
+
+prefix_rule(
+    pattern = ["git", ["show", "rev-parse", "merge-base", "ls-files", "grep"]],
+    decision = "allow",
+    justification = "Git の参照系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["git", "remote", "-v"],
+    decision = "allow",
+    justification = "リモート設定の参照のみ"
+)
+
+prefix_rule(
+    pattern = ["git", "config", "--get"],
+    decision = "allow",
+    justification = "Git 設定の参照のみ"
+)
+
+prefix_rule(
+    pattern = ["git", "submodule", "status"],
+    decision = "allow",
+    justification = "submodule 状態の参照のみ"
+)
+
+prefix_rule(
+    pattern = ["git", "branch", ["--show-current", "--list", "-a"]],
+    decision = "allow",
+    justification = "ブランチ一覧や現在ブランチの参照のみ"
+)
+
+prefix_rule(
+    pattern = ["git", ["commit", "add"]],
+    decision = "allow",
+    justification = "コミットは通常安全"
+)
+
+prefix_rule(
+    pattern = ["git", "branch", "-d"],
+    decision = "allow",
+    justification = "マージ済みローカルブランチ削除は通常安全"
+)
+
+prefix_rule(
+    pattern = ["git", "stash"],
+    decision = "allow",
+    justification = "作業内容を一時退避する操作は通常安全"
+)
+
+prefix_rule(
+    pattern = ["git", "worktree", ["add", "list", "lock", "move", "repair", "unlock"]],
+    decision = "allow",
+    justification = "remove/prune 以外の worktree 操作は通常安全"
+)
+
+prefix_rule(
+    pattern = ["safe-git-push"],
+    decision = "allow",
+    justification = "safe-git-push validates branch and remote before pushing"
+)
+
+# ----------------------------------------
+# GitHub / PR operations
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "pr", "create"],
+    decision = "allow",
+    justification = "PR作成は通常安全"
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "view"],
+    decision = "allow",
+    justification = "閲覧のみ"
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", ["list", "status", "diff", "checks"]],
+    decision = "allow",
+    justification = "PR の参照/確認のみ"
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", ["view", "list"]],
+    decision = "allow",
+    justification = "リポジトリ情報の参照のみ"
+)
+
+prefix_rule(
+    pattern = ["gh", "issue", "create"],
+    decision = "allow",
+    justification = "Issue 作成は通常安全"
+)
+
+prefix_rule(
+    pattern = ["gh", "issue", ["view", "list", "status"]],
+    decision = "allow",
+    justification = "Issue の参照/確認のみ"
+)
+
+# ----------------------------------------
+# Read-only and local commands
+# ----------------------------------------
+
+prefix_rule(
+    pattern = [["ls", "tree", "rg", "cat", "less"]],
+    decision = "allow",
+    justification = "参照系は安全"
+)
+
+prefix_rule(
+    pattern = [["pwd", "head", "tail", "find"]],
+    decision = "allow",
+    justification = "参照系は安全"
+)
+
+prefix_rule(
+    pattern = ["sed", "-n"],
+    decision = "allow",
+    justification = "sed の読み取り用途は安全"
+)
+
+prefix_rule(
+    pattern = [["npm", "pnpm", "yarn", "bun"], ["run", "start"]],
+    decision = "allow",
+    justification = "ローカル操作は安全"
+)
+
+prefix_rule(
+    pattern = [["npm", "pnpm", "yarn", "bun"], ["test", "install", "build"]],
+    decision = "allow",
+    justification = "ローカル操作は安全"
+)
+
+prefix_rule(
+    pattern = ["bundle", ["exec", "install"]],
+    decision = "allow",
+    justification = "Ruby操作は安全"
+)
+
+prefix_rule(
+    pattern = ["make"],
+    decision = "allow",
+    justification = "ビルド/テストは安全"
+)
+
+prefix_rule(
+    pattern = ["go", ["test", "list", "vet"]],
+    decision = "allow",
+    justification = "Go の検証/参照系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["cargo", ["test", "check"]],
+    decision = "allow",
+    justification = "Rust の検証系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["python", "-m", "pytest"],
+    decision = "allow",
+    justification = "Python テスト実行は通常安全"
+)
+
+prefix_rule(
+    pattern = ["python3", "-m", "pytest"],
+    decision = "allow",
+    justification = "Python テスト実行は通常安全"
+)
+
+prefix_rule(
+    pattern = ["mv"],
+    decision = "allow",
+    justification = "ファイル移動は通常安全"
+)
+
+# ----------------------------------------
+# Docker local development
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["docker", ["version", "info", "ps", "images", "logs", "inspect", "stats", "top", "port"]],
+    decision = "allow",
+    justification = "Docker の参照系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["docker", "container", ["ls", "inspect", "logs", "stats", "top", "port"]],
+    decision = "allow",
+    justification = "コンテナの参照系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["docker", "image", ["ls", "inspect", "history"]],
+    decision = "allow",
+    justification = "イメージの参照系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["docker", "network", ["ls", "inspect"]],
+    decision = "allow",
+    justification = "ネットワークの参照系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["docker", "volume", ["ls", "inspect"]],
+    decision = "allow",
+    justification = "ボリュームの参照系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["docker", "compose", ["config", "ps", "logs", "ls", "top", "images"]],
+    decision = "allow",
+    justification = "Compose の参照系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["docker", "compose", ["version", "events"]],
+    decision = "allow",
+    justification = "Compose の参照/監視系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["docker", "compose", ["build", "up", "start", "stop", "restart", "pull", "pause", "unpause"]],
+    decision = "allow",
+    justification = "Compose のローカル開発操作は通常安全"
+)
+
+# ----------------------------------------
+# Local network checks
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["curl", "https://localhost:*"],
+    decision = "allow",
+    justification = "localhost への疎通確認は安全"
+)
+
+prefix_rule(
+    pattern = ["curl", "http://localhost:*"],
+    decision = "allow",
+    justification = "localhost への疎通確認は安全"
+)
+
+prefix_rule(
+    pattern = ["curl", "http://127.0.0.1:*"],
+    decision = "allow",
+    justification = "loopback への疎通確認は安全"
+)
+
+prefix_rule(
+    pattern = ["curl", "http://0.0.0.0:*"],
+    decision = "allow",
+    justification = "ローカルバインド先への疎通確認は安全"
+)
+
+prefix_rule(
+    pattern = ["curl", [
+        "http://10.*",
+        "https://10.*",
+        "http://172.16.*",
+        "https://172.16.*",
+        "http://172.17.*",
+        "https://172.17.*",
+        "http://172.18.*",
+        "https://172.18.*",
+        "http://172.19.*",
+        "https://172.19.*",
+        "http://172.20.*",
+        "https://172.20.*",
+        "http://172.21.*",
+        "https://172.21.*",
+        "http://172.22.*",
+        "https://172.22.*",
+        "http://172.23.*",
+        "https://172.23.*",
+        "http://172.24.*",
+        "https://172.24.*",
+        "http://172.25.*",
+        "https://172.25.*",
+        "http://172.26.*",
+        "https://172.26.*",
+        "http://172.27.*",
+        "https://172.27.*",
+        "http://172.28.*",
+        "https://172.28.*",
+        "http://172.29.*",
+        "https://172.29.*",
+        "http://172.30.*",
+        "https://172.30.*",
+        "http://172.31.*",
+        "https://172.31.*",
+        "http://192.168.*",
+        "https://192.168.*"
+    ]],
+    decision = "allow",
+    justification = "Docker network で使われる private address への疎通確認は安全"
+)

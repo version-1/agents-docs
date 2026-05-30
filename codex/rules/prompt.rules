@@ -1,0 +1,169 @@
+# ========================================
+# Codex Prompt Rules
+# ========================================
+
+# ----------------------------------------
+# Git operations
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "リモート反映前に確認"
+)
+
+prefix_rule(
+    pattern = ["git", "rebase"],
+    decision = "prompt",
+    justification = "履歴変更確認"
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "prompt",
+    justification = "作業内容消失防止"
+)
+
+prefix_rule(
+    pattern = ["git", "worktree", ["remove", "prune"]],
+    decision = "prompt",
+    justification = "worktree の削除や掃除は作業内容に影響する可能性"
+)
+
+# ----------------------------------------
+# GitHub / PR operations
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["gh", "pr", "edit"],
+    decision = "prompt",
+    justification = "PR内容変更確認"
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "prompt",
+    justification = "マージ前に確認"
+)
+
+# ----------------------------------------
+# Infrastructure / deploy operations
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["terraform", "apply"],
+    decision = "prompt",
+    justification = "本番影響の可能性"
+)
+
+prefix_rule(
+    pattern = ["kubectl"],
+    decision = "prompt",
+    justification = "クラスタ操作は確認"
+)
+
+prefix_rule(
+    pattern = ["aws"],
+    decision = "prompt",
+    justification = "課金・本番影響の可能性"
+)
+
+prefix_rule(
+    pattern = ["gcloud"],
+    decision = "prompt",
+    justification = "GCP操作は確認"
+)
+
+prefix_rule(
+    pattern = ["vercel", "deploy"],
+    decision = "prompt",
+    justification = "デプロイ確認"
+)
+
+# ----------------------------------------
+# Database operations
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["psql"],
+    decision = "prompt",
+    justification = "DB操作は慎重に"
+)
+
+prefix_rule(
+    pattern = ["mysql"],
+    decision = "prompt",
+    justification = "DB操作は慎重に"
+)
+
+# ----------------------------------------
+# Package publishing
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["npm", "publish"],
+    decision = "prompt",
+    justification = "公開前確認"
+)
+
+prefix_rule(
+    pattern = ["pnpm", "publish"],
+    decision = "prompt",
+    justification = "公開前確認"
+)
+
+prefix_rule(
+    pattern = ["gem", "push"],
+    decision = "prompt",
+    justification = "公開前確認"
+)
+
+prefix_rule(
+    pattern = ["docker", "push"],
+    decision = "prompt",
+    justification = "イメージ公開確認"
+)
+
+prefix_rule(
+    pattern = ["docker", "compose", ["exec", "run"]],
+    decision = "prompt",
+    justification = "Compose exec/run は実行内容次第で副作用があるため確認"
+)
+
+# ----------------------------------------
+# File operations
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["cp", "-r"],
+    decision = "prompt",
+    justification = "大量コピー防止"
+)
+
+prefix_rule(
+    pattern = ["chmod"],
+    decision = "prompt",
+    justification = "権限変更確認"
+)
+
+# ----------------------------------------
+# Network operations
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["curl"],
+    decision = "prompt",
+    justification = "外部アクセス確認"
+)
+
+prefix_rule(
+    pattern = ["wget"],
+    decision = "prompt",
+    justification = "外部取得確認"
+)
+
+prefix_rule(
+    pattern = ["ssh"],
+    decision = "prompt",
+    justification = "接続先確認"
+)

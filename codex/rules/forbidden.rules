@@ -1,0 +1,77 @@
+# ========================================
+# Codex Forbidden Rules
+# ========================================
+
+# ----------------------------------------
+# Destructive commands
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["rm", "-rf"],
+    decision = "forbidden",
+    justification = "ディレクトリ削除は危険"
+)
+
+prefix_rule(
+    pattern = ["sudo", "rm"],
+    decision = "forbidden",
+    justification = "root削除は禁止"
+)
+
+prefix_rule(
+    pattern = ["git", "push", "--force"],
+    decision = "forbidden",
+    justification = "履歴破壊防止"
+)
+
+prefix_rule(
+    pattern = ["git", "clean", "-fd"],
+    decision = "forbidden",
+    justification = "未追跡ファイル削除防止"
+)
+
+prefix_rule(
+    pattern = ["docker", "system", "prune"],
+    decision = "forbidden",
+    justification = "Dockerリソース削除防止"
+)
+
+prefix_rule(
+    pattern = ["terraform", "destroy"],
+    decision = "forbidden",
+    justification = "インフラ破壊防止"
+)
+
+prefix_rule(
+    pattern = ["gh", "repo", "delete"],
+    decision = "forbidden",
+    justification = "リポジトリ削除防止"
+)
+
+# ----------------------------------------
+# Data and transfer risks
+# ----------------------------------------
+
+prefix_rule(
+    pattern = ["drop"],
+    decision = "forbidden",
+    justification = "データ削除禁止"
+)
+
+prefix_rule(
+    pattern = ["truncate"],
+    decision = "forbidden",
+    justification = "データ削除禁止"
+)
+
+prefix_rule(
+    pattern = ["chown"],
+    decision = "forbidden",
+    justification = "権限変更は禁止"
+)
+
+prefix_rule(
+    pattern = ["scp"],
+    decision = "forbidden",
+    justification = "ファイル送信禁止"
+)
