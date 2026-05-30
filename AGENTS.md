@@ -71,6 +71,7 @@ make deploy
 
 - `codex/skills/internal/<name>/SKILL.md` が Codex skill の本体です。
 - `codex/skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも内容に合わせます。
+- skill の設計・命名時は [`docs/design-skill.md`](docs/design-skill.md) の方針も確認します。
 - skill の追加・更新時は [`docs/skill-library.md`](docs/skill-library.md) の一覧も更新します。
 - `codex/agents/*.toml` の `nickname_candidates` は覚えやすい英語の人名を 3 件ずつ設定します。
 - `deploy.json` は内部ファイルの配布先、`external-skills.json` は外部 skill の取得先を管理します。

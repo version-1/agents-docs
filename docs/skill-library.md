@@ -50,6 +50,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | Skill | 概要 | 使う場面 |
 |---|---|---|
 | `format-pr-description` | GitHub Pull Request の description を定義済みフォーマットで作成、更新する。 | PR 番号、diff、コミット履歴から Summary、変更点、動作確認を整理するとき。 |
+| `format-rich-html-diagram` | アーキテクチャ、コンポーネント構造、データフロー、状態管理、シーケンス、処理フローを単一 `index.html` でリッチに可視化する。 | 開発理解、設計整理、コードリーディング、オンボーディング用に、ブラウザで開ける図解資料を作りたいとき。 |
 
 ### B. 判断定義型
 
