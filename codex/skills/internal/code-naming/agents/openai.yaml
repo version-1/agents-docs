@@ -1,0 +1,4 @@
+interface:
+  display_name: "code-naming"
+  short_description: "関数名・クラス名・変数名などコード要素の命名をレビュー"
+  default_prompt: "Use $code-naming to review these function, class, and variable names and suggest clearer alternatives."
