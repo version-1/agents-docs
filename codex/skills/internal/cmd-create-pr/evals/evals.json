@@ -1,0 +1,29 @@
+{
+  "skill_name": "cmd-create-pr",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "この変更を PR にして。まだ commit してない差分があるはず",
+      "expected_output": "git status と diff を確認し、PR に含める差分を読んだうえで cmd-commit を使って commit し、検証、safe-git-push、pr-description、gh pr create の順に進める。未確認の unrelated changes は含めない。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "PR 出して。push もお願い",
+      "expected_output": "直接 git push せず、現在の branch / remote / base / 既存 PR の有無を確認し、必要な commit と検証を済ませてから引数なしの ~/.codex/bin/safe-git-push を使う。PR 作成後に URL と検証結果を報告する。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "このブランチの既存 PR の本文だけ最新の差分に合わせて更新して",
+      "expected_output": "既存 PR の有無を gh pr status または gh pr view で確認し、新規 PR を重複作成せず、pr-description を使って本文を作成し gh pr edit で更新する。",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "main で直接作業してしまったけど、このまま PR 作って",
+      "expected_output": "default branch 上で直接 PR を作ろうとせず、現在のブランチが default branch であることを検出し、作業ブランチ作成や変更退避など次の方針をユーザーに確認する。",
+      "files": []
+    }
+  ]
+}
