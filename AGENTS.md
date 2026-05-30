@@ -1,11 +1,14 @@
 これは agents-docs レポジトリ用の AGENTS.md です。
 Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、`make deploy` でローカル環境へ配布します。
 
+エージェント作業の標準フローは [`WORKFLOW.md`](WORKFLOW.md) を参照してください。
+
 ## ディレクトリ構成
 
 ```text
 .
 ├── AGENTS.md                      このファイル（リポジトリの案内）
+├── WORKFLOW.md                    エージェント作業の標準ワークフロー
 ├── README.md                      リポジトリ概要と基本コマンド
 ├── Makefile                       deploy ビルドと配布コマンド
 ├── deploy.json                    内部ファイルの配布設定
