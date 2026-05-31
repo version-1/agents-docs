@@ -1,0 +1,68 @@
+#!/bin/sh
+set -eu
+
+die() {
+  printf 'safe-gh-edit: %s\n' "$*" >&2
+  exit 1
+}
+
+usage() {
+  die "usage: safe-gh-edit <pr|issue> <number> [gh edit flags...]"
+}
+
+if [ "$#" -lt 2 ]; then
+  usage
+fi
+
+target=$1
+number=$2
+shift 2
+
+case "$target" in
+  pr | issue)
+    ;;
+  *)
+    usage
+    ;;
+esac
+
+case "$number" in
+  '' | *[!0-9]*)
+    die "number must be a positive integer"
+    ;;
+esac
+
+if [ "$number" -eq 0 ]; then
+  die "number must be a positive integer"
+fi
+
+command -v gh >/dev/null 2>&1 || die "gh command not found"
+
+repo_owner=$(gh repo view --json owner --jq '.owner.login') ||
+  die "failed to resolve repository owner"
+repo_name=$(gh repo view --json name --jq '.name') ||
+  die "failed to resolve repository name"
+current_user=$(gh api user --jq '.login') ||
+  die "failed to resolve authenticated GitHub user"
+
+case "$target" in
+  pr)
+    author=$(gh api "repos/${repo_owner}/${repo_name}/pulls/${number}" --jq '.user.login') ||
+      die "failed to resolve PR author"
+    ;;
+  issue)
+    author=$(gh api "repos/${repo_owner}/${repo_name}/issues/${number}" --jq '.user.login') ||
+      die "failed to resolve issue author"
+    ;;
+esac
+
+if [ "$author" != "$current_user" ]; then
+  die "refusing to edit ${target} #${number}: author is ${author}, authenticated user is ${current_user}"
+fi
+
+printf 'safe-gh-edit: repository: %s/%s\n' "$repo_owner" "$repo_name" >&2
+printf 'safe-gh-edit: authenticated user: %s\n' "$current_user" >&2
+printf 'safe-gh-edit: %s #%s author: %s\n' "$target" "$number" "$author" >&2
+printf 'safe-gh-edit: running: gh %s edit %s\n' "$target" "$number" >&2
+
+exec gh "$target" edit "$number" "$@"

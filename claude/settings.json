@@ -45,6 +45,8 @@
       "Bash(git worktree unlock *)",
       "Bash(safe-git-push)",
       "Bash(~/.codex/bin/safe-git-push)",
+      "Bash(safe-gh-edit *)",
+      "Bash(~/.codex/bin/safe-gh-edit *)",
       "Bash(gh pr create *)",
       "Bash(gh pr view)",
       "Bash(gh pr view *)",
