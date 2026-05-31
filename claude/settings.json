@@ -120,6 +120,8 @@
       "Bash(go test *)",
       "Bash(go list *)",
       "Bash(go vet *)",
+      "Bash(go build *)",
+      "Bash(go mod tidy)",
       "Bash(cargo test)",
       "Bash(cargo test *)",
       "Bash(cargo check)",
