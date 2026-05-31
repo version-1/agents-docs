@@ -183,9 +183,15 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["go", ["test", "list", "vet"]],
+    pattern = ["go", ["test", "list", "vet", "build"]],
     decision = "allow",
     justification = "Go の検証/参照系操作は安全"
+)
+
+prefix_rule(
+    pattern = ["go", "mod", "tidy"],
+    decision = "allow",
+    justification = "Go 依存定義の整備は通常安全"
 )
 
 prefix_rule(
