@@ -41,6 +41,12 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["gh", "issue", "edit"],
+    decision = "prompt",
+    justification = "Issue内容変更確認"
+)
+
+prefix_rule(
     pattern = ["gh", "pr", "merge"],
     decision = "prompt",
     justification = "マージ前に確認"

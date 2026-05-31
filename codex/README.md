@@ -44,6 +44,7 @@ commands
 Codex CLI から prompt なしで実行させる補助コマンドを配置します。
 
 - `safe-git-push`: 引数なし専用の安全な push wrapper。`main` / `master` / detached HEAD / 不正な branch / 複数 push URL を拒否し、`git push origin HEAD:<current-branch>` だけを実行します。
+- `safe-gh-edit`: 自分が作成した PR / Issue だけを編集できる `gh pr edit` / `gh issue edit` wrapper。対象の author と認証中の GitHub user が一致しない場合は拒否します。
 
 ### prompts
 

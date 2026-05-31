@@ -84,6 +84,18 @@ prefix_rule(
     justification = "safe-git-push validates branch and remote before pushing"
 )
 
+prefix_rule(
+    pattern = ["safe-gh-edit"],
+    decision = "allow",
+    justification = "safe-gh-edit validates PR/issue ownership before editing"
+)
+
+prefix_rule(
+    pattern = ["~/.codex/bin/safe-gh-edit"],
+    decision = "allow",
+    justification = "safe-gh-edit validates PR/issue ownership before editing"
+)
+
 # ----------------------------------------
 # GitHub / PR operations
 # ----------------------------------------
