@@ -1,0 +1,29 @@
+{
+  "skill_name": "ci-fix",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "PR の GitHub Actions が落ちてるので直して。lint か test のどれかが red になっているはず",
+      "expected_output": "gh pr checks や gh pr view で失敗 check を特定し、workflow / job / step / root cause を切り分ける。CI step と同じローカル検証コマンドを実行し、必要なら coding や code-test を併用して最小修正する。修正後に検証結果と CI 再実行の要否を報告する。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "GitHub Actions でだけ build が失敗してる。ローカルでは通っているので workflow 側も含めて見て",
+      "expected_output": "CI definition failure または environment drift として扱い、workflow YAML、working directory、env、toolchain version、cache、artifact、matrix 条件を確認する。ローカルとの差分を説明し、CI 専用の場当たり対応ではなく標準環境や workflow 定義の最小修正を提案または実装する。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "checks がたまに落ちる。再実行すると通ることもあるので flake の原因を潰して",
+      "expected_output": "単に再実行で済ませず、失敗ログと再発条件から timing、sleep、時刻、乱数、並列実行、共有リソース、外部 API、rate limit を調査する。必要なら code-test を併用して同期、固定 seed、依存分離、タイムアウト明確化などの修正を行い、残る flake リスクを報告する。",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "workflow の deploy job が permission denied で失敗してる。secret 周りっぽい",
+      "expected_output": "secret 値を表示せず、GitHub permissions、OIDC、token、fork PR 制約、必要最小権限を確認する。権限や secret の新規設定が必要な場合は勝手に変更せず、必要なユーザー判断と次の手順を明確にする。",
+      "files": []
+    }
+  ]
+}

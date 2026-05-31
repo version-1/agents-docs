@@ -19,9 +19,13 @@ internal skills
 │   ├── cmd-start-branch
 │   │   ├── cmd-dispatch-agent
 │   │   └── cmd-rmbranch
-│   └── beautify-commit
-│       ├── cmd-commit
-│       └── grill-me (external)
+│   ├── beautify-commit
+│   │   ├── cmd-commit
+│   │   └── grill-me (external)
+│   └── ci-fix
+│       ├── coding
+│       ├── code-test
+│       └── cmd-create-pr
 ├── role
 │   ├── role-reviewer
 │   │   └── code-review
@@ -57,6 +61,9 @@ internal skills
 | `cmd-start-branch` | `cmd-rmbranch` | 不要ブランチ整理 agent の依頼内容として使う。 |
 | `beautify-commit` | `cmd-commit` | 整理後の commit 作成で使う。 |
 | `beautify-commit` | `grill-me` | 分割方針が曖昧なときに整理方針を詰めるため使う。 |
+| `ci-fix` | `coding` | CI 失敗の修正に実装変更が必要なときに使う。 |
+| `ci-fix` | `code-test` | テスト追加、flake 対策、検証コマンド整理が必要なときに使う。 |
+| `ci-fix` | `cmd-create-pr` | CI 修正を PR 作成や PR 更新まで反映するときに使う。 |
 
 ## ロール系
 
@@ -111,13 +118,17 @@ graph TD
     beautify_commit["beautify-commit"] --> cmd_commit
     beautify_commit --> grill_me["grill-me (external)"]
 
+    ci_fix["ci-fix"] --> coding
+    ci_fix --> code_test["code-test"]
+    ci_fix --> cmd_create_pr
+
     role_reviewer --> code_review
     role_implementer["role-implementer"] --> coding["coding"]
 
     coding --> code_naming["code-naming"]
 
     component_design["component-design"] --> coding
-    component_design --> code_test["code-test"]
+    component_design --> code_test
     component_design --> code_next_dev["code-next-developer-review"]
 
     code_naming --> code_next_dev
