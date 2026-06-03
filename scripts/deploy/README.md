@@ -140,7 +140,7 @@ make build-deploy
     "name": "grill-me",
     "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
     "type": "git",
-    "commit": "e3b90b5238f38cdea5996e16861dcae28ef52eda",
+    "treeHash": "2a1ad17028306ebe45f0e49703fa28b9b2e7f499",
     "destination": [
       "~/.codex/skills/external/grill-me",
       "~/.claude/skills/grill-me"
@@ -149,7 +149,15 @@ make build-deploy
 ]
 ```
 
-`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式だけを受け付けます。`commit` は必須で、取得後の `HEAD` と照合する 40 文字の hex commit hash を指定します。dry-run でも取得、commit 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、commit が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
+`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式だけを受け付けます。`treeHash` は必須で、`url` が指すディレクトリの Git tree hash と照合する 40 文字の hex hash を指定します。dry-run でも取得、tree hash 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、tree hash が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
+
+対象ディレクトリの tree hash は次のように確認できます。
+
+```bash
+git -C <repo> rev-parse HEAD:<path>
+```
+
+tree hash は対象ディレクトリ配下の内容に対する hash です。リポジトリ内の別ディレクトリだけが更新されても変わりません。
 
 外部 skill 同士の `name` 重複、内部 skill と外部 skill の同名衝突、外部 skill の `destination` 重複は上書きせずエラーにします。
 

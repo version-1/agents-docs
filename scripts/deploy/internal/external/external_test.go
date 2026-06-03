@@ -10,9 +10,9 @@ import (
 	"deploy/internal/config"
 )
 
-const testCommit = "0123456789abcdef0123456789abcdef01234567"
+const testTreeHash = "0123456789abcdef0123456789abcdef01234567"
 
-func TestLoadRequiresCommit(t *testing.T) {
+func TestLoadRequiresTreeHash(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "external-skills.json")
 	if err := os.WriteFile(path, []byte(`[
   {"name":"skill","url":"https://github.com/owner/repo/tree/main/skill","type":"git","destination":["dest/skill"]}
@@ -22,36 +22,36 @@ func TestLoadRequiresCommit(t *testing.T) {
 
 	_, err := Load(path)
 	if err == nil {
-		t.Fatal("expected missing commit error")
+		t.Fatal("expected missing treeHash error")
 	}
-	if !strings.Contains(err.Error(), "commit is required") {
+	if !strings.Contains(err.Error(), "treeHash is required") {
 		t.Fatalf("unexpected error: %v", err)
 	}
 }
 
-func TestLoadRejectsInvalidCommit(t *testing.T) {
+func TestLoadRejectsInvalidTreeHash(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "external-skills.json")
 	if err := os.WriteFile(path, []byte(`[
-  {"name":"skill","url":"https://github.com/owner/repo/tree/main/skill","type":"git","commit":"not-a-commit","destination":["dest/skill"]}
+  {"name":"skill","url":"https://github.com/owner/repo/tree/main/skill","type":"git","treeHash":"not-a-tree-hash","destination":["dest/skill"]}
 ]`), 0644); err != nil {
 		t.Fatal(err)
 	}
 
 	_, err := Load(path)
 	if err == nil {
-		t.Fatal("expected invalid commit error")
+		t.Fatal("expected invalid treeHash error")
 	}
 	if !strings.Contains(err.Error(), "40-character lowercase hex") {
 		t.Fatalf("unexpected error: %v", err)
 	}
 }
 
-func TestGitFetcherFetchVerifiesCommit(t *testing.T) {
+func TestGitFetcherFetchVerifiesTreeHash(t *testing.T) {
 	var calls []string
 	fetcher := GitFetcher{runGit: func(args ...string) (string, error) {
 		calls = append(calls, strings.Join(args, " "))
-		if isRevParseHead(args) {
-			return testCommit + "\n", nil
+		if isRevParseTree(args, "skill") {
+			return testTreeHash + "\n", nil
 		}
 		return "", nil
 	}}
@@ -66,12 +66,15 @@ func TestGitFetcherFetchVerifiesCommit(t *testing.T) {
 	if len(calls) != 3 {
 		t.Fatalf("expected clone, rev-parse, sparse-checkout calls, got %v", calls)
 	}
+	if isRevParseHead(calls) {
+		t.Fatalf("fetch should verify the skill tree hash, not repository HEAD: %v", calls)
+	}
 }
 
-func TestGitFetcherFetchRejectsCommitMismatch(t *testing.T) {
+func TestGitFetcherFetchRejectsTreeHashMismatch(t *testing.T) {
 	actual := "abcdef0123456789abcdef0123456789abcdef01"
 	fetcher := GitFetcher{runGit: func(args ...string) (string, error) {
-		if isRevParseHead(args) {
+		if isRevParseTree(args, "skill") {
 			return actual + "\n", nil
 		}
 		return "", nil
@@ -79,15 +82,24 @@ func TestGitFetcherFetchRejectsCommitMismatch(t *testing.T) {
 
 	_, err := fetcher.Fetch(testSkill("skill"), t.TempDir())
 	if err == nil {
-		t.Fatal("expected commit mismatch")
+		t.Fatal("expected tree hash mismatch")
 	}
-	if !strings.Contains(err.Error(), fmt.Sprintf("expected %s, got %s", testCommit, actual)) {
+	if !strings.Contains(err.Error(), fmt.Sprintf("expected %s, got %s", testTreeHash, actual)) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 }
 
-func isRevParseHead(args []string) bool {
-	return len(args) >= 3 && args[len(args)-2] == "rev-parse" && args[len(args)-1] == "HEAD"
+func isRevParseTree(args []string, path string) bool {
+	return len(args) >= 3 && args[len(args)-2] == "rev-parse" && args[len(args)-1] == "HEAD:"+path
+}
+
+func isRevParseHead(calls []string) bool {
+	for _, call := range calls {
+		if strings.HasSuffix(call, " rev-parse HEAD") {
+			return true
+		}
+	}
+	return false
 }
 
 func TestValidateConflictsRejectsInternalSkillNameConflict(t *testing.T) {
@@ -155,7 +167,7 @@ func testSkill(name string) Skill {
 		Name:        name,
 		URL:         "https://github.com/owner/repo/tree/main/" + name,
 		Type:        "git",
-		Commit:      testCommit,
+		TreeHash:    testTreeHash,
 		Destination: []string{"dest/" + name},
 	}
 }

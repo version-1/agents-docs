@@ -22,7 +22,7 @@ type Skill struct {
 	Name        string   `json:"name"`
 	URL         string   `json:"url"`
 	Type        string   `json:"type"`
-	Commit      string   `json:"commit"`
+	TreeHash    string   `json:"treeHash"`
 	Destination []string `json:"destination"`
 }
 
@@ -41,7 +41,7 @@ type githubTreeURL struct {
 	path  string
 }
 
-var commitHashPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
+var gitObjectHashPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
 
 func Load(path string) ([]Skill, error) {
 	b, err := os.ReadFile(path)
@@ -74,11 +74,11 @@ func validateConfigSkill(i int, skill Skill) error {
 	if skill.Type != "git" {
 		return fmt.Errorf("externalSkills[%d].type %q is not supported", i, skill.Type)
 	}
-	if skill.Commit == "" {
-		return fmt.Errorf("externalSkills[%d].commit is required", i)
+	if skill.TreeHash == "" {
+		return fmt.Errorf("externalSkills[%d].treeHash is required", i)
 	}
-	if !commitHashPattern.MatchString(skill.Commit) {
-		return fmt.Errorf("externalSkills[%d].commit must be a 40-character lowercase hex string", i)
+	if !gitObjectHashPattern.MatchString(skill.TreeHash) {
+		return fmt.Errorf("externalSkills[%d].treeHash must be a 40-character lowercase hex string", i)
 	}
 	if len(skill.Destination) == 0 {
 		return fmt.Errorf("externalSkills[%d].destination must include at least one path", i)
@@ -256,7 +256,7 @@ func (f GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
 	if _, err := f.run("clone", "--depth", "1", "--filter=blob:none", "--sparse", "--branch", treeURL.ref, cloneURL, repoDir); err != nil {
 		return "", err
 	}
-	if err := f.verifyCommit(skill, repoDir); err != nil {
+	if err := f.verifyTreeHash(skill, treeURL, repoDir); err != nil {
 		return "", err
 	}
 	if _, err := f.run("-C", repoDir, "sparse-checkout", "set", "--", treeURL.path); err != nil {
@@ -265,14 +265,14 @@ func (f GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
 	return filepath.Join(repoDir, filepath.FromSlash(treeURL.path)), nil
 }
 
-func (f GitFetcher) verifyCommit(skill Skill, repoDir string) error {
-	actual, err := f.run("-C", repoDir, "rev-parse", "HEAD")
+func (f GitFetcher) verifyTreeHash(skill Skill, treeURL githubTreeURL, repoDir string) error {
+	actual, err := f.run("-C", repoDir, "rev-parse", "HEAD:"+treeURL.path)
 	if err != nil {
 		return err
 	}
 	actual = strings.TrimSpace(actual)
-	if !strings.HasPrefix(actual, skill.Commit) {
-		return fmt.Errorf("external skill %q commit mismatch: expected %s, got %s", skill.Name, skill.Commit, actual)
+	if actual != skill.TreeHash {
+		return fmt.Errorf("external skill %q tree hash mismatch for %q: expected %s, got %s", skill.Name, treeURL.path, skill.TreeHash, actual)
 	}
 	return nil
 }

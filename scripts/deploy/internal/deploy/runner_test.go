@@ -110,7 +110,7 @@ func TestRunnerDeploysExternalSkills(t *testing.T) {
     "name": "grill-me",
     "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
     "type": "git",
-    "commit": "0123456789abcdef0123456789abcdef01234567",
+    "treeHash": "0123456789abcdef0123456789abcdef01234567",
     "destination": ["dest/external/grill-me"]
   }
 ]`)
@@ -137,7 +137,7 @@ func TestRunnerExternalSkillsRequiresValidGitHubTreeURL(t *testing.T) {
 	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
 	externalConfig := filepath.Join(root, "external-skills.json")
 	writeConfig(t, externalConfig, `[
-  {"name":"bad","url":"https://github.com/owner/repo/blob/main/skill","type":"git","commit":"0123456789abcdef0123456789abcdef01234567","destination":["dest/bad"]}
+  {"name":"bad","url":"https://github.com/owner/repo/blob/main/skill","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/bad"]}
 ]`)
 
 	var out bytes.Buffer
@@ -161,7 +161,7 @@ func TestRunnerExternalSkillsRejectsFetchFailure(t *testing.T) {
 	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
 	externalConfig := filepath.Join(root, "external-skills.json")
 	writeConfig(t, externalConfig, `[
-  {"name":"grill-me","url":"https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me","type":"git","commit":"0123456789abcdef0123456789abcdef01234567","destination":["dest/grill-me"]}
+  {"name":"grill-me","url":"https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/grill-me"]}
 ]`)
 
 	var out bytes.Buffer
@@ -189,7 +189,7 @@ func TestRunnerExternalSkillsRequiresSkillFile(t *testing.T) {
 	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
 	externalConfig := filepath.Join(root, "external-skills.json")
 	writeConfig(t, externalConfig, `[
-  {"name":"missing-skill","url":"https://github.com/owner/repo/tree/main/missing-skill","type":"git","commit":"0123456789abcdef0123456789abcdef01234567","destination":["dest/missing-skill"]}
+  {"name":"missing-skill","url":"https://github.com/owner/repo/tree/main/missing-skill","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/missing-skill"]}
 ]`)
 
 	var out bytes.Buffer
@@ -215,7 +215,7 @@ func TestRunnerExternalSkillsRejectsNameMismatch(t *testing.T) {
 	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
 	externalConfig := filepath.Join(root, "external-skills.json")
 	writeConfig(t, externalConfig, `[
-  {"name":"configured-name","url":"https://github.com/owner/repo/tree/main/configured-name","type":"git","commit":"0123456789abcdef0123456789abcdef01234567","destination":["dest/configured-name"]}
+  {"name":"configured-name","url":"https://github.com/owner/repo/tree/main/configured-name","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/configured-name"]}
 ]`)
 
 	var out bytes.Buffer
@@ -239,7 +239,7 @@ func TestRunnerExternalSkillsRejectsInternalNameConflict(t *testing.T) {
 	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
 	externalConfig := filepath.Join(root, "external-skills.json")
 	writeConfig(t, externalConfig, `[
-  {"name":"coding","url":"https://github.com/owner/repo/tree/main/coding","type":"git","commit":"0123456789abcdef0123456789abcdef01234567","destination":["dest/coding"]}
+  {"name":"coding","url":"https://github.com/owner/repo/tree/main/coding","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/coding"]}
 ]`)
 
 	var out bytes.Buffer
@@ -263,8 +263,8 @@ func TestRunnerExternalSkillsRejectsDestinationConflict(t *testing.T) {
 	writeConfig(t, config, `{"items":[{"source":"codex/skills","destination":"dest"}]}`)
 	externalConfig := filepath.Join(root, "external-skills.json")
 	writeConfig(t, externalConfig, `[
-  {"name":"one","url":"https://github.com/owner/repo/tree/main/one","type":"git","commit":"0123456789abcdef0123456789abcdef01234567","destination":["dest/same"]},
-  {"name":"two","url":"https://github.com/owner/repo/tree/main/two","type":"git","commit":"0123456789abcdef0123456789abcdef01234567","destination":["dest/same"]}
+  {"name":"one","url":"https://github.com/owner/repo/tree/main/one","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/same"]},
+  {"name":"two","url":"https://github.com/owner/repo/tree/main/two","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/same"]}
 ]`)
 
 	var out bytes.Buffer
