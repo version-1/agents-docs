@@ -151,9 +151,9 @@ flatten は `SKILL.md` を持つディレクトリを skill root とみなし、
 
 - external skill の `destination` 重複
 
-fetch は `external.Fetcher` interface 経由です。通常実行では `GitFetcher` を使い、テストでは fake fetcher を注入します。
+fetch は `external.Fetcher` interface 経由です。通常実行では `GitFetcher` を使い、テストでは fake fetcher を注入します。`GitFetcher` は取得した ref の repo HEAD ではなく、`url` が指す対象ディレクトリの Git tree hash を外部 skill 設定の `treeHash` と照合します。
 
-dry-run でも外部 skill の fetch と `SKILL.md` 検証は実行します。これは「コピーはしないが、実行すれば成功するか」は確認する、という仕様です。
+dry-run でも外部 skill の fetch、tree hash 照合、`SKILL.md` 検証は実行します。これは「コピーはしないが、実行すれば成功するか」は確認する、という仕様です。
 
 ## Skill Directory Scanning
 
