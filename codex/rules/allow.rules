@@ -218,6 +218,12 @@ prefix_rule(
     justification = "ファイル移動は通常安全"
 )
 
+prefix_rule(
+    pattern = ["tq"],
+    decision = "allow",
+    justification = "ローカルのタスクキュー操作は通常安全"
+)
+
 # ----------------------------------------
 # Docker local development
 # ----------------------------------------
