@@ -118,7 +118,7 @@ is_safe_short_flags() {
     flag=${flags%${flags#?}}
     flags=${flags#?}
     case "$flag" in
-      s | S | f | i | I | L | v | k | N | g)
+      s | S | f | i | I | v | k | N | g)
         ;;
       *)
         return 1
@@ -143,7 +143,7 @@ validate_args() {
         shift
         break
         ;;
-      --fail | --silent | --show-error | --include | --head | --location | --verbose | --insecure | --no-buffer | --globoff)
+      --fail | --silent | --show-error | --include | --head | --verbose | --insecure | --no-buffer | --globoff)
         shift
         ;;
       --max-time | --connect-timeout)
