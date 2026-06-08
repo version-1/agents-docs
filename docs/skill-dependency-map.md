@@ -47,6 +47,7 @@ internal skills
     │   └── code-css -> code-general
     ├── component-design
     │   ├── code-general
+    │   ├── code-react
     │   ├── code-test
     │   └── code-next-developer-review
     ├── code-naming
@@ -100,6 +101,7 @@ internal skills
 | `code-ruby` | `code-general` | Ruby / Rails 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
 | `code-css` | `code-general` | CSS 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
 | `component-design` | `code-general` | UI 設計後に実装へ進む場合に併用する。 |
+| `component-design` | `code-react` | React 実装へ進む場合に、実装時の責務分離や Atomic Design の補助観点を確認するため併用する。 |
 | `component-design` | `code-test` | テスト設計やテスト追加で併用する。 |
 | `component-design` | `code-next-developer-review` | 次の開発者の読みやすさを確認する場合に併用する。 |
 | `code-naming` | `code-next-developer-review` | 次に開発する人の理解しやすさ全体を見る場合に併用する。 |
@@ -124,6 +126,7 @@ internal skills
 | `code-quality-review` | `code-next-developer-review` | 次の開発者の迷いやすさが主目的の場合。 |
 | `code-review` | `code-general` | 具体的なコード変更の実装方法を相談する場合。 |
 | `code-review` | `code-quality-review` | 将来的な変更容易性やコード品質を重点的に見る場合。 |
+| `code-react` | `component-design` | 画面構成、大きな JSX 分割、component tree、実装順序を先に整理する必要がある場合。 |
 
 ## Mermaid 図
 
@@ -161,6 +164,7 @@ graph TD
     code_css --> code_general
 
     component_design["component-design"] --> code_general
+    component_design --> code_react
     component_design --> code_test
     component_design --> code_next_dev["code-next-developer-review"]
 
