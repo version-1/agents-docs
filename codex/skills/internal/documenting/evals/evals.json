@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "この変更の README を更新して。変更理由、影響範囲、戻し方が未来の開発者に分かるようにしたい。",
       "expected_output": "documenting が発火し、Why、影響範囲、互換性、運用注意、Rollback を整理して技術文書を作成または更新すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "ADR を書いて。今回の設計判断と採用しなかった代替案を残したい。",
       "expected_output": "技術文書作成として扱い、Context、Decision、Alternatives、Consequences を中心に、未来の理解コストを下げる内容にすること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }

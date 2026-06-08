@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "Planner として、この機能追加のゴール、スコープ、タスク、Definition of Done を整理して。",
       "expected_output": "role-planner が発火し、実装コードや diff を出さず、ゴール、タスク、DoD、in/out scope、リスク、未解決事項を整理すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "実装前の計画だけ作って。Implementer と Reviewer が迷わない粒度にして、具体的なコード例は不要です。",
       "expected_output": "Planner ロールとして扱い、実装方法に踏み込みすぎず、明確な成果物と検証可能なタスクへ分解すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }

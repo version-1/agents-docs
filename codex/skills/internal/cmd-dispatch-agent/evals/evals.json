@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "worker にこの修正を投げて。結果は待たずに別作業を進めて。",
       "expected_output": "cmd-dispatch-agent が発火し、agent type、自己完結した依頼内容、対象範囲を整理して起動し、結果を待っていないことを報告すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "scouter を走らせて、この設定ファイル群を調査させて。こちらでは別の実装を続けたい。",
       "expected_output": "明示的なサブエージェント起動依頼として扱い、調査目的、対象範囲、期待出力、除外範囲を渡して待機しないこと。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }
