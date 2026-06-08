@@ -33,7 +33,12 @@ internal skills
 │       └── code-general
 └── code work
     ├── code-general
-    │   └── code-naming
+    │   ├── code-naming
+    │   ├── code-go
+    │   ├── code-ts
+    │   ├── code-react
+    │   ├── code-ruby
+    │   └── code-css
     ├── component-design
     │   ├── code-general
     │   ├── code-test
@@ -77,6 +82,11 @@ internal skills
 | Skill | 依存先 | 関係 |
 |---|---|---|
 | `code-general` | `code-naming` | 命名判断で迷う場合に併用する。 |
+| `code-general` | `code-go` | Go 実装や Go テストで言語別ガイドを確認するときに使う。 |
+| `code-general` | `code-ts` | TypeScript 実装や React の型設計で言語別ガイドを確認するときに使う。 |
+| `code-general` | `code-react` | React 実装でフレームワーク別ガイドを確認するときに使う。 |
+| `code-general` | `code-ruby` | Ruby / Rails 実装やテストで言語別ガイドを確認するときに使う。 |
+| `code-general` | `code-css` | CSS 実装で言語別ガイドを確認するときに使う。 |
 | `component-design` | `code-general` | UI 設計後に実装へ進む場合に併用する。 |
 | `component-design` | `code-test` | テスト設計やテスト追加で併用する。 |
 | `component-design` | `code-next-developer-review` | 次の開発者の読みやすさを確認する場合に併用する。 |
@@ -126,6 +136,11 @@ graph TD
     role_implementer["role-implementer"] --> code_general["code-general"]
 
     code_general --> code_naming["code-naming"]
+    code_general --> code_go["code-go"]
+    code_general --> code_ts["code-ts"]
+    code_general --> code_react["code-react"]
+    code_general --> code_ruby["code-ruby"]
+    code_general --> code_css["code-css"]
 
     component_design["component-design"] --> code_general
     component_design --> code_test
