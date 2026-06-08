@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "この PR をレビューして。仕様違反、回帰、公開契約破壊、データ整合性、検証不足を重要度順に見て。",
       "expected_output": "code-review が発火し、findings first で High / Medium / Low の指摘、根拠、影響、壊れる条件、検証不足を出すこと。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "このコミットにセキュリティや並行性のリスクがないか、差分中心でレビューして。実装案ではなく指摘を優先して。",
       "expected_output": "実装ではなくレビューとして扱い、セキュリティ、認可、情報漏えい、並行性、冪等性、公開契約破壊を優先して確認すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }

@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "`CreateOrder` がどこから呼ばれていて何を呼んでいるか、callers / callees 両方を Mermaid 付きで追跡して。",
       "expected_output": "code-tracer が発火し、対象シンボル、direction、depth、scope、根拠、確実 / 推定 / 未確定の区分、Markdown と Mermaid 図を出すこと。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "Go の `Repository.Save` の呼び出し経路を depth 2 で調べたい。grep だけで断定せず、根拠と限界も書いて。",
       "expected_output": "Go 対象として references/go.md を読む判断をし、構造化された参照検索や型情報を優先し、調査条件と解析上の限界を明記すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }
