@@ -39,6 +39,12 @@ internal skills
     │   ├── code-react
     │   ├── code-ruby
     │   └── code-css
+    ├── language skills
+    │   ├── code-go -> code-general
+    │   ├── code-ts -> code-general
+    │   ├── code-react -> code-general, code-ts
+    │   ├── code-ruby -> code-general
+    │   └── code-css -> code-general
     ├── component-design
     │   ├── code-general
     │   ├── code-test
@@ -87,6 +93,12 @@ internal skills
 | `code-general` | `code-react` | React 実装でフレームワーク別ガイドを確認するときに使う。 |
 | `code-general` | `code-ruby` | Ruby / Rails 実装やテストで言語別ガイドを確認するときに使う。 |
 | `code-general` | `code-css` | CSS 実装で言語別ガイドを確認するときに使う。 |
+| `code-go` | `code-general` | Go 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
+| `code-ts` | `code-general` | TypeScript 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
+| `code-react` | `code-general` | React 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
+| `code-react` | `code-ts` | React 実装で TypeScript の型設計が必要な場合に `code-ts/references/lang.md` を読む。 |
+| `code-ruby` | `code-general` | Ruby / Rails 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
+| `code-css` | `code-general` | CSS 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
 | `component-design` | `code-general` | UI 設計後に実装へ進む場合に併用する。 |
 | `component-design` | `code-test` | テスト設計やテスト追加で併用する。 |
 | `component-design` | `code-next-developer-review` | 次の開発者の読みやすさを確認する場合に併用する。 |
@@ -141,6 +153,12 @@ graph TD
     code_general --> code_react["code-react"]
     code_general --> code_ruby["code-ruby"]
     code_general --> code_css["code-css"]
+    code_go --> code_general
+    code_ts --> code_general
+    code_react --> code_general
+    code_react --> code_ts
+    code_ruby --> code_general
+    code_css --> code_general
 
     component_design["component-design"] --> code_general
     component_design --> code_test
