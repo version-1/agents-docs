@@ -1,0 +1,17 @@
+{
+  "skill_name": "agent-retro",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "さっきのエージェント作業を振り返って、最初に知っていれば遠回りしなかったことを AGENTS.md に反映したい。",
+      "expected_output": "agent-retro が発火し、詰まった点、誤解した点、再利用できる判断基準を整理し、反映先と変更内容をユーザー確認してから進めること。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "今回の作業で得た知見を skill に残したい。次回の agent が迷わないルールにして。",
+      "expected_output": "直近作業の振り返りとして扱い、skill / AGENTS.md / CLAUDE.md のどこへ反映するかを選び、反映前に確認すること。",
+      "files": []
+    }
+  ]
+}
