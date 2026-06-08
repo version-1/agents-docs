@@ -1,0 +1,17 @@
+{
+  "skill_name": "format-pr-description",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "この PR の description をテンプレートに沿って整えて。Summary、やったこと、動作確認を入れて。",
+      "expected_output": "format-pr-description が発火し、PR diff / commit をもとに Summary、主な変更点、やったこと、動作確認、レビューチェックリストを作ること。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "PR 本文をレビュー向けに書き直して。確認ポイントと推奨テスト計画も入れてほしい。",
+      "expected_output": "PR description 整形として扱い、定義済みテンプレートに沿って、レビュー時に見るべき点と推奨テスト計画を含めること。",
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "skill_name": "cmd-rmbranch",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "ローカルブランチを整理して。main と develop 以外の不要ブランチを安全に消したい。",
+      "expected_output": "cmd-rmbranch が発火し、現在ブランチ、作業ツリー、削除候補、保護ブランチ、未マージ状態を確認してから削除すること。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "古いローカルブランチを掃除して。リモートブランチやコード変更には触らないで。",
+      "expected_output": "ローカルブランチ整理として扱い、main / develop / current branch を除外し、リモートには触れず、強制削除が必要なら確認すること。",
+      "files": []
+    }
+  ]
+}
