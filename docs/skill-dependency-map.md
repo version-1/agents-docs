@@ -23,19 +23,19 @@ internal skills
 │   │   ├── cmd-commit
 │   │   └── grill-me (external)
 │   └── ci-fix
-│       ├── coding
+│       ├── code-general
 │       ├── code-test
 │       └── cmd-create-pr
 ├── role
 │   ├── role-reviewer
 │   │   └── code-review
 │   └── role-implementer
-│       └── coding
+│       └── code-general
 └── code work
-    ├── coding
+    ├── code-general
     │   └── code-naming
     ├── component-design
-    │   ├── coding
+    │   ├── code-general
     │   ├── code-test
     │   └── code-next-developer-review
     ├── code-naming
@@ -61,7 +61,7 @@ internal skills
 | `cmd-start-branch` | `cmd-rmbranch` | 不要ブランチ整理 agent の依頼内容として使う。 |
 | `beautify-commit` | `cmd-commit` | 整理後の commit 作成で使う。 |
 | `beautify-commit` | `grill-me` | 分割方針が曖昧なときに整理方針を詰めるため使う。 |
-| `ci-fix` | `coding` | CI 失敗の修正に実装変更が必要なときに使う。 |
+| `ci-fix` | `code-general` | CI 失敗の修正に実装変更が必要なときに使う。 |
 | `ci-fix` | `code-test` | テスト追加、flake 対策、検証コマンド整理が必要なときに使う。 |
 | `ci-fix` | `cmd-create-pr` | CI 修正を PR 作成や PR 更新まで反映するときに使う。 |
 
@@ -70,14 +70,14 @@ internal skills
 | Skill | 依存先 | 関係 |
 |---|---|---|
 | `role-reviewer` | `code-review` | Reviewer として検証するとき、通常レビュー観点も併せて参照する。 |
-| `role-implementer` | `coding` | Implementer として実装するときの基本方針として併用する。 |
+| `role-implementer` | `code-general` | Implementer として実装するときの基本方針として併用する。 |
 
 ## コード作業系
 
 | Skill | 依存先 | 関係 |
 |---|---|---|
-| `coding` | `code-naming` | 命名判断で迷う場合に併用する。 |
-| `component-design` | `coding` | UI 設計後に実装へ進む場合に併用する。 |
+| `code-general` | `code-naming` | 命名判断で迷う場合に併用する。 |
+| `component-design` | `code-general` | UI 設計後に実装へ進む場合に併用する。 |
 | `component-design` | `code-test` | テスト設計やテスト追加で併用する。 |
 | `component-design` | `code-next-developer-review` | 次の開発者の読みやすさを確認する場合に併用する。 |
 | `code-naming` | `code-next-developer-review` | 次に開発する人の理解しやすさ全体を見る場合に併用する。 |
@@ -92,15 +92,15 @@ internal skills
 
 | 起点 | 優先先 | 条件 |
 |---|---|---|
-| `coding` | `code-review` | レビューのみが目的の場合。 |
+| `code-general` | `code-review` | レビューのみが目的の場合。 |
 | `component-design` | `code-review` | 実装済み差分の欠陥レビューが目的の場合。 |
 | `component-design` | `code-test` | テストケース設計だけが目的の場合。 |
 | `code-naming` | `code-typo` | typo や spelling の検査だけが目的の場合。 |
 | `code-naming` | `code-review` | バグ、仕様違反、セキュリティ、データ整合性のレビューが目的の場合。 |
-| `code-naming` | `coding` | 実装変更やリネーム作業まで行う場合。 |
+| `code-naming` | `code-general` | 実装変更やリネーム作業まで行う場合。 |
 | `code-quality-review` | `code-review` | 仕様違反、セキュリティ、データ破壊など即時欠陥の検出が主目的の場合。 |
 | `code-quality-review` | `code-next-developer-review` | 次の開発者の迷いやすさが主目的の場合。 |
-| `code-review` | `coding` | 具体的なコード変更の実装方法を相談する場合。 |
+| `code-review` | `code-general` | 具体的なコード変更の実装方法を相談する場合。 |
 | `code-review` | `code-quality-review` | 将来的な変更容易性やコード品質を重点的に見る場合。 |
 
 ## Mermaid 図
@@ -118,16 +118,16 @@ graph TD
     beautify_commit["beautify-commit"] --> cmd_commit
     beautify_commit --> grill_me["grill-me (external)"]
 
-    ci_fix["ci-fix"] --> coding
+    ci_fix["ci-fix"] --> code_general
     ci_fix --> code_test["code-test"]
     ci_fix --> cmd_create_pr
 
     role_reviewer --> code_review
-    role_implementer["role-implementer"] --> coding["coding"]
+    role_implementer["role-implementer"] --> code_general["code-general"]
 
-    coding --> code_naming["code-naming"]
+    code_general --> code_naming["code-naming"]
 
-    component_design["component-design"] --> coding
+    component_design["component-design"] --> code_general
     component_design --> code_test
     component_design --> code_next_dev["code-next-developer-review"]
 
