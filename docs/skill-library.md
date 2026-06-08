@@ -94,7 +94,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 |---|---|---|
 | `code-css` | CSS / `.css` / Sass / SCSS / `.scss` 実装向けの layout、responsive design、selector、cascade、保守しやすいスタイル設計の参照。 | CSS 実装を書く前に、スタイル設計の判断基準を確認するとき。 |
 | `code-go` | Go / `.go` 実装と Go テスト向けの goroutine、interface、error handling、設計、テスト方針の参照。 | Go 実装や Go テストを書く前に、実装ガイドを確認するとき。 |
-| `code-react` | React / JSX / TSX / `.jsx` / `.tsx` 実装向けの hooks、props、state、コンポーネント設計の参照。 | React 実装を書く前に、UI 実装ガイドを確認するとき。 |
+| `code-react` | React / JSX / TSX / `.jsx` / `.tsx` 実装向けの hooks、props、state、Atomic Design を補助観点にしたコンポーネント設計の参照。 | React 実装を書く前に、UI 実装ガイドを確認するとき。 |
 | `code-ruby` | Ruby / Rails / `.rb` 実装と RSpec / Minitest テスト向けの Active Record、MVC、設計、テスト方針の参照。 | Ruby / Rails 実装やテストを書く前に、実装ガイドを確認するとき。 |
 | `code-ts` | TypeScript / `.ts` / `.tsx` 実装向けの型設計、interface / type、strict typing、責務分離の参照。 | TypeScript 実装を書く前に、実装ガイドを確認するとき。 |
 
