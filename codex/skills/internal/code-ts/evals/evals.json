@@ -1,0 +1,17 @@
+{
+  "skill_name": "code-ts",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "TypeScript の API response 型と view model 型を分けて実装したい。strict typing と既存 interface に合わせて。",
+      "expected_output": "code-general に加えて code-ts が発火し、型設計、interface / type、strict typing、責務分離、既存コードへの合わせ方を確認すること。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": ".ts の関数で union type の分岐が増えてきたので、公開契約を壊さず型を整理して実装して。",
+      "expected_output": "TypeScript 実装として扱い、型と実装の責務、union type、公開契約、既存型との整合性を確認すること。",
+      "files": []
+    }
+  ]
+}

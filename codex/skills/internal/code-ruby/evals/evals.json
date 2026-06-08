@@ -1,0 +1,17 @@
+{
+  "skill_name": "code-ruby",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Rails の Active Record モデルに validation と scope を追加したい。既存の MVC と RSpec に合わせて実装して。",
+      "expected_output": "code-general に加えて code-ruby が発火し、Ruby / Rails、Active Record、MVC、RSpec、既存コードへの合わせ方を確認すること。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": ".rb の service object を直して、Minitest の回帰テストも足したい。例外処理と既存命名に合わせて。",
+      "expected_output": "Ruby 実装と Ruby テストとして扱い、言語・フレームワーク設計、例外処理、テスト方針、既存命名を確認すること。",
+      "files": []
+    }
+  ]
+}

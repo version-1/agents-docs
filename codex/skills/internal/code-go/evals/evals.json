@@ -1,0 +1,17 @@
+{
+  "skill_name": "code-go",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Go の repository 実装を追加したい。interface と error handling を既存コードに合わせて、小さく実装して。",
+      "expected_output": "code-general に加えて code-go が発火し、Go の interface、error handling、既存パッケージ構造、テスト方針を確認して実装すること。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": ".go の並行処理で goroutine と channel を使う処理を直したい。race と cancellation を見ながらテストも足して。",
+      "expected_output": "Go 実装と Go テストとして扱い、goroutine、cancellation、race、標準的な設計、テスト観点を確認すること。",
+      "files": []
+    }
+  ]
+}
