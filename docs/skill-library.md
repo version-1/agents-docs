@@ -31,7 +31,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `code-simplifier` | 挙動を変えずにコードを簡略化、リファクタリングする。 | レビュー指摘、quality report、diff、指定ファイルをもとに可読性、保守性、テスト容易性を改善するとき。 |
 | `code-test` | テスト設計、回帰テスト追加、テストコードレビュー、テスト戦略を整理する。 | 正常系、異常系、境界値、flake、モック方針を検討するとき。 |
 | `code-tracer` | 特定シンボルや関数の callers / callees / both を根拠付きで追跡する。 | 呼び出し経路、影響範囲、依存関係を Markdown や Mermaid で可視化したいとき。 |
-| `coding` | 既存コードベースで機能追加、修正、バグ修正、テスト追加を実装するための基本方針。 | 実装作業全般。既存構造、命名、責務境界に合わせて差分を作るとき。 |
+| `code-general` | 言語固有スキルが適用できない、または言語をまたぐ実装作業の共通原則。 | 既存構造、命名、責務境界に合わせて小さく安全な差分を作るとき。言語固有の判断では該当する言語別スキルを併用する。 |
 | `component-design` | React / Next.js / TypeScript UI の実装前に、画面構成とコンポーネント境界を設計する。 | 新規画面、大きな JSX 分割、既存 UI へのまとまった機能追加を行う前。 |
 | `documenting` | README、ADR、Runbook、API Docs、開発者向け文書を作成、更新する。 | 変更理由、影響範囲、互換性、運用注意、戻し方を未来の開発者へ残すとき。 |
 
@@ -113,7 +113,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 - 新しい internal skill を追加したら、この一覧にも追記する。
 - 追加時は [docs/guide/skill-category.md](guide/skill-category.md) を参照し、主用途に最も近い分類へ配置する。
 - 複数カテゴリにまたがる skill は、重複掲載せず主分類に置き、必要に応じて概要に複合要素を明記する。
-- `coding` や `code-review` のようにガードレールや思想を含む skill でも、一覧では主な行動や判断の用途を優先して配置する。
+- `code-general` や `code-review` のようにガードレールや思想を含む skill でも、一覧では主な行動や判断の用途を優先して配置する。
 - `codex/skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用の説明も `SKILL.md` と矛盾しないように更新する。
 - 他 skill への明示的な依存や利用順序を追加したら、[docs/skill-dependency-map.md](skill-dependency-map.md) も更新する。
 - deploy 前は `make deploy-dry-run` で配布対象に含まれることを確認する。

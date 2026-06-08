@@ -49,7 +49,7 @@ skills
 ├── code-review     コードレビュー
 ├── code-tracer     コードの呼び出し経路調査
 ├── code-typo       typo 指摘
-├── coding          コーディング全般
+├── code-general    コーディング全般
 ├── documenting     ドキュメント作成
 └── testing         テスト・検証
 ```

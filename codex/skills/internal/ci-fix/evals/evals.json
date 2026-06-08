@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "PR の GitHub Actions が落ちてるので直して。lint か test のどれかが red になっているはず",
-      "expected_output": "gh pr checks や gh pr view で失敗 check を特定し、workflow / job / step / root cause を切り分ける。CI step と同じローカル検証コマンドを実行し、必要なら coding や code-test を併用して最小修正する。修正後に検証結果と CI 再実行の要否を報告する。",
+      "expected_output": "gh pr checks や gh pr view で失敗 check を特定し、workflow / job / step / root cause を切り分ける。CI step と同じローカル検証コマンドを実行し、必要なら code-general や code-test を併用して最小修正する。修正後に検証結果と CI 再実行の要否を報告する。",
       "files": []
     },
     {
