@@ -1,0 +1,17 @@
+{
+  "skill_name": "cmd-commit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "この変更を確認して、適切な粒度で commit して。",
+      "expected_output": "cmd-commit が発火し、status、diff、staged diff、unrelated changes の有無を確認し、対象ファイルだけ stage して commit すること。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "差分をコミットして。未確認の変更は混ぜず、メッセージも既存履歴に合わせて。",
+      "expected_output": "コミット作成として扱い、読んだ差分だけを含め、既存履歴の形式に合わせた本文付き commit message を作ること。",
+      "files": []
+    }
+  ]
+}

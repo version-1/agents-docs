@@ -1,0 +1,17 @@
+{
+  "skill_name": "beautify-commit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "この巨大な未整理差分を、意味のある変更単位ごとに commit し直して。ベースは main で見て。",
+      "expected_output": "beautify-commit が発火し、基準 ref、status、log、diff を確認し、分割方針を整理して cmd-commit で commit を作ること。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "連続 commit の履歴をきれいにして、レビューしやすい粒度に分けてほしい。",
+      "expected_output": "履歴整理として扱い、基準 ref の確認、対象範囲、バックアップ、履歴書き換えの影響確認、分割後の commit 一覧を報告すること。",
+      "files": []
+    }
+  ]
+}
