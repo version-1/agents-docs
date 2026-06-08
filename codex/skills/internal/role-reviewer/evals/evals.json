@@ -14,6 +14,29 @@
       "expected_output": "Reviewer ロールとして扱い、安心してマージできるかのリスク探索を行い、High / Medium / Low の懸念と不足検証を整理すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "レビュアーとして見て。この実装がスコープ外の変更を含んでいないか、公開 API の互換性を壊していないか確認して。",
+      "expected_output": "role-reviewer が発火し、スコープ逸脱、公開契約の破壊、仕様との整合性を検証し、根拠付きで指摘すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この機能のテストケースを設計して。正常系、異常系、境界値のカバレッジを整理したい。",
+      "expected_output": "このプロンプトでは code-test が発火すべきであり、role-reviewer は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-test"
+    },
+    {
+      "id": 5,
+      "prompt": "この差分の保守性スコアと技術的負債の評価を出して。品質レポート形式でお願い。",
+      "expected_output": "このプロンプトでは code-quality-review が発火すべきであり、role-reviewer は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-quality-review"
     }
   ]
 }

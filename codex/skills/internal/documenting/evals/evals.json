@@ -14,6 +14,21 @@
       "expected_output": "技術文書作成として扱い、Context、Decision、Alternatives、Consequences を中心に、未来の理解コストを下げる内容にすること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "API ドキュメントを作って。エンドポイント一覧、リクエスト・レスポンス例、エラーコードを含めて。",
+      "expected_output": "documenting が発火し、API エンドポイント、パラメータ、レスポンス形式、エラーコード、使用例を技術文書として整理すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "Doc として、なぜこのライブラリを選んだか、却下した選択肢と理由を後任に残して。",
+      "expected_output": "このプロンプトでは role-doc が発火すべきであり、documenting は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "role-doc"
     }
   ]
 }

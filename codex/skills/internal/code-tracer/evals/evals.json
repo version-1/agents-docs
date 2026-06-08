@@ -14,6 +14,21 @@
       "expected_output": "Go 対象として references/go.md を読む判断をし、構造化された参照検索や型情報を優先し、調査条件と解析上の限界を明記すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "TypeScript の `useAuth` hook がどのコンポーネントから使われているか、callers を一覧にして依存関係を可視化して。",
+      "expected_output": "code-tracer が発火し、TypeScript の useAuth を対象シンボルとして callers 方向の呼び出し経路を根拠付きで追跡し、Markdown / Mermaid で可視化すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この PR の差分に含まれるコードの品質を評価して、保守性と複雑度のレポートを出して。",
+      "expected_output": "このプロンプトでは code-quality-review が発火すべきであり、code-tracer は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-quality-review"
     }
   ]
 }

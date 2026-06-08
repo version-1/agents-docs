@@ -14,6 +14,29 @@
       "expected_output": "実装ではなくレビューとして扱い、セキュリティ、認可、情報漏えい、並行性、冪等性、公開契約破壊を優先して確認すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "マイグレーションファイルの差分をレビューして。データ整合性と後方互換性が壊れていないか、回帰リスクを重要度順に出して。",
+      "expected_output": "code-review が発火し、マイグレーション差分に対してデータ整合性、後方互換性、ロールバック可能性、既存データへの影響を重要度順に指摘すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この差分の保守性と複雑度を中心に品質レポートを出して。バグ探しより設計品質が知りたい。",
+      "expected_output": "このプロンプトでは code-quality-review が発火すべきであり、code-review は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-quality-review"
+    },
+    {
+      "id": 5,
+      "prompt": "次に触る人が迷わないか、変更箇所の見つけやすさやテスト名の分かりやすさを中心にレビューして。",
+      "expected_output": "このプロンプトでは code-next-developer-review が発火すべきであり、code-review は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-next-developer-review"
     }
   ]
 }

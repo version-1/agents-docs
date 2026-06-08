@@ -14,6 +14,29 @@
       "expected_output": "テストコードレビューとして扱い、flake、モック、データ整合性、互換性、性能、層ごとの責務を検討すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "このモジュールのテスト戦略を整理したい。ユニットテスト、インテグレーションテスト、E2E の境界とモック方針を決めて。",
+      "expected_output": "code-test が発火し、テスト戦略の整理として、テスト層の境界、モック方針、各層のカバー範囲と維持コストを整理すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この PR のコードに仕様違反やセキュリティリスクがないか重要度順にレビューして。",
+      "expected_output": "このプロンプトでは code-review が発火すべきであり、code-test は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-review"
+    },
+    {
+      "id": 5,
+      "prompt": "このテストファイルの関数名が何をテストしているか分かりにくい。命名を改善する候補を出して。",
+      "expected_output": "このプロンプトでは code-naming が発火すべきであり、code-test は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-naming"
     }
   ]
 }

@@ -14,6 +14,21 @@
       "expected_output": "実装を伴う既存コード変更として扱い、スコープ外変更を避け、既存パターン、公開契約、検証手段を確認して進めること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "Python と Shell スクリプトが混在するデプロイツールにログローテーション機能を追加したい。両言語にまたがるので、まず影響範囲と実装方針を整理して。",
+      "expected_output": "複数言語にまたがる実装として code-general が発火し、既存構造、言語間の呼び出し契約、命名慣習、テスト方針を確認してから段階的に実装すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この Go ファイルに新しい HTTP ハンドラを追加して。error handling と interface は既存コードに合わせて。",
+      "expected_output": "このプロンプトでは code-go が発火すべきであり、code-general は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-go"
     }
   ]
 }

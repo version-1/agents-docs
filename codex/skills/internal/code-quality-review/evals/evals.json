@@ -21,6 +21,21 @@
       "expected_output": "merge 前対応、follow-up、対応不要が分かれた Quality Gate と、設計品質・テスト品質・観測可能性・定量シグナルの scorecard が出ること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この差分の重複率と関数の長さが気になる。リファクタリングの優先度をつけて、技術的負債を観点別に評価して。",
+      "expected_output": "code-quality-review が発火し、重複率、関数長、技術的負債を観点別にスコアリングし、リファクタリング優先度を根拠付きで提示すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 5,
+      "prompt": "この PR にセキュリティホールや認可漏れがないか、リスクを重要度順にレビューして。",
+      "expected_output": "このプロンプトでは code-review が発火すべきであり、code-quality-review は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-review"
     }
   ]
 }

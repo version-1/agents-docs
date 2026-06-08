@@ -35,6 +35,14 @@
       "expected_output": "PR 作成前に role-reviewer で差分をレビューし、High severity の指摘を検出した場合は安全に自動対応する。対応後は関連検証を再実行し、追加 commit を作成して再レビューする。High が解消できない場合は PR 作成を止め、理由と選択肢をユーザーに確認する。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 6,
+      "prompt": "既存 PR の description だけテンプレートに合わせて書き直して。PR の作成や push は不要。",
+      "expected_output": "このプロンプトでは format-pr-description が発火すべきであり、cmd-create-pr は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "format-pr-description"
     }
   ]
 }

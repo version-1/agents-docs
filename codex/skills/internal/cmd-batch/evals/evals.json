@@ -14,6 +14,21 @@
       "expected_output": "並列作業設計として扱い、各副タスクの入力、期待出力、対象範囲、除外範囲、完了条件、所有ファイルを明示すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "フロントエンド、バックエンド、インフラの3領域にまたがるリファクタリングを一気に進めたい。競合しないように分担と統合順序を決めて。",
+      "expected_output": "cmd-batch が発火し、各領域の担当範囲、編集所有権、依存関係、統合順序、競合回避ルール、検証手順を整理すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この API エンドポイントの設計について、同期か非同期かのトレードオフを整理してアドバイスがほしい。",
+      "expected_output": "このプロンプトでは role-advisor が発火すべきであり、cmd-batch は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "role-advisor"
     }
   ]
 }

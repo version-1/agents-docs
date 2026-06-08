@@ -14,6 +14,21 @@
       "expected_output": "レビューではなく実装反映として扱い、公開契約を維持し、重複削除、命名改善、早期リターン、関数抽出など小さく戻しやすい変更を選ぶこと。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "code-quality-review の結果で cyclomatic complexity が高いと指摘された関数を、挙動を変えずに分割して複雑度を下げて。",
+      "expected_output": "code-simplifier が発火し、quality report の指摘を起点に、挙動維持で関数分割・早期リターン・条件整理を行い、変更範囲と検証結果を報告すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この PR の差分をレビューして、仕様違反やセキュリティリスクがないか確認して。",
+      "expected_output": "このプロンプトでは code-review が発火すべきであり、code-simplifier は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-review"
     }
   ]
 }

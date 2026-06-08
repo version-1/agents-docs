@@ -14,6 +14,29 @@
       "expected_output": "code-next-developer-review が発火し、欠陥検出ではなく、責務境界、命名、型・契約、テストの読みやすさ、ローカル検証のしやすさを確認すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "この差分、新しいメンバーがオンボーディングで触ったときに前提知識が足りるか心配。ローカル環境での検証手順やコメントの有無を見て。",
+      "expected_output": "code-next-developer-review が発火し、前提知識の残し方、ローカル検証のしやすさ、開発者ドキュメントの充足度を中心に確認すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この diff に SQL インジェクションや認証バイパスのリスクがないかレビューして。重要度順にお願い。",
+      "expected_output": "このプロンプトでは code-review が発火すべきであり、code-next-developer-review は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-review"
+    },
+    {
+      "id": 5,
+      "prompt": "この差分の cyclomatic complexity と責務分離を評価して。品質スコアを出してほしい。",
+      "expected_output": "このプロンプトでは code-quality-review が発火すべきであり、code-next-developer-review は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-quality-review"
     }
   ]
 }

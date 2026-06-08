@@ -14,6 +14,21 @@
       "expected_output": "明示的なサブエージェント起動依頼として扱い、調査目的、対象範囲、期待出力、除外範囲を渡して待機しないこと。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "テストの agent を立ち上げて、結果を待たずにこっちの実装を進めて。",
+      "expected_output": "cmd-dispatch-agent が発火し、テスト実行を別 agent に委譲して結果を待たず、現在のタスクの続行を報告すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "複数領域にまたがる修正を並列に進めたい。担当範囲と統合順序を整理して。",
+      "expected_output": "このプロンプトでは cmd-batch が発火すべきであり、cmd-dispatch-agent は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "cmd-batch"
     }
   ]
 }

@@ -14,6 +14,21 @@
       "expected_output": "コミット作成として扱い、読んだ差分だけを含め、既存履歴の形式に合わせた本文付き commit message を作ること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "修正した認証モジュールとテストファイルだけを stage して、機能ごとに分けてコミットして。",
+      "expected_output": "cmd-commit が発火し、対象ファイルを確認して関連する変更ごとに stage・commit を分け、無関係な差分を含めないこと。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この巨大なコミットを意味のある単位に分割して履歴を整理して。",
+      "expected_output": "このプロンプトでは beautify-commit が発火すべきであり、cmd-commit は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "beautify-commit"
     }
   ]
 }

@@ -14,6 +14,29 @@
       "expected_output": "PR タイトル、PR 説明、コミットメッセージの typo 検査として扱い、コード変更や設計評価を行わないこと。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "エラーメッセージとログ出力の文字列リテラルにスペルミスがないか確認して。修正候補をファイルと行番号付きで出して。",
+      "expected_output": "code-typo が発火し、文字列リテラル中の typo をファイル / 行番号付きで報告し、コード設計の変更は行わないこと。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この関数名 `fetchUsrData` が責務を反映していない。もっと良い名前の候補を出して。",
+      "expected_output": "このプロンプトでは code-naming が発火すべきであり、code-typo は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-naming"
+    },
+    {
+      "id": 5,
+      "prompt": "この差分を品質レポートの観点でレビューして。保守性と技術的負債を評価したい。",
+      "expected_output": "このプロンプトでは code-quality-review が発火すべきであり、code-typo は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-quality-review"
     }
   ]
 }

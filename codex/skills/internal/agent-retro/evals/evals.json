@@ -14,6 +14,21 @@
       "expected_output": "直近作業の振り返りとして扱い、skill / AGENTS.md / CLAUDE.md のどこへ反映するかを選び、反映前に確認すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "今回のリファクタリング作業で遠回りしたポイントを振り返って、CLAUDE.md にルールとして追加して。",
+      "expected_output": "agent-retro が発火し、遠回りの原因と再利用可能な知見を抽出し、CLAUDE.md への反映内容をユーザーに確認してから適用すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "今どこまで進んでいる？残りの作業とブロッカーを教えて。",
+      "expected_output": "このプロンプトでは cmd-agent-status が発火すべきであり、agent-retro は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "cmd-agent-status"
     }
   ]
 }

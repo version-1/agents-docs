@@ -14,6 +14,21 @@
       "expected_output": "Ruby 実装と Ruby テストとして扱い、言語・フレームワーク設計、例外処理、テスト方針、既存命名を確認すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "Rails の concerns に共通ロジックを切り出して、既存の controller と model から include したい。RSpec で共有テストも書いて。",
+      "expected_output": "code-ruby が発火し、Rails concerns の設計、既存 MVC との整合性、shared examples、テスト方針を確認して実装すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "言語を問わず、この関数の呼び出し経路を callers 方向で追跡して Mermaid 図にまとめて。",
+      "expected_output": "このプロンプトでは code-tracer が発火すべきであり、code-ruby は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-tracer"
     }
   ]
 }

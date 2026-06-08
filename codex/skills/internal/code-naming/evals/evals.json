@@ -14,6 +14,29 @@
       "expected_output": "code-naming が発火し、設計レビューや実装変更ではなく、ファイル名とディレクトリ名の重複、責務、既存パターンをもとに候補を絞ること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "型名 `Info` と `Data` が複数パッケージで使われていて区別しづらい。コンテキストに合った命名候補を出して。",
+      "expected_output": "code-naming が発火し、型名の抽象度、コンテキストとの重複、検索性、既存語彙との一貫性を基準に候補を提案すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この diff に typo やスペルミスがないかチェックして。コード変更は不要。",
+      "expected_output": "このプロンプトでは code-typo が発火すべきであり、code-naming は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-typo"
+    },
+    {
+      "id": 5,
+      "prompt": "この PR の差分をレビューして。回帰リスクと公開 API の破壊がないか確認したい。",
+      "expected_output": "このプロンプトでは code-review が発火すべきであり、code-naming は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-review"
     }
   ]
 }

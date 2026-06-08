@@ -14,6 +14,21 @@
       "expected_output": "CSS / SCSS 実装として扱い、レイアウト責務、レスポンシブ制約、既存 selector との衝突、保守しやすいスタイル設計を確認すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "ダークモード対応の CSS を追加したい。CSS custom properties で既存テーマを拡張して、selector の詳細度を上げずに切り替えられるようにして。",
+      "expected_output": "code-css が発火し、CSS custom properties、cascade、selector 詳細度、既存テーマ構造との整合性、保守しやすい設計を確認して実装すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "デザインカンプからダッシュボード画面のコンポーネントツリーと props 設計を作って。React + TypeScript で。",
+      "expected_output": "このプロンプトでは component-design が発火すべきであり、code-css は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "component-design"
     }
   ]
 }

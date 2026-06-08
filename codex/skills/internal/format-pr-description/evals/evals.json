@@ -14,6 +14,21 @@
       "expected_output": "PR description 整形として扱い、定義済みテンプレートに沿って、レビュー時に見るべき点と推奨テスト計画を含めること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "PR #42 の description を最新の差分に合わせてフォーマットし直して。Summary と動作確認も更新して。",
+      "expected_output": "format-pr-description が発火し、最新 diff とコミット履歴をもとに Summary、主な変更点、やったこと、動作確認、チェックリストをテンプレートに沿って更新すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この変更を PR にして push して。レビューも通してから出して。",
+      "expected_output": "このプロンプトでは cmd-create-pr が発火すべきであり、format-pr-description は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "cmd-create-pr"
     }
   ]
 }

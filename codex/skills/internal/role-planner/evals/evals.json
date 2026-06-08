@@ -14,6 +14,21 @@
       "expected_output": "Planner ロールとして扱い、実装方法に踏み込みすぎず、明確な成果物と検証可能なタスクへ分解すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "認証基盤の刷新タスクについて、スコープ、依存関係、リスク、未解決事項を洗い出して計画にまとめて。コードは書かないで。",
+      "expected_output": "role-planner が発火し、ゴール、in/out scope、依存関係、リスク、未解決事項、タスク分解、DoD を整理し、実装コードや擬似コードを含めないこと。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "データベース設計のベストプラクティスを教えて。正規化と非正規化のトレードオフを整理してほしい。",
+      "expected_output": "このプロンプトでは role-advisor が発火すべきであり、role-planner は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "role-advisor"
     }
   ]
 }

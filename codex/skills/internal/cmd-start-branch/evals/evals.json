@@ -28,6 +28,14 @@
       "expected_output": "CI ワークフロー変更として ci を選び、Go テスト CI 用のブランチを最新デフォルトブランチから作成して、不要ブランチ整理を非同期 agent に依頼する。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 5,
+      "prompt": "ローカルの不要ブランチを整理して、main と develop 以外を消して。",
+      "expected_output": "このプロンプトでは cmd-rmbranch が発火すべきであり、cmd-start-branch は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "cmd-rmbranch"
     }
   ]
 }

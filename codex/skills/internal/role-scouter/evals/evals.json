@@ -14,6 +14,21 @@
       "expected_output": "調査ロールとして扱い、観測可能な問いに分解し、参照元パスやコマンドを添えて不確実性を下げること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "この環境変数がどこで使われているか、設定ファイル、コード、CI 定義を横断で調べて。判断は急がず事実だけまとめて。",
+      "expected_output": "role-scouter が発火し、環境変数の参照箇所をコード・設定・CI 横断で調査し、根拠ファイルパスと未確認範囲を分けて報告すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この関数の caller と callee を追跡して、呼び出しチェーンを Mermaid で可視化して。",
+      "expected_output": "このプロンプトでは code-tracer が発火すべきであり、role-scouter は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-tracer"
     }
   ]
 }

@@ -14,6 +14,21 @@
       "expected_output": "ローカルブランチ整理として扱い、main / develop / current branch を除外し、リモートには触れず、強制削除が必要なら確認すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "マージ済みのローカルブランチが溜まっているので一括で消して。今のブランチは残して。",
+      "expected_output": "cmd-rmbranch が発火し、現在ブランチと保護ブランチを除外したうえで、マージ済みブランチを安全に削除すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "新しいタスク用のブランチを最新 main から切って。",
+      "expected_output": "このプロンプトでは cmd-start-branch が発火すべきであり、cmd-rmbranch は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "cmd-start-branch"
     }
   ]
 }

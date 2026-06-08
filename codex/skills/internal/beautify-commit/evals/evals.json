@@ -14,6 +14,21 @@
       "expected_output": "履歴整理として扱い、基準 ref の確認、対象範囲、バックアップ、履歴書き換えの影響確認、分割後の commit 一覧を報告すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "develop との差分をモジュールごとに分けてコミットし直して。レビューしやすくしたい。",
+      "expected_output": "beautify-commit が発火し、基準 ref を develop として確認し、差分をモジュール単位に分割して整理された commit 履歴を作ること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この変更を確認してコミットして。新しいコミットを1つ作ればOK。",
+      "expected_output": "このプロンプトでは cmd-commit が発火すべきであり、beautify-commit は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "cmd-commit"
     }
   ]
 }

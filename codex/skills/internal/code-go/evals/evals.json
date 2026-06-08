@@ -14,6 +14,21 @@
       "expected_output": "Go 実装と Go テストとして扱い、goroutine、cancellation、race、標準的な設計、テスト観点を確認すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "Go で CLI ツールを作りたい。cobra を使ってサブコマンド構成にして、テストは table-driven で書いて。",
+      "expected_output": "code-go が発火し、Go の標準的なパッケージ構成、cobra のサブコマンド設計、table-driven test、error handling を確認して実装すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この TypeScript の API クライアントに retry ロジックを追加したい。型安全に実装して。",
+      "expected_output": "このプロンプトでは code-ts が発火すべきであり、code-go は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-ts"
     }
   ]
 }

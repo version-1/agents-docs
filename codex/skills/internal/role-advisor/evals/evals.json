@@ -14,6 +14,21 @@
       "expected_output": "実装を伴わないテックリード視点の相談として扱い、ベストプラクティス、トレードオフ、リスク、落とし穴を整理すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "マイクロサービスとモノリスのどちらがこのプロジェクトに合うか、判断材料を整理してほしい。コードは触らなくてよい。",
+      "expected_output": "role-advisor が発火し、両選択肢のメリット・デメリット、チーム規模・運用負荷・成長見通しに応じた推奨、リスク、判断基準を実践的に助言すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この機能追加のゴール、タスクリスト、Definition of Done を整理して。実装コードは不要。",
+      "expected_output": "このプロンプトでは role-planner が発火すべきであり、role-advisor は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "role-planner"
     }
   ]
 }

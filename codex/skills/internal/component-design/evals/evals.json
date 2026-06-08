@@ -21,6 +21,14 @@
       "expected_output": "form value、確認表示用 view model、API request 型を分け、validation、submit、server error、入力部品、確認画面の責務とテスト対象が整理される。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "既存の React コンポーネントで onClick ハンドラのロジックが複雑になっている。hooks に切り出して実装して。",
+      "expected_output": "このプロンプトでは code-react が発火すべきであり、component-design は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-react"
     }
   ]
 }

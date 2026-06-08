@@ -14,6 +14,21 @@
       "expected_output": "実行済み、実行中、未実行、ブロッカーを混ぜず、ユーザーに見えないコマンド結果は要点だけ説明すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "何をやっている最中？残りタスクとブロッカーがあれば教えて。",
+      "expected_output": "cmd-agent-status が発火し、現在実行中の作業、残タスク、ブロッカーの有無、次のアクションを簡潔に報告すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "さっきの作業を振り返って、次回使える知見をルールに反映して。",
+      "expected_output": "このプロンプトでは agent-retro が発火すべきであり、cmd-agent-status は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "agent-retro"
     }
   ]
 }

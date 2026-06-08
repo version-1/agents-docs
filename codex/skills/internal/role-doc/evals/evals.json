@@ -14,6 +14,21 @@
       "expected_output": "Doc ロールとして扱い、自明な説明ではなく、なぜ、何が変わったか、何は変わっていないか、将来の選択に影響する情報を優先すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "このアーキテクチャ変更の意思決定理由と、採用しなかった代替案の却下理由を、後任に分かるように残して。",
+      "expected_output": "role-doc が発火し、意思決定の背景、制約条件、代替案とその却下理由、影響範囲、将来の変更時に留意すべき点を整理すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "README を更新して。変更理由、影響範囲、戻し方を書いて。",
+      "expected_output": "このプロンプトでは documenting が発火すべきであり、role-doc は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "documenting"
     }
   ]
 }

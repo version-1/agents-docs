@@ -14,6 +14,21 @@
       "expected_output": "Implementer ロールとして扱い、指示通りに実装し、スコープ外改善を持ち込まず、必要な検証を行うこと。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "Planner が作ったタスクリスト 1-5 を順番に実装して。各タスクの DoD を満たしたら次に進んで、完了報告して。",
+      "expected_output": "role-implementer が発火し、Planner のタスクリストと DoD を正として扱い、code-general を併用して順序通りに小さく安全に実装し、各タスクの完了を報告すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この機能の実装前にゴール、スコープ、タスクリスト、DoD、リスクを整理して計画を作って。",
+      "expected_output": "このプロンプトでは role-planner が発火すべきであり、role-implementer は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "role-planner"
     }
   ]
 }

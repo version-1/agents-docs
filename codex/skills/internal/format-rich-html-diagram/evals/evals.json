@@ -21,6 +21,14 @@
       "expected_output": "単一 index.html に overview、structure tree、state transition、data flow、contracts、appendix が含まれ、使用 CDN、許可済み Google Fonts、制限が appendix に記載されている。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この設計判断の背景と採用しなかった代替案を、Markdown の ADR として残して。",
+      "expected_output": "このプロンプトでは documenting が発火すべきであり、format-rich-html-diagram は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "documenting"
     }
   ]
 }

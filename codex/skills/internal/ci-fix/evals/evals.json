@@ -28,6 +28,14 @@
       "expected_output": "secret 値を表示せず、GitHub permissions、OIDC、token、fork PR 制約、必要最小権限を確認する。権限や secret の新規設定が必要な場合は勝手に変更せず、必要なユーザー判断と次の手順を明確にする。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 5,
+      "prompt": "この差分を PR にして push して。CI はローカルで通ってるから大丈夫。",
+      "expected_output": "このプロンプトでは cmd-create-pr が発火すべきであり、ci-fix は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "cmd-create-pr"
     }
   ]
 }

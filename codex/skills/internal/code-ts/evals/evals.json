@@ -14,6 +14,21 @@
       "expected_output": "TypeScript 実装として扱い、型と実装の責務、union type、公開契約、既存型との整合性を確認すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "TypeScript で Zod schema から推論型を生成して、API バリデーションと型定義を一元管理する実装をしたい。",
+      "expected_output": "code-ts が発火し、Zod の infer 型、schema と型の一元管理、strict typing、既存型定義との整合性を確認して実装すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "React コンポーネントで useState と useEffect の依存配列を見直して、不要な再レンダリングを減らしたい。",
+      "expected_output": "このプロンプトでは code-react が発火すべきであり、code-ts は発火すべきでない。",
+      "files": [],
+      "should_fire": false,
+      "expected_skill": "code-react"
     }
   ]
 }
