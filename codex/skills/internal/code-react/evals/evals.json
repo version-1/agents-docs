@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "React + TSX の一覧画面にフィルタ UI を追加したい。components、hooks、props、state の境界を見てから実装して。",
       "expected_output": "code-general に加えて code-react が発火し、コンポーネント境界、hooks、props、state、表示ロジックの責務分離を確認すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": ".tsx のフォームコンポーネントが肥大化しているので、既存 UI に合わせて state と submit ロジックを分けたい。",
       "expected_output": "React 実装として扱い、コンポーネント設計、hooks、props、state、TypeScript 型設計が必要なら code-ts 併用も検討すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }

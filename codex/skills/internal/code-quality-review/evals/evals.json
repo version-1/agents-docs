@@ -5,19 +5,22 @@
       "id": 1,
       "prompt": "この PR を quality report 観点で review して。特に保守性、責務分離、テストしやすさ、技術的負債を見たい。",
       "expected_output": "通常の欠陥レビューではなく、Quality Signals、品質スコア、観点別 scorecard、品質上の findings、quality gate が出ること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "差分を見てコード品質レポートを作って。バグ探しより、複雑度と将来の変更容易性を中心に評価してほしい。",
       "expected_output": "複雑度、変更容易性、責務境界の観点で根拠付きの品質評価が出ること。cyclomatic complexity などの metric がある場合は補助証拠として扱い、即時欠陥は別セクションに分離されること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 3,
       "prompt": "このコミット、quality gate として通してよいかレビューして。設計品質、テスト品質、運用時の調査しやすさを中心に。",
       "expected_output": "merge 前対応、follow-up、対応不要が分かれた Quality Gate と、設計品質・テスト品質・観測可能性・定量シグナルの scorecard が出ること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }

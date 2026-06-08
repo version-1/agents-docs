@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "Planner のタスクと DoD に従って Implementer として実装して。既存コードの流儀に合わせて。",
       "expected_output": "role-implementer が発火し、Planner のゴール、スコープ、DoD を正として扱い、code-general を併用して小さく安全に実装すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "この計画に沿って実装担当として進めて。曖昧な点は解釈せず確認して。",
       "expected_output": "Implementer ロールとして扱い、指示通りに実装し、スコープ外改善を持ち込まず、必要な検証を行うこと。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }

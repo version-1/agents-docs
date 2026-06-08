@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "今どうなってる？進捗と次にやることだけ教えて。",
       "expected_output": "cmd-agent-status が発火し、現在地、進捗、ブロッカー、次に行うことを短く事実ベースで報告すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "ステータス確認。止まっているなら理由、動いているなら何を待っているか知りたい。",
       "expected_output": "実行済み、実行中、未実行、ブロッカーを混ぜず、ユーザーに見えないコマンド結果は要点だけ説明すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }

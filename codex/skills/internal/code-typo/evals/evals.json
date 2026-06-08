@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "この diff の typo だけ見て。変数名、コメント、ファイルパスのスペル違いがあればファイル / 行と修正候補を出して。",
       "expected_output": "code-typo が発火し、設計レビューや実装変更をせず、typo、正しいスペル、ファイル / 行、確認範囲のサマリだけを報告すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "PR タイトルと説明、コミットメッセージに spelling mistake がないか確認して。コード品質レビューは不要です。",
       "expected_output": "PR タイトル、PR 説明、コミットメッセージの typo 検査として扱い、コード変更や設計評価を行わないこと。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }

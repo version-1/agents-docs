@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "Reviewer として、この実装済み差分が仕様と品質要件を満たしているか検証して。",
       "expected_output": "role-reviewer が発火し、実際の diff を起点に、リスク、回帰、境界条件、責務違反、検証不足を根拠付きで言語化すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "PR 作成前レビューをして。High リスクがあれば先に潰したい。",
       "expected_output": "Reviewer ロールとして扱い、安心してマージできるかのリスク探索を行い、High / Medium / Low の懸念と不足検証を整理すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }

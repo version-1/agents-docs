@@ -5,13 +5,15 @@
       "id": 1,
       "prompt": "既存の管理画面に CSS でレスポンシブな2カラムレイアウトを追加したい。selector と cascade を崩さずに実装方針を見てから進めて。",
       "expected_output": "code-general を前提に、CSS の layout、responsive design、selector、cascade、既存スタイルへの合わせ方を確認してから実装または方針整理に進むこと。",
-      "files": []
+      "files": [],
+      "should_fire": true
     },
     {
       "id": 2,
       "prompt": "SCSS の差分を直して。モバイル幅でカード内のテキストがはみ出すので、既存 UI に馴染む形で修正したい。",
       "expected_output": "CSS / SCSS 実装として扱い、レイアウト責務、レスポンシブ制約、既存 selector との衝突、保守しやすいスタイル設計を確認すること。",
-      "files": []
+      "files": [],
+      "should_fire": true
     }
   ]
 }
