@@ -171,6 +171,12 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["jq"],
+    decision = "allow",
+    justification = "JSON の参照/整形用途は安全"
+)
+
+prefix_rule(
     pattern = [["npm", "pnpm", "yarn", "bun"], ["run", "start"]],
     decision = "allow",
     justification = "ローカル操作は安全"
