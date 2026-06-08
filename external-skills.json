@@ -25,5 +25,15 @@
       "~/.codex/skills/external/empirical-prompt-tuning",
       "~/.claude/skills/empirical-prompt-tuning"
     ]
+  },
+  {
+    "name": "frontend-design",
+    "url": "https://github.com/anthropics/skills/tree/main/skills/frontend-design",
+    "type": "git",
+    "treeHash": "928950704df8a8b885c03de5da626331e6f29cf8",
+    "destination": [
+      "~/.codex/skills/external/frontend-design",
+      "~/.claude/skills/frontend-design"
+    ]
   }
 ]

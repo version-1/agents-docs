@@ -105,6 +105,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | Skill | 取得元 | 主な分類 | 概要 |
 |---|---|---|---|
 | `skill-creator` | `anthropics/skills` | 行動定義型 / ワークフロー型 | 新しい skill の作成、既存 skill の更新、メタデータや検証手順の整備に使う。 |
+| `frontend-design` | `anthropics/skills` | 行動定義型 / ワークフロー型 | Web UI、ページ、コンポーネント、HTML/CSS/React などを高品質な frontend design として実装するときに使う。 |
 | `grill-me` | `mattpocock/skills` | 判断定義型 / 判断基準・評価型 | 計画や設計を厳しく質問し、曖昧さや判断漏れを潰すために使う。 |
 | `empirical-prompt-tuning` | `mizchi/skills` | 判断定義型 / スコアリング・査定型 | skill やプロンプトを実験的に改善し、評価と反復で性能を詰めるために使う。 |
 
