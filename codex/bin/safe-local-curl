@@ -1,0 +1,206 @@
+#!/bin/sh
+set -eu
+
+die() {
+  printf 'safe-local-curl: %s\n' "$*" >&2
+  exit 1
+}
+
+is_octet() {
+  case "$1" in
+    '' | *[!0-9]*)
+      return 1
+      ;;
+  esac
+
+  [ "$1" -ge 0 ] 2>/dev/null && [ "$1" -le 255 ] 2>/dev/null
+}
+
+is_private_ipv4() {
+  case "$1" in
+    '' | *[!0-9.]*)
+      return 1
+      ;;
+  esac
+
+  old_ifs=$IFS
+  IFS=.
+  set -- $1
+  IFS=$old_ifs
+
+  [ "$#" -eq 4 ] || return 1
+
+  is_octet "$1" && is_octet "$2" && is_octet "$3" && is_octet "$4" || return 1
+
+  case "$1.$2" in
+    0.0)
+      [ "$3.$4" = "0.0" ]
+      return
+      ;;
+    10.* | 127.* | 192.168)
+      return 0
+      ;;
+    172.*)
+      [ "$2" -ge 16 ] 2>/dev/null && [ "$2" -le 31 ] 2>/dev/null
+      return
+      ;;
+  esac
+
+  return 1
+}
+
+is_curl_number() {
+  case "$1" in
+    '' | *[!0-9.]*)
+      return 1
+      ;;
+  esac
+
+  return 0
+}
+
+usage() {
+  die "usage: safe-local-curl [safe curl flags] <http(s)://localhost-or-private-address[:port]/...>"
+}
+
+is_safe_url() {
+  url=$1
+
+  case "$url" in
+    http://* | https://*)
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+
+  authority=${url#http://}
+  authority=${authority#https://}
+  authority=${authority%%/*}
+  authority=${authority%%\?*}
+  authority=${authority%%#*}
+
+  case "$authority" in
+    '' | *@*)
+      return 1
+      ;;
+  esac
+
+  case "$authority" in
+    \[*\]*)
+      host=${authority%%\]*}
+      host=${host#\[}
+      ;;
+    *)
+      host=${authority%%:*}
+      ;;
+  esac
+
+  host=$(printf '%s' "$host" | tr '[:upper:]' '[:lower:]')
+
+  case "$host" in
+    localhost | ::1)
+      return 0
+      ;;
+  esac
+
+  is_private_ipv4 "$host"
+}
+
+is_safe_short_flags() {
+  flags=${1#-}
+
+  if [ "$flags" = "" ]; then
+    return 1
+  fi
+
+  while [ "$flags" != "" ]; do
+    flag=${flags%${flags#?}}
+    flags=${flags#?}
+    case "$flag" in
+      s | S | f | i | I | L | v | k | N | g)
+        ;;
+      *)
+        return 1
+        ;;
+    esac
+  done
+
+  return 0
+}
+
+command -v curl >/dev/null 2>&1 || die "curl command not found"
+
+validate_args() {
+  url_count=0
+  safe_url=
+
+  while [ "$#" -gt 0 ]; do
+    arg=$1
+
+    case "$arg" in
+      --)
+        shift
+        break
+        ;;
+      --fail | --silent | --show-error | --include | --head | --location | --verbose | --insecure | --no-buffer | --globoff)
+        shift
+        ;;
+      --max-time | --connect-timeout)
+        shift
+        [ "$#" -gt 0 ] || die "$arg requires a value"
+        is_curl_number "$1" || die "$arg requires a numeric value"
+        shift
+        ;;
+      --max-time=* | --connect-timeout=*)
+        value=${arg#*=}
+        is_curl_number "$value" || die "${arg%%=*} requires a numeric value"
+        shift
+        ;;
+      --*)
+        die "unsupported curl option: $arg"
+        ;;
+      -*)
+        case "$arg" in
+          -m)
+            shift
+            [ "$#" -gt 0 ] || die "-m requires a value"
+            is_curl_number "$1" || die "-m requires a numeric value"
+            shift
+            ;;
+          *)
+            is_safe_short_flags "$arg" || die "unsupported curl option: $arg"
+            shift
+            ;;
+        esac
+        ;;
+      *)
+        is_safe_url "$arg" || die "URL is not localhost, loopback, or private IPv4: $arg"
+        url_count=$((url_count + 1))
+        safe_url=$arg
+        shift
+        ;;
+    esac
+  done
+
+  while [ "$#" -gt 0 ]; do
+    is_safe_url "$1" || die "URL is not localhost, loopback, or private IPv4: $1"
+    url_count=$((url_count + 1))
+    safe_url=$1
+    shift
+  done
+
+  if [ "$url_count" -ne 1 ]; then
+    die "exactly one local URL is required"
+  fi
+}
+
+if [ "$#" -eq 0 ]; then
+  usage
+fi
+
+validate_args "$@"
+
+printf 'safe-local-curl: URL: %s\n' "$safe_url" >&2
+
+exec curl "$@"
