@@ -1,114 +1,42 @@
-# Agent Workflow
+---
+polling:
+  interval_ms: 30000
+workspace:
+  root: .worktrees
+agent:
+  max_concurrent_agents: 1
+  max_turns: 20
+  continuation_turns_enabled: false
+  max_retry_attempts: 3
+  max_retry_backoff_ms: 300000
+codex:
+  command: codex app-server
+  read_timeout_ms: 5000
+  turn_timeout_ms: 3600000
+  stall_timeout_ms: 300000
+---
 
-このファイルは、agents-docs レポジトリでエージェントが作業するときの標準ワークフローを定義します。
+# Task
 
-複数のエージェントや人間が同時に作業する前提で、作業場所、ブランチ、確認手順を揃えることを目的にします。
+Issue ID: {{ issue.id }}
+Title: {{ issue.title }}
+Status: {{ issue.status }}
+Priority: {{ issue.priority }}
+Assignee: {{ issue.assignee }}
+Attempt: {{ attempt }}
 
-## 基本方針
+## Description
 
-- ユーザーの未コミット変更を revert、削除、上書きしない。
-- 作業前に現在のブランチ、差分、未追跡ファイルを確認する。
-- 変更はタスクの責務範囲に閉じる。
-- 破壊的操作、外部送信、履歴改変、設定変更は実行前に確認する。
-- 並行作業では git worktree を使い、作業場所の衝突を避ける。
+{{ issue.description }}
 
-## 作業開始
+## Required Flow
 
-作業を始める前に、必ず現在地と差分を確認します。
+1. Confirm the task scope from the issue title and description above.
+2. Create or switch to an isolated task branch/worktree before editing.
+3. Make focused changes that satisfy the issue.
+4. Run the narrowest useful verification first, then broaden checks when shared behavior is affected.
+5. Commit the change and create or update a pull request.
+6. Leave a progress or handoff comment on the issue.
+7. Move the issue to `review` when the pull request is ready for human review.
 
-```bash
-git status --short --branch
-```
-
-新しいタスクを開始する場合は、編集を始める前に必ず作業ブランチを作成します。
-
-作業ブランチは最新のデフォルトブランチから作成し、タスク内容に合う名前を付けます。
-
-既存の変更がある場合は、その変更が自分の作業対象か、ユーザーまたは別エージェントの変更かを判断してから進めます。判断できない場合は、作業を始める前に確認します。
-
-## Worktree Slots
-
-並行作業では git worktree を使うことを推奨します。
-
-リポジトリ直下の `.worktrees/` をスロット置き場として扱い、最大 10 個の worktree を用意できます。
-
-`.worktrees/` はローカル作業領域であり、コミット対象ではありません。
-
-```text
-.worktrees/
-├── 1
-├── 2
-├── 3
-├── 4
-├── 5
-├── 6
-├── 7
-├── 8
-├── 9
-└── 10
-```
-
-各スロットは独立した作業場所です。任意の空きスロットを選び、作業ブランチを作ってからその中で作業します。
-
-例:
-
-```bash
-git worktree add .worktrees/1 -b docs/add-agent-workflow main
-```
-
-既存スロットを使う前に、その worktree の状態を確認します。
-
-```bash
-git -C .worktrees/1 status --short --branch
-```
-
-スロットに未コミット変更がある場合は、誰の変更か判断できるまで再利用しません。
-
-## 作業中
-
-作業中は、ファイルの所有範囲を意識します。
-
-別エージェントが同時に作業している可能性があるため、関係ない差分を整形、削除、移動しないでください。必要な変更が他の差分と同じファイルにある場合は、周辺の意図を読んでから最小限の編集にします。
-
-実装や文書更新では、既存の構成、命名、文体に合わせます。新しいルールや配置を追加する場合は、入口となる文書から辿れるようにします。
-
-## Skill 追加・更新時のドキュメント更新
-
-internal skill を追加または更新した場合は、`SKILL.md` だけで完結させず、利用者が一覧やガイドから辿れる状態にします。
-
-新しい internal skill を追加した場合は、最低限次を確認します。
-
-- `codex/skills/internal/<skill-name>/SKILL.md` に `name` と `description` があり、trigger 条件が具体的か。
-- `docs/skill-library.md` に skill の用途を追記したか。
-- 追加先の分類は `docs/guide/skill-category.md` の考え方に合っているか。
-- `codex/skills/internal/<skill-name>/evals/evals.json` が必要な skill では、代表的な利用ケースを追加したか。
-- `codex/skills/internal/<skill-name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも `SKILL.md` と矛盾しないように更新したか。
-- 既存 skill との依存や利用順序が増えた場合は、`docs/skill-dependency-map.md` と該当 skill の本文から辿れるようにしたか。
-
-外部 skill を追加または更新する場合は、`external-skills.json` の取得元、commit、配布先を更新し、`docs/skill-library.md` の外部 skill 一覧も合わせて確認します。
-
-## 完了前確認
-
-作業が終わったら、差分と状態を確認します。
-
-```bash
-git status --short --branch
-git diff
-```
-
-テストや dry-run がある変更では、影響範囲に合う検証を実行します。
-
-このリポジトリでは、配布設定や skill を変更した場合は通常次の順で確認します。
-
-```bash
-make deploy-dry-run
-make deploy
-```
-
-文書だけの変更では、Markdown のリンク、見出し、読み順が自然かを確認します。
-
-## 報告
-
-作業完了時は、変更したファイル、要点、実行した検証を簡潔に報告します。
-
-検証できなかった項目がある場合は、未実行の理由を明示します。
+For repository-specific contribution rules, follow [CONTRIBUTING.md](CONTRIBUTING.md).
