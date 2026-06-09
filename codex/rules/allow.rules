@@ -67,6 +67,18 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["git", "cherry-pick"],
+    decision = "allow",
+    justification = "cherry-pick はローカルブランチへの適用で通常安全"
+)
+
+prefix_rule(
+    pattern = ["git", "rebase"],
+    decision = "allow",
+    justification = "rebase はローカルブランチの履歴整理で通常安全"
+)
+
+prefix_rule(
     pattern = ["git", "stash"],
     decision = "allow",
     justification = "作業内容を一時退避する操作は通常安全"

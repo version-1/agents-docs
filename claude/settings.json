@@ -34,6 +34,9 @@
       "Bash(git commit *)",
       "Bash(git add *)",
       "Bash(git branch -d *)",
+      "Bash(git cherry-pick *)",
+      "Bash(git rebase)",
+      "Bash(git rebase *)",
       "Bash(git stash)",
       "Bash(git stash *)",
       "Bash(git worktree add *)",
@@ -200,8 +203,6 @@
     "ask": [
       "Bash(git push)",
       "Bash(git push *)",
-      "Bash(git rebase)",
-      "Bash(git rebase *)",
       "Bash(git reset --hard)",
       "Bash(git reset --hard *)",
       "Bash(git worktree remove *)",
