@@ -39,5 +39,4 @@ Attempt: {{ attempt }}
 6. Leave a progress or handoff comment on the issue.
 7. Move the issue to `review` when the pull request is ready for human review.
 
-For repository-specific contribution rules, follow [CONTRIBUTE.md](CONTRIBUTE.md).
-
+For repository-specific contribution rules, follow [CONTRIBUTING.md](CONTRIBUTING.md).
