@@ -12,4 +12,7 @@ TypeScript 実装で、型と実装の責務を分けつつ既存コードに自
 ## 使い方
 
 - まず [../code-general/SKILL.md](../code-general/SKILL.md) を読む。
-- TypeScript 実装では [references/lang.md](references/lang.md) を読む。
+- TypeScript 実装では references/lang.md を必ず読む。
+  - このファイルは、この SKILL.md と同じディレクトリの references/ 配下にある。
+  - 見つからない場合は ~/.claude/skills/code-ts/references/lang.md を試す。
+  - それでも見つからない場合はユーザーに報告し、references なしで進めない。

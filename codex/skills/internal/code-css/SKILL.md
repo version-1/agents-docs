@@ -12,6 +12,9 @@ CSS 実装で、レイアウトとスタイルの責務を整理し、既存 UI 
 ## 使い方
 
 - まず [../code-general/SKILL.md](../code-general/SKILL.md) を読む。
-- CSS 実装では [references/lang.md](references/lang.md) を読む。
+- CSS 実装では references/lang.md を必ず読む。
+  - このファイルは、この SKILL.md と同じディレクトリの references/ 配下にある。
+  - 見つからない場合は ~/.claude/skills/code-css/references/lang.md を試す。
+  - それでも見つからない場合はユーザーに報告し、references なしで進めない。
 - 実装前に、変更が「レイアウト」なのか「appearance（見た目）」なのかを分けて考える。
 - レイアウト変更と appearance 変更を同じ差分に混ぜる場合は、影響範囲と意図が読み取れる最小単位に整理する。
