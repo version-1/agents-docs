@@ -1,6 +1,6 @@
 ---
 name: code-tracer
-description: コードベース内の特定シンボル、関数、メソッド、型、モジュールについて、callers / callees / both の呼び出し経路を根拠付きで追跡し、Markdown や Mermaid で可視化するときに使う。言語固有の調査手順は references/ 配下を参照し、Go の場合は references/go.md を読む。
+description: コードベース内の特定シンボル、関数、メソッド、型、モジュールについて、callers / callees / both の呼び出し経路を根拠付きで追跡し、Markdown や Mermaid で可視化するときに使う。言語ごとの構造化された解析手順を選び、根拠と限界を明示する。
 ---
 
 # Code Tracer
