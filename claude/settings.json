@@ -35,8 +35,6 @@
       "Bash(git add *)",
       "Bash(git branch -d *)",
       "Bash(git cherry-pick *)",
-      "Bash(git rebase)",
-      "Bash(git rebase *)",
       "Bash(git stash)",
       "Bash(git stash *)",
       "Bash(git worktree add *)",
