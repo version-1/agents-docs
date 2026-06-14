@@ -13,12 +13,6 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", "rebase"],
-    decision = "prompt",
-    justification = "履歴変更確認"
-)
-
-prefix_rule(
     pattern = ["git", "reset", "--hard"],
     decision = "prompt",
     justification = "作業内容消失防止"
