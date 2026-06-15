@@ -1,7 +1,7 @@
 {
   "codex": {
     "sandbox": {
-      "writable_roots": "[]"
+      "writable_roots": []
     }
   }
 }

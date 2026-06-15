@@ -71,11 +71,60 @@ func resolve(vars Vars, key string) (string, error) {
 		current = val
 	}
 
-	switch v := current.(type) {
+	return toTOMLValue(current, key)
+}
+
+// toTOMLValue converts a JSON-decoded value to its TOML string representation.
+// Supported types: string, float64 (number), bool, []any (flat array of primitives).
+// Objects (map[string]any) are not supported as leaf values.
+func toTOMLValue(v any, key string) (string, error) {
+	switch val := v.(type) {
 	case string:
-		return v, nil
+		return val, nil
+	case float64:
+		if val == float64(int64(val)) {
+			return fmt.Sprintf("%d", int64(val)), nil
+		}
+		return fmt.Sprintf("%g", val), nil
+	case bool:
+		if val {
+			return "true", nil
+		}
+		return "false", nil
+	case []any:
+		elems := make([]string, 0, len(val))
+		for i, elem := range val {
+			s, err := toTOMLPrimitive(elem, key, i)
+			if err != nil {
+				return "", err
+			}
+			elems = append(elems, s)
+		}
+		return "[" + strings.Join(elems, ", ") + "]", nil
+	case map[string]any:
+		return "", fmt.Errorf("template variable {{%s}}: objects cannot be used as values", key)
 	default:
-		return "", fmt.Errorf("template variable {{%s}}: value must be a string, got %T", key, current)
+		return "", fmt.Errorf("template variable {{%s}}: unsupported type %T", key, v)
+	}
+}
+
+// toTOMLPrimitive converts a single array element to its TOML representation.
+func toTOMLPrimitive(v any, key string, index int) (string, error) {
+	switch val := v.(type) {
+	case string:
+		return fmt.Sprintf("%q", val), nil
+	case float64:
+		if val == float64(int64(val)) {
+			return fmt.Sprintf("%d", int64(val)), nil
+		}
+		return fmt.Sprintf("%g", val), nil
+	case bool:
+		if val {
+			return "true", nil
+		}
+		return "false", nil
+	default:
+		return "", fmt.Errorf("template variable {{%s}}[%d]: unsupported array element type %T", key, index, v)
 	}
 }
 

@@ -11,8 +11,13 @@ func TestExpand(t *testing.T) {
 		"codex": map[string]any{
 			"model": "o3-pro",
 			"sandbox": map[string]any{
-				"writable_roots": `["/tmp", "/home"]`,
+				"writable_roots": []any{"/tmp", "/home"},
 			},
+			"debug":   true,
+			"port":    float64(8080),
+			"ratio":   float64(3.14),
+			"empty":   []any{},
+			"nested":  map[string]any{"key": "val"},
 		},
 	}
 
@@ -28,9 +33,29 @@ func TestExpand(t *testing.T) {
 			want:  `model = "o3-pro"`,
 		},
 		{
-			name:  "nested variable",
+			name:  "array variable",
 			input: `writable_roots = {{codex.sandbox.writable_roots}}`,
 			want:  `writable_roots = ["/tmp", "/home"]`,
+		},
+		{
+			name:  "empty array",
+			input: `roots = {{codex.empty}}`,
+			want:  `roots = []`,
+		},
+		{
+			name:  "bool variable",
+			input: `debug = {{codex.debug}}`,
+			want:  `debug = true`,
+		},
+		{
+			name:  "integer variable",
+			input: `port = {{codex.port}}`,
+			want:  `port = 8080`,
+		},
+		{
+			name:  "float variable",
+			input: `ratio = {{codex.ratio}}`,
+			want:  `ratio = 3.14`,
 		},
 		{
 			name:  "multiple variables",
@@ -55,6 +80,11 @@ func TestExpand(t *testing.T) {
 		{
 			name:    "intermediate not object",
 			input:   `val = "{{codex.model.sub}}"`,
+			wantErr: true,
+		},
+		{
+			name:    "object as leaf value",
+			input:   `val = {{codex.nested}}`,
 			wantErr: true,
 		},
 	}
