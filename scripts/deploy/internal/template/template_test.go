@@ -131,6 +131,39 @@ func TestLoadVars(t *testing.T) {
 	}
 }
 
+func TestLoadVars_TrailingComma(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "config.local.json")
+
+	content := `{
+  "codex": {
+    "sandbox": {
+      "writable_roots": [
+        "/tmp",
+        "/home",
+      ],
+    },
+  },
+}`
+	if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	vars, err := LoadVars(path)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	got, err := Expand("roots = {{codex.sandbox.writable_roots}}", vars)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	want := `roots = ["/tmp", "/home"]`
+	if got != want {
+		t.Errorf("got %q, want %q", got, want)
+	}
+}
+
 func TestLoadVars_NotFound(t *testing.T) {
 	_, err := LoadVars("/nonexistent/config.local.json")
 	if err == nil {

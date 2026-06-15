@@ -8,20 +8,26 @@ import (
 	"strings"
 )
 
-var varPattern = regexp.MustCompile(`\{\{([a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*)\}\}`)
+var (
+	varPattern           = regexp.MustCompile(`\{\{([a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)*)\}\}`)
+	trailingCommaPattern = regexp.MustCompile(`,\s*([\]}])`)
+)
 
 // Vars holds the parsed local config values as a nested map.
 type Vars map[string]any
 
 // LoadVars reads a JSON file and returns the parsed variables.
+// Trailing commas in arrays and objects are tolerated.
 func LoadVars(path string) (Vars, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("read local config %q: %w", path, err)
 	}
 
+	cleaned := trailingCommaPattern.ReplaceAll(b, []byte("$1"))
+
 	var v Vars
-	if err := json.Unmarshal(b, &v); err != nil {
+	if err := json.Unmarshal(cleaned, &v); err != nil {
 		return nil, fmt.Errorf("parse local config %q: %w", path, err)
 	}
 	return v, nil
