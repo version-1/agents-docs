@@ -77,7 +77,11 @@ func (r Runner) Run(configPath string, opts Options) error {
 
 	var vars template.Vars
 	if opts.LocalConfigPath != "" {
-		vars, err = template.LoadVars(opts.LocalConfigPath)
+		absLocalConfigPath, err := pathutil.ResolveConfigPath(opts.LocalConfigPath)
+		if err != nil {
+			return err
+		}
+		vars, err = template.LoadVars(absLocalConfigPath)
 		if err != nil {
 			return err
 		}

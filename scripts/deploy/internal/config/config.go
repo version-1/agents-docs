@@ -40,6 +40,9 @@ func Load(path string) (Config, error) {
 		if item.Destination == "" {
 			return Config{}, fmt.Errorf("items[%d].destination is required", i)
 		}
+		if item.Template && item.Flatten {
+			return Config{}, fmt.Errorf("items[%d]: template and flatten cannot be used together", i)
+		}
 	}
 	return cfg, nil
 }
