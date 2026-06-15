@@ -79,6 +79,12 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["git", "merge", "--ff-only"],
+    decision = "allow",
+    justification = "fast-forward マージは履歴破壊しないので通常安全"
+)
+
+prefix_rule(
     pattern = ["git", "stash"],
     decision = "allow",
     justification = "作業内容を一時退避する操作は通常安全"
