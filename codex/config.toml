@@ -6,7 +6,7 @@ sandbox_mode = "workspace-write"
 [sandbox_workspace_write]
 exclude_tmpdir_env_var = true
 exclude_slash_tmp = true
-writable_roots = []
+writable_roots = {{codex.sandbox.writable_roots}}
 
 [mcp_servers.context7]
 args = ["-y", "@upstash/context7-mcp", "--api-key", "${CONTEXT7_API_KEY}"]

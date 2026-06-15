@@ -16,6 +16,7 @@ type Item struct {
 	Exclude     []string `json:"exclude"`
 	Replace     bool     `json:"replace"`
 	Flatten     bool     `json:"flatten"`
+	Template    bool     `json:"template"`
 }
 
 func Load(path string) (Config, error) {

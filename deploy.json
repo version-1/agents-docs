@@ -39,6 +39,7 @@
     {
       "source": "codex/config.toml",
       "destination": "~/.codex/config.toml",
+      "template": true,
       "exclude": [
         "**/.DS_Store"
       ]

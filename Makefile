@@ -4,10 +4,10 @@ build-deploy:
 
 deploy-dry-run:
 	$(MAKE) build-deploy
-	./bin/deploy -config=./deploy.json -external-skills=./external-skills.json -dry-run
+	./bin/deploy -config=./deploy.json -external-skills=./external-skills.json -local-config=./config.local.json -dry-run
 
 deploy:
 	$(MAKE) build-deploy
-	./bin/deploy -config=./deploy.json -external-skills=./external-skills.json
+	./bin/deploy -config=./deploy.json -external-skills=./external-skills.json -local-config=./config.local.json
 
 apply: deploy
