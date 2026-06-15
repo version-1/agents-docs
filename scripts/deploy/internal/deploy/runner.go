@@ -264,7 +264,7 @@ func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Ma
 			r.printSummary(report, opts)
 			return nil
 		}
-		if tmpl {
+		if tmpl && vars != nil {
 			return r.deployTemplateFile(index, src, dst, info.Mode(), replace, backupRoot, vars, report, opts)
 		}
 		return r.deployFile(index, src, dst, info.Mode(), replace, backupRoot, report, opts)
