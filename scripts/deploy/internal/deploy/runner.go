@@ -14,12 +14,14 @@ import (
 	"deploy/internal/matcher"
 	"deploy/internal/pathutil"
 	"deploy/internal/skillscan"
+	"deploy/internal/template"
 )
 
 type Options struct {
 	DryRun             bool
 	NoColor            bool
 	ExternalSkillsPath string
+	LocalConfigPath    string
 }
 
 type Runner struct {
@@ -73,6 +75,18 @@ func (r Runner) Run(configPath string, opts Options) error {
 		return err
 	}
 
+	var vars template.Vars
+	if opts.LocalConfigPath != "" {
+		absLocalConfigPath, err := pathutil.ResolveConfigPath(opts.LocalConfigPath)
+		if err != nil {
+			return err
+		}
+		vars, err = template.LoadVars(absLocalConfigPath)
+		if err != nil {
+			return err
+		}
+	}
+
 	cwd, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("get current directory: %w", err)
@@ -89,7 +103,7 @@ func (r Runner) Run(configPath string, opts Options) error {
 		defer cleanupExternalSkills()
 	}
 
-	if err := r.deployConfiguredItems(cfg, cwd, configDir, backupRoot, opts); err != nil {
+	if err := r.deployConfiguredItems(cfg, cwd, configDir, backupRoot, vars, opts); err != nil {
 		return err
 	}
 	return r.deployExternalSkills(externalSkills, externalConfigDir, len(cfg.Items), backupRoot, opts)
@@ -110,13 +124,13 @@ func (r Runner) prepareOptionalExternalSkills(path string, cfg config.Config, cw
 	return skills, configDir, cleanup, nil
 }
 
-func (r Runner) deployConfiguredItems(cfg config.Config, cwd, configDir, backupRoot string, opts Options) error {
+func (r Runner) deployConfiguredItems(cfg config.Config, cwd, configDir, backupRoot string, vars template.Vars, opts Options) error {
 	for i, item := range cfg.Items {
 		src, dst, excludeMatcher, err := resolveDeployItem(i, item, cwd, configDir)
 		if err != nil {
 			return err
 		}
-		if err := r.deployItem(i, src, dst, excludeMatcher, item.Replace, item.Flatten, backupRoot, opts); err != nil {
+		if err := r.deployItem(i, src, dst, excludeMatcher, item.Replace, item.Flatten, item.Template, backupRoot, vars, opts); err != nil {
 			return err
 		}
 	}
@@ -224,7 +238,7 @@ func (r Runner) deployExternalSkill(index int, skill external.Skill, src, dst, b
 	return nil
 }
 
-func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Matcher, replace, flatten bool, backupRoot string, opts Options) error {
+func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Matcher, replace, flatten, tmpl bool, backupRoot string, vars template.Vars, opts Options) error {
 	info, err := os.Stat(src)
 	if err != nil {
 		return fmt.Errorf("stat source for items[%d] %q: %w", index, src, err)
@@ -232,6 +246,9 @@ func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Ma
 
 	report := &itemReport{}
 	if info.IsDir() {
+		if tmpl {
+			return fmt.Errorf("items[%d]: template requires a file source", index)
+		}
 		if flatten {
 			return r.deployFlattenedSkillDirs(index, src, dst, excludeMatcher, replace, backupRoot, report, opts)
 		}
@@ -246,6 +263,9 @@ func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Ma
 			report.Skipped++
 			r.printSummary(report, opts)
 			return nil
+		}
+		if tmpl && vars != nil {
+			return r.deployTemplateFile(index, src, dst, info.Mode(), replace, backupRoot, vars, report, opts)
 		}
 		return r.deployFile(index, src, dst, info.Mode(), replace, backupRoot, report, opts)
 	}
@@ -341,6 +361,42 @@ func (r Runner) deployFile(index int, src, dst string, mode os.FileMode, replace
 	}
 	if err := fileops.CopyFile(src, dst, mode, fileOptions(opts)); err != nil {
 		return err
+	}
+	report.CopiedFiles++
+	r.printSummary(report, opts)
+	return nil
+}
+
+func (r Runner) deployTemplateFile(index int, src, dst string, mode os.FileMode, replace bool, backupRoot string, vars template.Vars, report *itemReport, opts Options) error {
+	r.printItemHeader(index, "template", src, dst, opts)
+
+	if vars == nil {
+		return fmt.Errorf("items[%d]: template is true but -local-config was not specified", index)
+	}
+
+	expanded, err := template.ExpandFile(src, vars)
+	if err != nil {
+		return fmt.Errorf("items[%d]: %w", index, err)
+	}
+
+	if err := r.backupDestination(dst, backupRoot, opts); err != nil {
+		return err
+	}
+	if err := r.replaceDestination(dst, replace, opts); err != nil {
+		return err
+	}
+
+	if opts.DryRun {
+		report.CopiedFiles++
+		r.printSummary(report, opts)
+		return nil
+	}
+
+	if err := os.MkdirAll(filepath.Dir(dst), 0755); err != nil {
+		return fmt.Errorf("mkdir %q: %w", filepath.Dir(dst), err)
+	}
+	if err := os.WriteFile(dst, expanded, mode); err != nil {
+		return fmt.Errorf("write %q: %w", dst, err)
 	}
 	report.CopiedFiles++
 	r.printSummary(report, opts)

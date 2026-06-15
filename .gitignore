@@ -4,3 +4,4 @@ out/*
 .tmp
 .worktrees
 .DS_Store
+config.local.json

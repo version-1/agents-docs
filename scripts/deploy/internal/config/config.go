@@ -16,6 +16,7 @@ type Item struct {
 	Exclude     []string `json:"exclude"`
 	Replace     bool     `json:"replace"`
 	Flatten     bool     `json:"flatten"`
+	Template    bool     `json:"template"`
 }
 
 func Load(path string) (Config, error) {
@@ -38,6 +39,9 @@ func Load(path string) (Config, error) {
 		}
 		if item.Destination == "" {
 			return Config{}, fmt.Errorf("items[%d].destination is required", i)
+		}
+		if item.Template && item.Flatten {
+			return Config{}, fmt.Errorf("items[%d]: template and flatten cannot be used together", i)
 		}
 	}
 	return cfg, nil
