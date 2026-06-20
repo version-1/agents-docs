@@ -273,5 +273,9 @@
     "EDITOR": "vim",
     "VISUAL": "vim"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "companyAnnouncements": []
 }
