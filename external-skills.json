@@ -35,5 +35,25 @@
       "~/.codex/skills/external/frontend-design",
       "~/.claude/skills/frontend-design"
     ]
+  },
+  {
+    "name": "tasq-cli",
+    "url": "https://github.com/version-1/tasq/tree/main/.agents/skills/tasq-cli",
+    "type": "git",
+    "treeHash": "0db86f09b4e179b5ea787f87832ada7dae775245",
+    "destination": [
+      "~/.codex/skills/external/tasq-cli",
+      "~/.claude/skills/tasq-cli"
+    ]
+  },
+  {
+    "name": "tq-orchestrator",
+    "url": "https://github.com/version-1/tasq/tree/main/.agents/skills/tq-orchestrator",
+    "type": "git",
+    "treeHash": "ffe4cb370b68cf6af528983590d3e5c8f97d0293",
+    "destination": [
+      "~/.codex/skills/external/tq-orchestrator",
+      "~/.claude/skills/tq-orchestrator"
+    ]
   }
 ]
