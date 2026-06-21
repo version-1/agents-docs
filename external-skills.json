@@ -10,7 +10,7 @@
     "name": "grill-me",
     "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
     "type": "git",
-    "treeHash": "2a1ad17028306ebe45f0e49703fa28b9b2e7f499",
+    "treeHash": "8320e7b87f7b208f50ce165b1dd43d1e93c8e801",
     "destination": [
       "~/.codex/skills/external/grill-me",
       "~/.claude/skills/grill-me"
