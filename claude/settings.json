@@ -76,7 +76,7 @@
       "Bash(safe-gh-edit *)",
       "Bash(~/.codex/bin/safe-gh-edit *)",
       "Bash(safe-local-curl *)",
-      "Bash(~/.codex/bin/safe-local-curl *)",
+      "Bash(~/.codex/bin/safe-local-curl *)"
     ],
     "ask": [
       "Bash(git push)",
