@@ -20,6 +20,55 @@
 - クラスコンポーネントは、React Hooks の導入以降は非推奨とされているため、関数コンポーネントを使用することが推奨される。
 - `componentWillMount`、`componentWillReceiveProps`、`componentWillUpdate`などのライフサイクルメソッドは、React 16.3 以降は非推奨とされているため、使用しないことが推奨される。
 
+# React アーキテクチャ
+
+コンポーネントを実装する際は、ドメイン知識を持つ feature / domain 側の component と、
+見た目と基本操作だけを表現する design system 側の component を分けることが推奨される。
+
+## Core Principles
+
+- まずは画面要件を満たす実装を優先する
+- 同じ UI パターンが 2 回以上出たら共通化を検討する
+- 3 回以上使われる、または今後増えそうなら共通コンポーネント化する
+- 見た目だけでなく、振る舞い・状態・アクセシビリティも含めて共通化する
+- ドメイン固有の意味を持つものは `features/` や `components/domain/` に置く
+- 汎用 UI は `components/ui/` に置く
+- props が複雑になりすぎる共通化は避ける
+
+## ディレクトリ構成の例:
+
+ディクレクトリ構成の例を以下に示す。
+src/components/ui/ 以下に design system 側のコンポーネントを配置し、src/features/ 以下にドメイン知識を持つ feature / domain 側のコンポーネントを配置する。
+これは一例であり、プロジェクトの規模や要件に応じて柔軟に変更することが推奨される。
+ただし、ドメイン知識を持つ feature / domain 側のコンポーネントと、見た目と基本操作だけを表現する design system 側のコンポーネントを分けることは強く推奨される。
+
+```
+src/
+├── components/              // 共通コンポーネント
+│   └── ui/                  // design system 側のコンポーネント
+│       ├── button/index.tsx
+│       ├── dialog/index.tsx
+│       ├── card/index.tsx
+│       └── badge/index.tsx
+│
+├── features/                // ドメイン知識を持つ feature / domain 側のコンポーネント
+│   ├── projects/
+│   │   ├── components/
+│   │   │   ├── card/index.tsx
+│   │   │   ├── list/index.tsx
+│   │   │   └── badge/index.tsx
+│   │   ├── hooks/
+│   │   └── api/
+│   │
+│   └── tasks/
+│       ├── components/
+│       └── hooks/
+│
+└── app/
+    └── projects/
+        └── page.tsx
+```
+
 ### コンポーネントのディレクトリ設計について
 
 Table コンポーネントを例に、コンポーネントのディレクトリ設計の一例を示す。
