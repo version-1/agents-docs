@@ -20,7 +20,7 @@
     "name": "empirical-prompt-tuning",
     "url": "https://github.com/mizchi/skills/tree/main/meta/empirical-prompt-tuning",
     "type": "git",
-    "treeHash": "2ab11dd06ebc84d8faae42dbd6f2d9699ff1bf5a",
+    "treeHash": "84f108582bb31004a5fa6dfbfec4f93969a57d59",
     "destination": [
       "~/.codex/skills/external/empirical-prompt-tuning",
       "~/.claude/skills/empirical-prompt-tuning"
@@ -40,7 +40,7 @@
     "name": "tasq-cli",
     "url": "https://github.com/version-1/tasq/tree/main/.agents/skills/tasq-cli",
     "type": "git",
-    "treeHash": "0db86f09b4e179b5ea787f87832ada7dae775245",
+    "treeHash": "51272741921375a278241998d98ada41a1fd1e1b",
     "destination": [
       "~/.codex/skills/external/tasq-cli",
       "~/.claude/skills/tasq-cli"
