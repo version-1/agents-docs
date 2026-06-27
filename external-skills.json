@@ -40,7 +40,7 @@
     "name": "tasq-cli",
     "url": "https://github.com/version-1/tasq/tree/main/.agents/skills/tasq-cli",
     "type": "git",
-    "treeHash": "567c0d11423683827c0d2b34ade5dd9d2c551019",
+    "treeHash": "5a676d157f2c714951ae7c1fb3a60447dd4459b9",
     "destination": [
       "~/.codex/skills/external/tasq-cli",
       "~/.claude/skills/tasq-cli"
