@@ -10,6 +10,10 @@ extends = ":workspace"
 [permissions.project-edit.workspace_roots]
 {{codex.permissions.project_edit.workspace_roots}}
 
+[permissions.project-edit.filesystem]
+":workspace_roots" = { "." = "write" }
+{{codex.permissions.project_edit.filesystem}}
+
 [permissions.project-edit.network]
 enabled = true
 mode = "limited"
