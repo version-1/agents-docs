@@ -3,6 +3,10 @@
     "permissions": {
       "project_edit": {
         "workspace_roots": {},
+        "filesystem": {
+          "/Users/<username>/.docker/buildx": "write",
+          "/Users/<username>/.docker/contexts": "write"
+        },
         "network": {
           "unix_sockets": {
             "/Users/<username>/.docker/run/docker.sock": "allow"
