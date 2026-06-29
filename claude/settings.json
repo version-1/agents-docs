@@ -109,8 +109,6 @@
       "Bash(pnpm publish *)",
       "Bash(gem push *)",
       "Bash(docker push *)",
-      "Bash(docker compose exec *)",
-      "Bash(docker compose run *)",
       "Bash(cp -r *)",
       "Bash(chmod)",
       "Bash(chmod *)",
