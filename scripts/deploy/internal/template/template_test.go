@@ -13,11 +13,15 @@ func TestExpand(t *testing.T) {
 			"sandbox": map[string]any{
 				"writable_roots": []any{"/tmp", "/home"},
 			},
-			"debug":   true,
-			"port":    float64(8080),
-			"ratio":   float64(3.14),
-			"empty":   []any{},
-			"nested":  map[string]any{"key": "val"},
+			"debug":  true,
+			"port":   float64(8080),
+			"ratio":  float64(3.14),
+			"empty":  []any{},
+			"nested": map[string]any{"key": "val"},
+			"table": map[string]any{
+				"~/code/shared-lib": true,
+				"~/code/app":        true,
+			},
 		},
 	}
 
@@ -83,9 +87,16 @@ func TestExpand(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name:    "object as leaf value",
-			input:   `val = {{codex.nested}}`,
-			wantErr: true,
+			name:  "object variable as table entries",
+			input: `[permissions.project-edit.workspace_roots]` + "\n" + `{{codex.table}}`,
+			want: `[permissions.project-edit.workspace_roots]
+"~/code/app" = true
+"~/code/shared-lib" = true`,
+		},
+		{
+			name:  "single object variable as table entry",
+			input: `{{codex.nested}}`,
+			want:  `"key" = "val"`,
 		},
 	}
 
