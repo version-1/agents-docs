@@ -307,7 +307,7 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["docker", "compose", ["build", "up", "start", "stop", "restart", "pull", "pause", "unpause"]],
+    pattern = ["docker", "compose", ["build", "up", "start", "stop", "restart", "pull", "pause", "unpause", "exec", "run"]],
     decision = "allow",
     justification = "Compose のローカル開発操作は通常安全"
 )

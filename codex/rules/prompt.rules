@@ -124,12 +124,6 @@ prefix_rule(
     justification = "イメージ公開確認"
 )
 
-prefix_rule(
-    pattern = ["docker", "compose", ["exec", "run"]],
-    decision = "prompt",
-    justification = "Compose exec/run は実行内容次第で副作用があるため確認"
-)
-
 # ----------------------------------------
 # File operations
 # ----------------------------------------
