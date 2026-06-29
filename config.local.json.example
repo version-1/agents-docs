@@ -1,7 +1,14 @@
 {
   "codex": {
-    "sandbox": {
-      "writable_roots": []
+    "permissions": {
+      "project_edit": {
+        "workspace_roots": {},
+        "network": {
+          "unix_sockets": {
+            "/Users/<username>/.docker/run/docker.sock": "allow"
+          }
+        }
+      }
     }
   }
 }

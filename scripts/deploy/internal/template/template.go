@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -81,8 +82,8 @@ func resolve(vars Vars, key string) (string, error) {
 }
 
 // toTOMLValue converts a JSON-decoded value to its TOML string representation.
-// Supported types: string, float64 (number), bool, []any (flat array of primitives).
-// Objects (map[string]any) are not supported as leaf values.
+// Supported types: string, float64 (number), bool, []any (flat array of primitives),
+// and map[string]any (flat table entries).
 func toTOMLValue(v any, key string) (string, error) {
 	switch val := v.(type) {
 	case string:
@@ -108,10 +109,29 @@ func toTOMLValue(v any, key string) (string, error) {
 		}
 		return "[" + strings.Join(elems, ", ") + "]", nil
 	case map[string]any:
-		return "", fmt.Errorf("template variable {{%s}}: objects cannot be used as values", key)
+		return toTOMLTableEntries(val, key)
 	default:
 		return "", fmt.Errorf("template variable {{%s}}: unsupported type %T", key, v)
 	}
+}
+
+// toTOMLTableEntries converts a flat JSON object to TOML table entries.
+func toTOMLTableEntries(v map[string]any, key string) (string, error) {
+	keys := make([]string, 0, len(v))
+	for k := range v {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	lines := make([]string, 0, len(keys))
+	for _, k := range keys {
+		value, err := toTOMLPrimitive(v[k], key+"."+k, 0)
+		if err != nil {
+			return "", err
+		}
+		lines = append(lines, fmt.Sprintf("%q = %s", k, value))
+	}
+	return strings.Join(lines, "\n"), nil
 }
 
 // toTOMLPrimitive converts a single array element to its TOML representation.

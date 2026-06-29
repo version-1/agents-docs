@@ -2,9 +2,20 @@ model = "gpt-5.5"
 personality = "pragmatic"
 web_search = "live"
 
-sandbox_mode = "workspace-write"
-[sandbox_workspace_write]
-writable_roots = {{codex.sandbox.writable_roots}}
+default_permissions = "project-edit"
+
+[permissions.project-edit]
+extends = ":workspace"
+
+[permissions.project-edit.workspace_roots]
+{{codex.permissions.project_edit.workspace_roots}}
+
+[permissions.project-edit.network]
+enabled = true
+mode = "limited"
+
+[permissions.project-edit.network.unix_sockets]
+{{codex.permissions.project_edit.network.unix_sockets}}
 
 [mcp_servers.context7]
 args = ["-y", "@upstash/context7-mcp", "--api-key", "${CONTEXT7_API_KEY}"]
@@ -17,4 +28,3 @@ args = ["-y", "@notionhq/notion-mcp-server", "--auth-token", "${NOTION_TOKEN}"]
 
 [tui]
 status_line = ["git-branch", "session-id", "context-remaining", "used-tokens", "thread-title"]
-
