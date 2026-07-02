@@ -1,0 +1,29 @@
+{
+  "skill_name": "lego-programming",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "注文作成の実装をします。今は handler の中で request validation、在庫確認、決済 API 呼び出し、DB 保存、メール送信まで全部やっていて読みにくいです。どんな境界で分けてから実装すべきか整理してください。",
+      "expected_output": "lego-programming が発火し、handler、usecase/service、repository、client、mailer、validator などの責務境界、入力/出力/副作用、依存方向、完了前チェックを整理すること。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Next.js のユーザー詳細ページが 1 ファイルで 700 行あります。プロフィール表示、権限別ボタン、監査ログ、フォーム保存、API 呼び出しが混ざっています。component-design も意識しつつ、レゴみたいに再利用できる部品へ分けたいです。",
+      "expected_output": "component-design や code-react と併用する前提で lego-programming が発火し、Page、Feature Component、Custom Hook、API Client、Presenter/ViewModel などの境界と組み合わせ方を整理すること。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "このリファクタ、utils に全部寄せれば早い気もするけど、あとで変更しやすい構造にしたい。責務が混ざっていないかを実装前にチェックして。",
+      "expected_output": "lego-programming が発火し、utils/common への過剰集約を避け、責務、命名、再利用単位、テスト可能性、既存構造への配置を確認すること。",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "この PR のコードレビューをしてください。バグだけでなく、差分で作った service と hook の責務境界がレゴとして自然か、あとから再利用しやすいかも見てほしいです。",
+      "expected_output": "code-review と併用して lego-programming が発火し、仕様違反や回帰リスクとは別に、service、hook、component などの責務境界、依存方向、再利用性、テスト容易性をレビュー指摘として整理すること。",
+      "files": []
+    }
+  ]
+}

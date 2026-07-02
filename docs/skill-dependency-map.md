@@ -50,6 +50,17 @@ internal skills
     │   ├── code-react
     │   ├── code-test
     │   └── code-next-developer-review
+    ├── lego-programming
+    │   ├── code-general
+    │   ├── code-go
+    │   ├── code-ts
+    │   ├── code-react
+    │   ├── code-ruby
+    │   ├── code-css
+    │   ├── component-design
+    │   ├── code-naming
+    │   ├── code-review
+    │   └── code-next-developer-review
     ├── code-naming
     │   └── code-next-developer-review
     ├── code-quality-review
@@ -104,6 +115,16 @@ internal skills
 | `component-design` | `code-react` | React 実装へ進む場合に、実装時の責務分離や Atomic Design の補助観点を確認するため併用する。 |
 | `component-design` | `code-test` | テスト設計やテスト追加で併用する。 |
 | `component-design` | `code-next-developer-review` | 次の開発者の読みやすさを確認する場合に併用する。 |
+| `lego-programming` | `code-general` | 実装作業で仕様、公開契約、既存構造、検証方法を確認するときに併用する。 |
+| `lego-programming` | `code-go` | Go 固有の実装判断が必要な場合に併用する。 |
+| `lego-programming` | `code-ts` | TypeScript 固有の実装判断が必要な場合に併用する。 |
+| `lego-programming` | `code-react` | React 固有の実装判断が必要な場合に併用する。 |
+| `lego-programming` | `code-ruby` | Ruby / Rails 固有の実装判断が必要な場合に併用する。 |
+| `lego-programming` | `code-css` | CSS 固有の実装判断が必要な場合に併用する。 |
+| `lego-programming` | `component-design` | React / Next.js / TypeScript UI の大きな分割で、先に画面構成やコンポーネント境界を整理するときに併用する。 |
+| `lego-programming` | `code-naming` | 作成した部品の責務を表す名前で迷う場合に併用する。 |
+| `lego-programming` | `code-review` | 実装済み差分をレビューする場合に、仕様違反や回帰リスクと部品境界の問題を分けて扱うため併用する。 |
+| `lego-programming` | `code-next-developer-review` | 実装済み差分の境界が次の開発者に伝わるか確認したい場合に併用する。 |
 | `code-naming` | `code-next-developer-review` | 次に開発する人の理解しやすさ全体を見る場合に併用する。 |
 | `code-next-developer-review` | `code-review` | 欠陥や重大リスクを見つけた場合に通常レビュー観点として分ける。 |
 | `code-simplifier` | `code-quality-review` | 品質レポートや quality gate の観点から改善候補を拾う。 |
@@ -119,7 +140,6 @@ internal skills
 | `code-general` | `code-review` | レビューのみが目的の場合。 |
 | `component-design` | `code-review` | 実装済み差分の欠陥レビューが目的の場合。 |
 | `component-design` | `code-test` | テストケース設計だけが目的の場合。 |
-| `code-naming` | `code-typo` | typo や spelling の検査だけが目的の場合。 |
 | `code-naming` | `code-review` | バグ、仕様違反、セキュリティ、データ整合性のレビューが目的の場合。 |
 | `code-naming` | `code-general` | 実装変更やリネーム作業まで行う場合。 |
 | `code-quality-review` | `code-review` | 仕様違反、セキュリティ、データ破壊など即時欠陥の検出が主目的の場合。 |
@@ -167,6 +187,17 @@ graph TD
     component_design --> code_react
     component_design --> code_test
     component_design --> code_next_dev["code-next-developer-review"]
+
+    lego_programming["lego-programming"] --> code_general
+    lego_programming --> code_go
+    lego_programming --> code_ts
+    lego_programming --> code_react
+    lego_programming --> code_ruby
+    lego_programming --> code_css
+    lego_programming --> component_design
+    lego_programming --> code_naming
+    lego_programming --> code_review
+    lego_programming --> code_next_dev
 
     code_naming --> code_next_dev
 

@@ -34,13 +34,13 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `code-general` | 言語固有スキルが適用できない、または言語をまたぐ実装作業の共通原則。 | 既存構造、命名、責務境界に合わせて小さく安全な差分を作るとき。言語固有の判断では該当する言語別スキルを併用する。 |
 | `component-design` | React / Next.js / TypeScript UI の実装前に、画面構成とコンポーネント境界を設計する。 | 新規画面、大きな JSX 分割、既存 UI へのまとまった機能追加を行う前。 |
 | `documenting` | README、ADR、Runbook、API Docs、開発者向け文書を作成、更新する。 | 変更理由、影響範囲、互換性、運用注意、戻し方を未来の開発者へ残すとき。 |
+| `lego-programming` | 実装対象や差分を高凝集・疎結合な部品として境界づけ、組み合わせ、見直す。 | 実装、リファクタリング、コードレビュー、UI 分割、モジュール設計で責務分離や再利用単位を確認したいとき。 |
 
 #### ロール型スキル
 
 | Skill | 概要 | 使う場面 |
 |---|---|---|
 | `role-advisor` | 技術判断、設計相談、ベストプラクティスをテックリード視点で助言する。 | 実装を伴わず、アーキテクチャ、DB、DevOps、テスト、保守性を相談するとき。 |
-| `role-doc` | Doc として、変更理由や設計判断など未来の理解コストを下げる情報を文書化する。 | README や手順書の形式より、何を言語化すべきかの判断が重要なとき。 |
 | `role-implementer` | Implementer として、計画済みのゴールと完了条件に沿って実装する。 | Planner が整理した仕様に従い、小さく安全な差分を作るとき。 |
 | `role-planner` | Planner として、ゴール、スコープ、タスク、完了条件、リスクを整理する。 | 実装前に方針を固め、Implementer と Reviewer が迷わない計画を作るとき。 |
 | `role-reviewer` | Reviewer として、実装済み差分が仕様と品質要件を満たすか検証する。 | スコープ、公開契約、境界条件、責務違反、検証不足を確認するとき。 |
@@ -64,7 +64,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `code-naming` | 関数名、クラス名、型名、変数名などコード要素の命名候補や改善案を出す。 | 責務、抽象度、既存語彙、検索性、ユーザーの命名の好みに沿って名前を比較・改善したいとき。 |
 | `code-next-developer-review` | 次に開発する人が困らないかという観点で差分をレビューする。 | 命名、責務境界、型、テストの読みやすさ、前提知識の残し方を確認するとき。 |
 | `code-review` | 実装済み差分、PR、コミット、指定ファイルをリスク中心にレビューする。 | 仕様違反、回帰、公開契約破壊、セキュリティ、データ整合性を確認するとき。 |
-| `code-typo` | コード、diff、ファイルパス、PR 文面などの typo を指摘する。 | 設計レビューではなく、スペルミスや表記ゆれだけを確認したいとき。 |
 
 #### 思想・スタイル型スキル
 
@@ -97,6 +96,15 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `code-react` | React / JSX / TSX / `.jsx` / `.tsx` 実装向けの hooks、props、state、Atomic Design を補助観点にしたコンポーネント設計の参照。 | React 実装を書く前に、UI 実装ガイドを確認するとき。 |
 | `code-ruby` | Ruby / Rails / `.rb` 実装と RSpec / Minitest テスト向けの Active Record、MVC、設計、テスト方針の参照。 | Ruby / Rails 実装やテストを書く前に、実装ガイドを確認するとき。 |
 | `code-ts` | TypeScript / `.ts` / `.tsx` 実装向けの型設計、interface / type、strict typing、責務分離の参照。 | TypeScript 実装を書く前に、実装ガイドを確認するとき。 |
+
+### E. Deprecated Internal Skills
+
+`codex/skills/internal/deprecated/` 配下の skill は履歴保持用です。`make deploy` / `make apply` では配布されません。
+
+| Skill | 理由 |
+|---|---|
+| `code-typo` | active skill としては配布しない。 |
+| `role-doc` | active skill としては配布しない。 |
 
 ## External Skills
 
