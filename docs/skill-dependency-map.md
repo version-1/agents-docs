@@ -140,7 +140,6 @@ internal skills
 | `code-general` | `code-review` | レビューのみが目的の場合。 |
 | `component-design` | `code-review` | 実装済み差分の欠陥レビューが目的の場合。 |
 | `component-design` | `code-test` | テストケース設計だけが目的の場合。 |
-| `code-naming` | `code-typo` | typo や spelling の検査だけが目的の場合。 |
 | `code-naming` | `code-review` | バグ、仕様違反、セキュリティ、データ整合性のレビューが目的の場合。 |
 | `code-naming` | `code-general` | 実装変更やリネーム作業まで行う場合。 |
 | `code-quality-review` | `code-review` | 仕様違反、セキュリティ、データ破壊など即時欠陥の検出が主目的の場合。 |
