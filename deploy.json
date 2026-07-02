@@ -5,7 +5,9 @@
       "destination": "~/.codex/skills",
       "replace": true,
       "exclude": [
-        "**/.DS_Store"
+        "**/.DS_Store",
+        "internal/deprecated",
+        "internal/depricated"
       ]
     },
     {
@@ -50,7 +52,9 @@
       "replace": true,
       "flatten": true,
       "exclude": [
-        "**/.DS_Store"
+        "**/.DS_Store",
+        "internal/deprecated",
+        "internal/depricated"
       ]
     },
     {
