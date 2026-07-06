@@ -3,7 +3,7 @@
   "autoUpdatesChannel": "stable",
   "language": "japanese",
   "permissions": {
-    "defaultMode": "acceptEdits",
+    "defaultMode": "auto",
     "allow": [
       "Agent",
       "Bash(git *)",
@@ -147,9 +147,10 @@
     ]
   },
   "env": {
-    "EDITOR": "vim",
-    "VISUAL": "vim"
+    "EDITOR": "claude-vim",
+    "VISUAL": "claude-vim"
   },
+  "editorMode": "vim",
   "attribution": {
     "commit": "",
     "pr": ""
