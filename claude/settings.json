@@ -5,6 +5,7 @@
   "permissions": {
     "defaultMode": "acceptEdits",
     "allow": [
+      "Agent",
       "Bash(git *)",
       "Bash(gh *)",
       "Bash(tree)",
