@@ -150,7 +150,6 @@
     "EDITOR": "claude-vim",
     "VISUAL": "claude-vim"
   },
-  "editorMode": "vim",
   "attribution": {
     "commit": "",
     "pr": ""
