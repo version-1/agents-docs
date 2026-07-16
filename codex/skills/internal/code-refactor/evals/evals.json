@@ -1,0 +1,19 @@
+{
+  "skill_name": "code-refactor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "code quality report の指摘をもとに、挙動を変えずにこの差分を簡略化して。複雑度とテスト容易性を改善したい。",
+      "expected_output": "code-refactor が発火し、quality report の findings と quality gate を優先順位にして、採用するリファクタ分類の reference を読んだうえで挙動維持の小さなリファクタリングを行い、最終報告で分類ごとにやったことと検証結果を報告すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "この PR 差分を、可読性と保守性の観点でリファクタして。公開契約は変えないで。",
+      "expected_output": "レビューではなく実装反映として扱い、公開契約を維持し、Simplify、Extract、Rename、Split など該当する分類から小さく戻しやすい変更を選び、最終報告で分類ごとにやったことを示すこと。",
+      "files": [],
+      "should_fire": true
+    }
+  ]
+}
