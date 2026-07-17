@@ -19,7 +19,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | Skill | 概要 | 使う場面 |
 |---|---|---|
 | `agent-retro` | 直近のエージェント作業を振り返り、再利用可能なルールへ反映する。 | 遠回りした知見を skill、AGENTS.md、CLAUDE.md などに残したいとき。 |
-| `cmd-agent-status` | 現在のエージェント作業状況を短く報告する。 | ユーザーが「今どうなっている」「ステータス」「進捗」などを聞いたとき。 |
 | `cmd-batch` | 広範囲の調査、編集、検証を複数エージェントや並列作業へ分割する。 | 大規模変更、横断調査、複数担当への分担、統合手順の整理が必要なとき。 |
 | `cmd-commit` | 変更内容を確認し、適切な粒度とメッセージで安全に Git commit を作成する。 | commit 作成を依頼されたとき。未確認の変更や unrelated changes を含めず、stage 対象と message を整理する。 |
 | `cmd-create-pr` | GitHub Pull Request を安全な手順で作成または更新する。 | PR 作成、PR 提出、pull request 作成を依頼されたとき。差分確認、検証、commit、role-reviewer による PR 前レビュー、High 指摘の自動対応、safe-git-push、PR description 作成、gh pr create / edit の順序を整理する。 |
@@ -104,6 +103,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 | Skill | 理由 |
 |---|---|
+| `cmd-agent-status` | active skill としては配布せず、履歴保持のため deprecated へ移動した。 |
 | `code-typo` | active skill としては配布しない。 |
 | `role-doc` | active skill としては配布しない。 |
 
