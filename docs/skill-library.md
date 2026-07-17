@@ -28,7 +28,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `cmd-start-branch` | 最新のデフォルトブランチから作業ブランチを作り、不要ブランチ整理を非同期に依頼する。 | 新しい作業を始める前に「ブランチ切って」「作業開始用ブランチを作って」などを依頼されたとき。ブランチ名を報告してタスク詳細を待つ。 |
 | `beautify-commit` | ベースブランチまたは基準 commit との差分を、意味のある変更単位の commit へ安全に整理する。 | commit 分割、履歴整理、大きすぎる差分の再 commit、ベースブランチや commit hash を基準にした差分整理、interactive rebase や reset を伴う整理を依頼されたとき。 |
 | `ci-fix` | GitHub Actions / CI の失敗を調査し、原因切り分けから修正、再検証まで進める。 | CI、GitHub Actions、checks、workflow、test / lint / build failure の修正を依頼されたとき。 |
-| `code-simplifier` | 挙動を変えずにコードを簡略化、リファクタリングする。 | レビュー指摘、quality report、diff、指定ファイルをもとに可読性、保守性、テスト容易性を改善するとき。 |
+| `code-refactor` | 挙動を変えずにコードを簡略化、リファクタリングする。 | レビュー指摘、quality report、diff、指定ファイルをもとに可読性、保守性、テスト容易性を改善するとき。 |
 | `code-test` | テスト設計、回帰テスト追加、テストコードレビュー、テスト戦略を整理する。 | 正常系、異常系、境界値、flake、モック方針を検討するとき。 |
 | `code-tracer` | 特定シンボルや関数の callers / callees / both を根拠付きで追跡する。 | 呼び出し経路、影響範囲、依存関係を Markdown や Mermaid で可視化したいとき。 |
 | `code-general` | 言語固有スキルが適用できない、または言語をまたぐ実装作業の共通原則。 | 既存構造、命名、責務境界に合わせて小さく安全な差分を作るとき。言語固有の判断では該当する言語別スキルを併用する。 |

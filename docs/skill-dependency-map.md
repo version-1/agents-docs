@@ -66,7 +66,7 @@ internal skills
     ├── code-quality-review
     ├── code-next-developer-review
     │   └── code-review
-    └── code-simplifier
+    └── code-refactor
         ├── code-quality-review
         ├── code-review
         └── code-next-developer-review
@@ -127,9 +127,9 @@ internal skills
 | `lego-programming` | `code-next-developer-review` | 実装済み差分の境界が次の開発者に伝わるか確認したい場合に併用する。 |
 | `code-naming` | `code-next-developer-review` | 次に開発する人の理解しやすさ全体を見る場合に併用する。 |
 | `code-next-developer-review` | `code-review` | 欠陥や重大リスクを見つけた場合に通常レビュー観点として分ける。 |
-| `code-simplifier` | `code-quality-review` | 品質レポートや quality gate の観点から改善候補を拾う。 |
-| `code-simplifier` | `code-review` | 可読性、効率性、テスト容易性などのレビュー観点として使う。 |
-| `code-simplifier` | `code-next-developer-review` | 保守性や次の開発者の理解しやすさの観点として使う。 |
+| `code-refactor` | `code-quality-review` | 品質レポートや quality gate の観点から改善候補を拾う。 |
+| `code-refactor` | `code-review` | 可読性、効率性、テスト容易性などのレビュー観点として使う。 |
+| `code-refactor` | `code-next-developer-review` | 保守性や次の開発者の理解しやすさの観点として使う。 |
 
 ## 優先・ルーティング関係
 
@@ -203,9 +203,9 @@ graph TD
 
     code_next_dev --> code_review
 
-    code_simplifier["code-simplifier"] --> code_quality["code-quality-review"]
-    code_simplifier --> code_review
-    code_simplifier --> code_next_dev
+    code_refactor["code-refactor"] --> code_quality["code-quality-review"]
+    code_refactor --> code_review
+    code_refactor --> code_next_dev
 ```
 
 ## 更新ルール
