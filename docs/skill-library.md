@@ -35,6 +35,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `component-design` | React / Next.js / TypeScript UI の実装前に、画面構成とコンポーネント境界を設計する。 | 新規画面、大きな JSX 分割、既存 UI へのまとまった機能追加を行う前。 |
 | `documenting` | README、ADR、Runbook、API Docs、開発者向け文書を作成、更新する。 | 変更理由、影響範囲、互換性、運用注意、戻し方を未来の開発者へ残すとき。 |
 | `lego-programming` | 実装対象や差分を高凝集・疎結合な部品として境界づけ、組み合わせ、見直す。 | 実装、リファクタリング、コードレビュー、UI 分割、モジュール設計で責務分離や再利用単位を確認したいとき。 |
+| `modification-design` | 実装前に変更後の責務、公開 interface、contract、依存構造、影響、リスクを自然言語で設計する。 | Plan や実装手順ではなく、変更後のシステム構造をレビュー可能な形で固めたいとき。 |
 
 #### ロール型スキル
 

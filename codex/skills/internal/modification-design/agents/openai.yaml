@@ -1,0 +1,4 @@
+interface:
+  display_name: "modification-design"
+  short_description: "実装前に変更後の責務・契約・依存構造を設計"
+  default_prompt: "Use $modification-design to describe the post-change system structure, responsibilities, interfaces, contracts, dependencies, impacts, and risks before implementation."
