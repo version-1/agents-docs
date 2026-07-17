@@ -1,0 +1,23 @@
+{
+  "skill_name": "modification-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "既存のユーザー取得 API にメールアドレスとパスワードによるログインを追加したいです。Controller が直接 Repository を呼んでいる構成から、認証ロジックを Service に分離し、JWT 発行は専用サービスへ委譲する変更後設計を作ってください。まだコードは書かないでください。",
+      "expected_output": "8章構成で、Controller、認証 Service、Repository、JWT Service、Login API の変更後責務、公開 interface、request / response contract、依存方向、影響、具体的リスクを示し、実装手順やコードを含めない。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "React の注文一覧画面にステータスフィルターを追加します。URL query を状態の正とし、一覧取得 hook が query を API request に変換します。既存 API の response は変えません。実装前に Modification Design をまとめてください。",
+      "expected_output": "Page、filter component、query state、data-fetching hook、API client をレゴとして整理し、props / query / request contract の変更と response contract の変更なしを明記する。component 実装手順やコードは含めない。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "バッチ処理が直接 DB に保存している通知データを、イベント発行に置き換える案を設計レビューしたいです。ただしイベント schema、配送保証、consumer はまだ決まっていません。分かっている範囲で変更後設計を作り、決められない点も明確にしてください。",
+      "expected_output": "未確定事項を事実として補完せず、producer、event contract、transport、consumer、永続化責務の候補境界を整理する。contract 未確定による設計上の保留とリスクを明示し、一般的な実装計画へ逸れない。",
+      "files": []
+    }
+  ]
+}

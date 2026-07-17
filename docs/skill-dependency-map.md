@@ -61,6 +61,8 @@ internal skills
     │   ├── code-naming
     │   ├── code-review
     │   └── code-next-developer-review
+    ├── modification-design
+    │   └── lego-programming
     ├── code-naming
     │   └── code-next-developer-review
     ├── code-quality-review
@@ -125,6 +127,7 @@ internal skills
 | `lego-programming` | `code-naming` | 作成した部品の責務を表す名前で迷う場合に併用する。 |
 | `lego-programming` | `code-review` | 実装済み差分をレビューする場合に、仕様違反や回帰リスクと部品境界の問題を分けて扱うため併用する。 |
 | `lego-programming` | `code-next-developer-review` | 実装済み差分の境界が次の開発者に伝わるか確認したい場合に併用する。 |
+| `modification-design` | `lego-programming` | 変更対象を高凝集・疎結合なレゴとして整理し、責務と依存方向を定義するために併用する。 |
 | `code-naming` | `code-next-developer-review` | 次に開発する人の理解しやすさ全体を見る場合に併用する。 |
 | `code-next-developer-review` | `code-review` | 欠陥や重大リスクを見つけた場合に通常レビュー観点として分ける。 |
 | `code-refactor` | `code-quality-review` | 品質レポートや quality gate の観点から改善候補を拾う。 |
@@ -147,6 +150,9 @@ internal skills
 | `code-review` | `code-general` | 具体的なコード変更の実装方法を相談する場合。 |
 | `code-review` | `code-quality-review` | 将来的な変更容易性やコード品質を重点的に見る場合。 |
 | `code-react` | `component-design` | 画面構成、大きな JSX 分割、component tree、実装順序を先に整理する必要がある場合。 |
+| `modification-design` | `role-planner` | 変更後の構造ではなく、実装手順、タスクリスト、Definition of Done が主目的の場合。 |
+| `modification-design` | `component-design` | React UI の詳細な component tree、props、hooks、状態管理が主目的の場合。 |
+| `modification-design` | `code-review` | 実装前設計ではなく、実装済み差分の欠陥検出が主目的の場合。 |
 
 ## Mermaid 図
 
@@ -198,6 +204,8 @@ graph TD
     lego_programming --> code_naming
     lego_programming --> code_review
     lego_programming --> code_next_dev
+
+    modification_design["modification-design"] --> lego_programming
 
     code_naming --> code_next_dev
 
