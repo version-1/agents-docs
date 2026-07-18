@@ -48,3 +48,9 @@ make deploy
 
 - deploy コマンドの詳細: [scripts/deploy/README.md](scripts/deploy/README.md)
 - レポジトリ設計: [docs/design.md](docs/design.md)
+
+## ライセンス
+
+このリポジトリの内容は Apache License 2.0 のもとで利用できます。
+
+改変した内容を公開・配布する場合は、可能であればブログ、README、ドキュメントなどで、このリポジトリに多少なりとも触れてもらえるとうれしいです。このお願いはライセンス条件ではなく、任意のクレジットとしての希望です。
