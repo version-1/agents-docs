@@ -1,4 +1,4 @@
 interface:
   display_name: "code-quality-review"
-  short_description: "定量シグナル込みの code quality report"
-  default_prompt: "Use $code-quality-review to review this diff as a code quality report, incorporating quantitative signals such as complexity, coverage, duplication, lint/static analysis when available, and focusing on maintainability, design health, testability, and technical debt."
+  short_description: "品質問題を敵対的検証する code quality report"
+  default_prompt: "Use $code-quality-review to review this diff as a code quality report, incorporating quantitative signals such as complexity, coverage, duplication, lint/static analysis when available, and doing adversarial validation of conditions where quality issues could surface in future changes, testing, or operations."

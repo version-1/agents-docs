@@ -62,7 +62,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | Skill | 概要 | 使う場面 |
 |---|---|---|
 | `code-naming` | 関数名、クラス名、型名、変数名などコード要素の命名候補や改善案を出す。 | 責務、抽象度、既存語彙、検索性、ユーザーの命名の好みに沿って名前を比較・改善したいとき。 |
-| `code-next-developer-review` | 次に開発する人が困らないかという観点で差分をレビューする。 | 命名、責務境界、型、テストの読みやすさ、前提知識の残し方を確認するとき。 |
+| `code-next-developer-review` | 次に開発する人が困らないかという観点で差分をレビューする。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、命名、責務境界、型、テストの読みやすさ、前提知識の残し方を確認するとき。 |
 | `code-review` | 実装済み差分、PR、コミット、指定ファイルをリスク中心にレビューする。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、仕様違反、回帰、公開契約破壊、セキュリティ、データ整合性を確認するとき。 |
 
 #### 思想・スタイル型スキル
@@ -73,7 +73,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 | Skill | 概要 | 使う場面 |
 |---|---|---|
-| `code-quality-review` | code quality report として、定量シグナル、品質スコア、scorecard、quality gate を整理する。 | complexity、coverage、重複率、lint などを補助証拠にしつつ、merge 前対応と follow-up の判断材料にしたいとき。 |
+| `code-quality-review` | code quality report として、定量シグナル、品質スコア、scorecard、quality gate を整理する。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、complexity、coverage、重複率、lint などを補助証拠にしつつ、merge 前対応と follow-up の判断材料にしたいとき。 |
 
 ### C. 制約定義型
 
