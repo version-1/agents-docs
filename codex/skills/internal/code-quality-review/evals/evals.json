@@ -21,6 +21,13 @@
       "expected_output": "merge 前対応、follow-up、対応不要が分かれた Quality Gate と、設計品質・テスト品質・観測可能性・定量シグナルの scorecard が出ること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この差分を品質レビューして。metric や正常系テストを鵜呑みにせず、将来の変更や運用で品質問題が出る条件を敵対的検証して。",
+      "expected_output": "code-quality-review が発火し、将来の変更・テスト・運用で品質問題が表面化する条件について敵対的検証を行い、Quality Signals、Scorecard、Findings、Quality Gate を根拠付きで出すこと。",
+      "files": [],
+      "should_fire": true
     }
   ]
 }

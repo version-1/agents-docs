@@ -14,6 +14,13 @@
       "expected_output": "code-next-developer-review が発火し、欠陥検出ではなく、責務境界、命名、型・契約、テストの読みやすさ、ローカル検証のしやすさを確認すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "次に開発する人の立場でレビューして。実装者の前提を鵜呑みにせず、後続開発で詰まる条件を敵対的検証して。",
+      "expected_output": "code-next-developer-review が発火し、後続開発で前提が崩れる状況について敵対的検証を行い、次の開発者が困る点、足りない手がかり、通常レビューへ回すべき即時リスクを分けて出すこと。",
+      "files": [],
+      "should_fire": true
     }
   ]
 }

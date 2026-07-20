@@ -14,6 +14,13 @@
       "expected_output": "Reviewer ロールとして扱い、安心してマージできるかのリスク探索を行い、High / Medium / Low の懸念と不足検証を整理すること。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "Reviewer として、実装者の前提や正常系中心の説明に見落としがないか疑ってレビューして。",
+      "expected_output": "role-reviewer が発火し、実装者の前提を鵜呑みにせず、敵対的検証を行う基本姿勢で、入力、順序、権限、並行実行、外部依存失敗などの失敗条件を想定し、根拠付きでリスクと不足検証を整理すること。",
+      "files": [],
+      "should_fire": true
     }
   ]
 }
