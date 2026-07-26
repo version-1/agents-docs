@@ -14,6 +14,13 @@
       "expected_output": "Implementer ロールとして扱い、指示通りに実装し、スコープ外改善を持ち込まず、必要な検証を行うこと。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "実装方針として同期処理と非同期処理のどちらを採用すべきか、計画には明記されていません。Implementer として進めてください。",
+      "expected_output": "実装方針の判断を独断で行わず、role-advisor を使って Advisor に指示を仰ぐこと。",
+      "files": [],
+      "should_fire": true
     }
   ]
 }
