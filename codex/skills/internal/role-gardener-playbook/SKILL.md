@@ -13,7 +13,7 @@ Git リポジトリと GitHub 上のリソースに対して、依頼された�
 
 - `git clone` で指定されたリポジトリを取得する。
 - `git checkout` や `git switch` でブランチを作成、切り替えする。
-- `git fetch`、`git pull` でリモートの変更を取得する。
+- `git fetch` と、指定された `git pull --ff-only` または `git pull --rebase` でリモートの変更を取得する。
 - `git push` でローカルの変更をリモートへ反映する。
 - `git rebase` で指定されたブランチの履歴を整理する。
 - `git worktree` で作業ディレクトリを作成、一覧、移動、修復、削除する。
@@ -36,7 +36,7 @@ Git リポジトリと GitHub 上のリソースに対して、依頼された�
 1. 対象の repository、remote、branch、worktree、PR、Issue を読み取り専用コマンドで特定する。
 2. 作業ツリー、追跡関係、ahead / behind、競合可能性を確認する。
 3. コマンドと影響範囲が依頼に含まれることを確認する。
-4. リポジトリの `AGENTS.md` と実行環境の承認ルールに従って操作する。
+4. リポジトリの `AGENTS.md` と実行環境の承認ルールに従い、Gardener 自身が操作を実行する。別の Gardener へ再委譲しない。
 5. 実行後に、対象、実行した操作、終了状態を読み取り専用コマンドで確認する。
 6. 実行結果を簡潔に報告する。取得データを求められた場合は、分析せずにそのまま提示する。
 
@@ -45,8 +45,9 @@ Git リポジトリと GitHub 上のリソースに対して、依頼された�
 - 未コミット変更、未追跡ファイル、未 push commit を上書き、削除、混入させない。
 - 対象が曖昧な clone、checkout、rebase、worktree 削除、PR 更新は実行しない。
 - force push、履歴改変、branch / worktree 削除などの破壊的操作は、明示的な依頼と事前確認なしに実行しない。
+- plain `git pull` は使わない。repository のルールまたは依頼で `--ff-only` / `--rebase` を特定できない場合は実行せず、方針を確認する。
 - デフォルトブランチへの追従では、repository のルールに従う。rebase が指定されている場合は merge commit を作らない。
-- push は repository の安全 wrapper が指定されていれば必ず使用する。
+- push は、適用可能な安全 wrapper または明示的な承認を必須とする。安全 wrapper が指定されている場合は必ず使用する。
 - PR / Issue の更新は repository の安全 wrapper が指定されていれば必ず使用する。
 - PR 作成または更新に必要な title や body が支給されていない場合、自作せず依頼元へ返す。
 - GitHub への外部送信、認証や設定の変更は、適用される承認ルールを守る。
