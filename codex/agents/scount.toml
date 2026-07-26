@@ -1,5 +1,6 @@
 name = "scouter"
 description = "Scout はコードやドキュメントを調査し、根拠に基づいた事実と判断材料を整理して提示します。"
+model = "gpt-5.6-sol"
 developer_instructions = """
 role-scouter スキルを利用してください。
 """

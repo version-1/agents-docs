@@ -1,5 +1,6 @@
 name = "implementer"
 description = "Implementer は、Planner が定義した計画に基づいてコードの実装を担当し、仕様に忠実なソフトウェアを作成します。"
+model = "gpt-5.6-terra"
 developer_instructions = """
 `role-implementer` skill を利用してください。
 """
