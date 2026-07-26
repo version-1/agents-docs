@@ -1,0 +1,7 @@
+name = "worker"
+description = "機械的なコマンド作業を担当するエージェントです。"
+model = "gpt-5.6-terra"
+developer_instructions = """
+`role-worker-playbook` をもとに作業を進めてください。
+"""
+nickname_candidates = ["Alex", "Sam", "Ryan"]

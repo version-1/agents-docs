@@ -56,6 +56,10 @@ Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、
 - `make deploy` で Codex / Claude 用の設定、agent、skill、prompt、rule を配布します。
 - `make apply` は `make deploy` の別名です。
 
+## ブランチ運用
+
+- 作業ブランチをデフォルトブランチの最新状態へ追従させるときは、merge ではなく rebase を使用します。
+
 ## 配布時の確認
 
 通常は、次の順で実行します。

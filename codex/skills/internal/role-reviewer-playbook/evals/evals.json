@@ -1,10 +1,10 @@
 {
-  "skill_name": "role-reviewer",
+  "skill_name": "role-reviewer-playbook",
   "evals": [
     {
       "id": 1,
       "prompt": "Reviewer として、この実装済み差分が仕様と品質要件を満たしているか検証して。",
-      "expected_output": "role-reviewer が発火し、実際の diff を起点に、リスク、回帰、境界条件、責務違反、検証不足を根拠付きで言語化すること。",
+      "expected_output": "role-reviewer-playbook が発火し、実際の diff を起点に、リスク、回帰、境界条件、責務違反、検証不足を根拠付きで言語化すること。",
       "files": [],
       "should_fire": true
     },
@@ -18,7 +18,7 @@
     {
       "id": 3,
       "prompt": "Reviewer として、実装者の前提や正常系中心の説明に見落としがないか疑ってレビューして。",
-      "expected_output": "role-reviewer が発火し、実装者の前提を鵜呑みにせず、敵対的検証を行う基本姿勢で、入力、順序、権限、並行実行、外部依存失敗などの失敗条件を想定し、根拠付きでリスクと不足検証を整理すること。",
+      "expected_output": "role-reviewer-playbook が発火し、実装者の前提を鵜呑みにせず、敵対的検証を行う基本姿勢で、入力、順序、権限、並行実行、外部依存失敗などの失敗条件を想定し、根拠付きでリスクと不足検証を整理すること。",
       "files": [],
       "should_fire": true
     }

@@ -1,0 +1,12 @@
+{
+  "skill_name": "role-worker-playbook",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "指定されたテストコマンドを実行して、結果だけを簡潔に報告して。失敗したら判断せずに失敗内容を返して。",
+      "expected_output": "role-worker-playbook が発火し、既存の安全制約を守って明確に定義されたコマンド作業を行い、実行内容と結果を簡潔に報告すること。",
+      "files": [],
+      "should_fire": true
+    }
+  ]
+}

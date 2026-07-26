@@ -1,10 +1,10 @@
 {
-  "skill_name": "role-planner",
+  "skill_name": "role-planner-playbook",
   "evals": [
     {
       "id": 1,
       "prompt": "Planner として、この機能追加のゴール、スコープ、タスク、Definition of Done を整理して。",
-      "expected_output": "role-planner が発火し、実装コードや diff を出さず、ゴール、タスク、DoD、in/out scope、リスク、未解決事項を整理すること。",
+      "expected_output": "role-planner-playbook が発火し、実装コードや diff を出さず、ゴール、タスク、DoD、in/out scope、リスク、未解決事項を整理すること。",
       "files": [],
       "should_fire": true
     },

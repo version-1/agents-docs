@@ -27,9 +27,9 @@ internal skills
 │       ├── code-test
 │       └── cmd-create-pr
 ├── role
-│   ├── role-reviewer
+│   ├── role-reviewer-playbook
 │   │   └── code-review
-│   └── role-implementer
+│   └── role-implementer-playbook
 │       └── code-general
 └── code work
     ├── code-general
@@ -94,8 +94,8 @@ internal skills
 
 | Skill | 依存先 | 関係 |
 |---|---|---|
-| `role-reviewer` | `code-review` | Reviewer として検証するとき、通常レビュー観点も併せて参照する。 |
-| `role-implementer` | `code-general` | Implementer として実装するときの基本方針として併用する。 |
+| `role-reviewer-playbook` | `code-review` | Reviewer agent が検証するとき、通常レビュー観点も併せて参照する。 |
+| `role-implementer-playbook` | `code-general` | Implementer agent が実装するときの基本方針として併用する。 |
 
 ## コード作業系
 
@@ -173,8 +173,8 @@ graph TD
     ci_fix --> code_test["code-test"]
     ci_fix --> cmd_create_pr
 
-    role_reviewer --> code_review
-    role_implementer["role-implementer"] --> code_general["code-general"]
+    role_reviewer_playbook["role-reviewer-playbook"] --> code_review
+    role_implementer_playbook["role-implementer-playbook"] --> code_general["code-general"]
 
     code_general --> code_naming["code-naming"]
     code_general --> code_go["code-go"]

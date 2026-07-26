@@ -1,10 +1,10 @@
 {
-  "skill_name": "role-advisor",
+  "skill_name": "role-advisor-playbook",
   "evals": [
     {
       "id": 1,
       "prompt": "この API 設計、同期処理と非同期ジョブのどちらがよいか技術判断を相談したい。実装はまだ不要です。",
-      "expected_output": "role-advisor が発火し、推奨方針、理由、代替案、注意点、具体的な次の一手を実務的な助言として返すこと。",
+      "expected_output": "role-advisor-playbook が発火し、推奨方針、理由、代替案、注意点、具体的な次の一手を実務的な助言として返すこと。",
       "files": [],
       "should_fire": true
     },

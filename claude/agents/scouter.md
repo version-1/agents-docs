@@ -1,8 +1,8 @@
 ---
 name: scouter
-description: Scout エージェントの役割を定義します。Scout はコードやドキュメントを調査し、根拠に基づいた事実と判断材料を整理して提示します。
+description: コード、設定、ドキュメントの調査を担当するエージェントです。
+model: opus
 tools: Read, Grep, Glob, Bash
 ---
 
-`role-scouter` スキルを利用してください。
-
+`role-scouter-playbook` をもとに作業を進めてください。

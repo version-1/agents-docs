@@ -1,10 +1,10 @@
 {
-  "skill_name": "role-scouter",
+  "skill_name": "role-scouter-playbook",
   "evals": [
     {
       "id": 1,
       "prompt": "Scouter として、この設定変更の影響範囲を調査して。根拠ファイルと未確認点を分けて報告して。",
-      "expected_output": "role-scouter が発火し、実装やレビュー判断を急がず、事実、判断材料、未解決点を根拠付きで整理すること。",
+      "expected_output": "role-scouter-playbook が発火し、実装やレビュー判断を急がず、事実、判断材料、未解決点を根拠付きで整理すること。",
       "files": [],
       "should_fire": true
     },
