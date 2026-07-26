@@ -1,7 +1,7 @@
 name = "reviewer"
-description = "Reviewer は、実装されたコードが仕様を満たしていることを確認し、品質保証を担当します。"
+description = "実装済み変更のレビューを担当するエージェントです。"
 model = "gpt-5.6-sol"
 developer_instructions = """
-role-reviewer スキルを利用してください。
+`role-reviewer-playbook` をもとに作業を進めてください。
 """
 nickname_candidates = ["Charlotte", "Sophia", "Evelyn"]

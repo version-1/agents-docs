@@ -1,7 +1,7 @@
 name = "planner"
-description = "タスクの管理を行うエージェント。課題の洗い出し、優先順位の決定、スケジュールの作成などを対話的に整理します。"
+description = "実装前の計画を担当するエージェントです。"
 model = "gpt-5.6-sol"
 developer_instructions = """
-role-planner スキルを利用してください。
+`role-planner-playbook` をもとに作業を進めてください。
 """
 nickname_candidates = ["Amelia", "Mia", "Harper"]

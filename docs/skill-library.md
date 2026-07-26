@@ -40,11 +40,18 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 | Skill | 概要 | 使う場面 |
 |---|---|---|
-| `role-advisor` | 技術判断、設計相談、ベストプラクティスをテックリード視点で助言する。 | 実装を伴わず、アーキテクチャ、DB、DevOps、テスト、保守性を相談するとき。 |
-| `role-implementer` | Implementer として、計画済みのゴールと完了条件に沿って実装する。 | Planner が整理した仕様に従い、小さく安全な差分を作るとき。 |
-| `role-planner` | Planner として、ゴール、スコープ、タスク、完了条件、リスクを整理する。 | 実装前に方針を固め、Implementer と Reviewer が迷わない計画を作るとき。 |
-| `role-reviewer` | Reviewer として、実装済み差分が仕様と品質要件を満たすか検証する。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、スコープ、公開契約、境界条件、責務違反、検証不足を確認するとき。 |
-| `role-scouter` | Scouter として、コード、ドキュメント、設定、履歴を調査し判断材料を集める。 | 実装やレビュー判断の前に、不確実性を下げるための根拠収集をするとき。 |
+| `role-advisor` | `advisor` agent へ技術助言を委譲する。 | 技術判断や設計相談が必要なとき。 |
+| `role-advisor-playbook` | Advisor agent の助言方針を定義する。 | `advisor` agent が技術助言を行うとき。 |
+| `role-implementer` | `implementer` agent へ実装を委譲する。 | 計画に沿ったコード実装が必要なとき。 |
+| `role-implementer-playbook` | Implementer agent の実装方針を定義する。 | `implementer` agent が実装を行うとき。 |
+| `role-planner` | `planner` agent へ計画作成を委譲する。 | 実装前の計画整理が必要なとき。 |
+| `role-planner-playbook` | Planner agent の計画方針を定義する。 | `planner` agent が計画を作成するとき。 |
+| `role-reviewer` | `reviewer` agent へレビューを委譲する。 | 実装済み変更のレビューが必要なとき。 |
+| `role-reviewer-playbook` | Reviewer agent のレビュー方針を定義する。 | `reviewer` agent がレビューを行うとき。 |
+| `role-scouter` | `scouter` agent へ調査を委譲する。 | コードや設定の調査が必要なとき。 |
+| `role-scouter-playbook` | Scouter agent の調査方針を定義する。 | `scouter` agent が調査を行うとき。 |
+| `role-worker` | `worker` agent へ機械的な作業を委譲する。 | コマンド実行、定型操作、検証が必要なとき。 |
+| `role-worker-playbook` | Worker agent の機械的な作業方針を定義する。 | `worker` agent がコマンド作業や検証を行うとき。 |
 
 #### 出力フォーマット型スキル
 
