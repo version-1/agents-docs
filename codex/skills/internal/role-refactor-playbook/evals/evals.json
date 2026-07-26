@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-refactor-playbook",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "このサービスの長いメソッドを分割して読みやすくして。公開 API と振る舞いは変えないで。",
+      "expected_output": "既存の振る舞いと公開契約を確認した Modification Design を作成し、role-implementer へ引き継いだ実装を role-reviewer に確認させること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "この重複ロジックを共通化したいが、利用者への影響とどの API を残すべきか判断できません。",
+      "expected_output": "挙動維持を保証できない設計判断として、独断で実装せず role-advisor を使って指示を仰ぐこと。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "300 行を超えるファイルに 60 行の関数があり、深い条件分岐と複数の責務が混在しています。機能を変えずに改善してください。",
+      "expected_output": "ファイル長、関数長、深い分岐、責務の混在を改善シグナルとして扱い、Modification Design、role-implementer、role-reviewer のサイクルを必要に応じて反復すること。",
+      "files": [],
+      "should_fire": true
+    }
+  ]
+}
