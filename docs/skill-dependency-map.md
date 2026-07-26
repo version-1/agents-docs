@@ -29,8 +29,16 @@ internal skills
 ├── role
 │   ├── role-reviewer-playbook
 │   │   └── code-review
+│   ├── role-refactor-playbook
+│   │   ├── code-refactor
+│   │   ├── modification-design
+│   │   ├── role-planner
+│   │   ├── role-implementer
+│   │   ├── role-reviewer
+│   │   └── role-advisor
 │   └── role-implementer-playbook
-│       └── code-general
+│       ├── code-general
+│       └── role-advisor
 └── code work
     ├── code-general
     │   ├── code-naming
@@ -95,7 +103,14 @@ internal skills
 | Skill | 依存先 | 関係 |
 |---|---|---|
 | `role-reviewer-playbook` | `code-review` | Reviewer agent が検証するとき、通常レビュー観点も併せて参照する。 |
+| `role-refactor-playbook` | `code-refactor` | Modification Design の根拠となる改善シグナルと既存の振る舞いを分析する。 |
+| `role-refactor-playbook` | `modification-design` | Refactor agent が変更後の責務、境界、依存方向を設計するときに併用する。 |
+| `role-refactor-playbook` | `role-planner` | Modification Design を実装可能なゴール、スコープ、DoD、検証条件へ整理する。 |
+| `role-refactor-playbook` | `role-implementer` | Modification Design を実装へ引き継ぐ。 |
+| `role-refactor-playbook` | `role-reviewer` | 実装結果が設計と既存の振る舞いを満たすか確認する。 |
+| `role-refactor-playbook` | `role-advisor` | 挙動維持を保証できない設計判断が必要なときに指示を仰ぐ。 |
 | `role-implementer-playbook` | `code-general` | Implementer agent が実装するときの基本方針として併用する。 |
+| `role-implementer-playbook` | `role-advisor` | 実装方針や技術選定で判断が必要なときに指示を仰ぐ。 |
 
 ## コード作業系
 
@@ -174,7 +189,14 @@ graph TD
     ci_fix --> cmd_create_pr
 
     role_reviewer_playbook["role-reviewer-playbook"] --> code_review
+    role_refactor_playbook["role-refactor-playbook"] --> code_refactor["code-refactor"]
+    role_refactor_playbook["role-refactor-playbook"] --> modification_design["modification-design"]
+    role_refactor_playbook --> role_planner["role-planner"]
+    role_refactor_playbook --> role_implementer["role-implementer"]
+    role_refactor_playbook --> role_reviewer
+    role_refactor_playbook --> role_advisor["role-advisor"]
     role_implementer_playbook["role-implementer-playbook"] --> code_general["code-general"]
+    role_implementer_playbook --> role_advisor
 
     code_general --> code_naming["code-naming"]
     code_general --> code_go["code-go"]

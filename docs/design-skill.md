@@ -10,3 +10,17 @@ prefix はスキルのカテゴリを表すことが多いですが、必須で�
 - knowledge-*: 知識ベースやドキュメントを表すスキル
 
 出力フォーマット型 skill の `format-*` prefix など、カテゴリ別の命名方針は [`docs/guide/skill-category.md`](guide/skill-category.md) を参照してください。
+
+## Role skill と agent/playbook の構造
+
+role 系は、委譲の入口、実行主体、作業手順を分けて定義します。
+
+```text
+role-<name> → <name> agent → role-<name>-playbook
+```
+
+- `role-<name>` は対応する agent を起動する入口です。agent 名を示すだけに留め、作業手順や判断基準は書きません。
+- `codex/agents/<name>.toml` と `claude/agents/<name>.md` は agent のモデル、利用可能なツール、簡潔な説明を定義します。agent 本文には `role-<name>-playbook` を使って作業することだけを書きます。
+- `role-<name>-playbook` は agent が実行する作業手順、判断基準、併用 skill、出力・検証の期待値を定義します。
+
+新しい role を追加・変更するときは、この 3 層を同時に更新し、同じ内容を複数の層へ重複して書かないでください。
