@@ -1,4 +1,4 @@
-model = "gpt-5.6-sol"
+model = "gpt-5.6-terra"
 personality = "pragmatic"
 web_search = "live"
 
