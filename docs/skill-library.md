@@ -42,6 +42,8 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 |---|---|---|
 | `role-advisor` | `advisor` agent へ技術助言を委譲する。 | 技術判断や設計相談が必要なとき。 |
 | `role-advisor-playbook` | Advisor agent の助言方針を定義する。 | `advisor` agent が技術助言を行うとき。 |
+| `role-gardener` | `gardener` agent へ Git / GitHub 操作を委譲する。 | 内容の解釈を伴わない repository、branch、worktree、PR、Issue の操作が必要なとき。 |
+| `role-gardener-playbook` | Gardener agent の Git / GitHub 操作方針と責務境界を定義する。 | `gardener` agent が Git / GitHub の機械操作を行うとき。 |
 | `role-implementer` | `implementer` agent へ実装を委譲する。 | 計画に沿ったコード実装が必要なとき。 |
 | `role-implementer-playbook` | Implementer agent の実装方針を定義する。 | `implementer` agent が実装を行うとき。 |
 | `role-planner` | `planner` agent へ計画作成を委譲する。 | 実装前の計画整理が必要なとき。 |

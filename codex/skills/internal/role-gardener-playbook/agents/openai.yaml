@@ -1,0 +1,4 @@
+interface:
+  display_name: "role-gardener-playbook"
+  short_description: "Gardener agent の Git・GitHub 操作方針と安全境界を定義する"
+  default_prompt: "$role-gardener-playbook を使って、指定された Git・GitHub 操作だけを安全に実行してください。"
