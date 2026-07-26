@@ -1,5 +1,6 @@
 name = "reviewer"
 description = "Reviewer は、実装されたコードが仕様を満たしていることを確認し、品質保証を担当します。"
+model = "gpt-5.6-sol"
 developer_instructions = """
 role-reviewer スキルを利用してください。
 """

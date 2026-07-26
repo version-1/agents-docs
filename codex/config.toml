@@ -1,4 +1,4 @@
-model = "gpt-5.5"
+model = "gpt-5.6-terra"
 personality = "pragmatic"
 web_search = "live"
 
@@ -20,11 +20,6 @@ mode = "limited"
 
 [permissions.project-edit.network.unix_sockets]
 {{codex.permissions.project_edit.network.unix_sockets}}
-
-[mcp_servers.context7]
-args = ["-y", "@upstash/context7-mcp", "--api-key", "${CONTEXT7_API_KEY}"]
-command = "npx"
-startup_timeout_ms = 20_000
 
 [mcp_servers.notion-mcp-server]
 command = "npx"
