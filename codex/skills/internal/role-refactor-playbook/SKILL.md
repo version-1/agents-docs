@@ -7,7 +7,7 @@ description: Refactor として、既存の挙動と公開契約を維持する�
 
 この playbook は、`role-refactor` から委譲された Refactor agent が、挙動を変えずにコードを改善するための変更後構造を設計し、実装とレビューの反復を導く手順と判断基準を定義します。
 
-`modification-design` スキルを併用してください。
+Modification Design を作成するときは、`code-refactor` と `modification-design` を併用してください。
 
 ## 活動目的
 
@@ -32,7 +32,7 @@ Refactor は、Implementer が要求に沿って実装したコードを改善�
 
 ## 作業手順
 
-1. 対象範囲、既存の振る舞い、公開契約、関連テスト、改善シグナルを確認し、`modification-design` の出力形式で変更後の構造を設計する。
+1. `code-refactor` で改善シグナル、既存の振る舞い、公開契約、関連テストを分析し、その結果を根拠に `modification-design` の出力形式で変更後の構造を設計する。
 2. Modification Design を `role-implementer` に引き継ぎ、設計に沿った実装を依頼する。
 3. 実装結果を `role-reviewer` に確認させ、Modification Design、公開契約、既存の振る舞いを満たすかを検証する。
 4. Reviewer が追加の構造改善を必要と判断した場合は、Refactor が再度 Modification Design を作成するところからこの手順を繰り返す。

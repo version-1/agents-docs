@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "このサービスの長いメソッドを分割して読みやすくして。公開 API と振る舞いは変えないで。",
-      "expected_output": "既存の振る舞いと公開契約を確認した Modification Design を作成し、role-implementer へ引き継いだ実装を role-reviewer に確認させること。",
+      "expected_output": "code-refactor で既存の振る舞いと公開契約を分析したうえで Modification Design を作成し、role-implementer へ引き継いだ実装を role-reviewer に確認させること。",
       "files": [],
       "should_fire": true
     },

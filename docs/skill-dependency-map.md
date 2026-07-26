@@ -30,6 +30,7 @@ internal skills
 │   ├── role-reviewer-playbook
 │   │   └── code-review
 │   ├── role-refactor-playbook
+│   │   ├── code-refactor
 │   │   ├── modification-design
 │   │   ├── role-implementer
 │   │   ├── role-reviewer
@@ -101,6 +102,7 @@ internal skills
 | Skill | 依存先 | 関係 |
 |---|---|---|
 | `role-reviewer-playbook` | `code-review` | Reviewer agent が検証するとき、通常レビュー観点も併せて参照する。 |
+| `role-refactor-playbook` | `code-refactor` | Modification Design の根拠となる改善シグナルと既存の振る舞いを分析する。 |
 | `role-refactor-playbook` | `modification-design` | Refactor agent が変更後の責務、境界、依存方向を設計するときに併用する。 |
 | `role-refactor-playbook` | `role-implementer` | Modification Design を実装へ引き継ぐ。 |
 | `role-refactor-playbook` | `role-reviewer` | 実装結果が設計と既存の振る舞いを満たすか確認する。 |
@@ -185,6 +187,7 @@ graph TD
     ci_fix --> cmd_create_pr
 
     role_reviewer_playbook["role-reviewer-playbook"] --> code_review
+    role_refactor_playbook["role-refactor-playbook"] --> code_refactor["code-refactor"]
     role_refactor_playbook["role-refactor-playbook"] --> modification_design["modification-design"]
     role_refactor_playbook --> role_implementer["role-implementer"]
     role_refactor_playbook --> role_reviewer
