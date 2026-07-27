@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-planner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "この機能追加について、実装前にゴール、in/out scope、タスク、依存関係、リスク、DoD を整理して。",
+      "expected_output": "role-planner が発火し、実装前の計画作成を Planner agent へ委譲すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "この障害の原因と影響範囲をコードと設定から調べ、根拠ファイルを示して。",
+      "expected_output": "事実調査依頼なので role-planner は発火せず、role-scouter を優先すること。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "実装計画の前に、同期 API と非同期ジョブのどちらを採用すべきか、トレードオフを評価して推奨して。",
+      "expected_output": "技術判断の助言依頼なので role-planner は発火せず、role-advisor を優先すること。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}

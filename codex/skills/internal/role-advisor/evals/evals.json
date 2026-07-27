@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-advisor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "この認証基盤はセッション方式と JWT のどちらにすべきか、実装前にトレードオフを含めて専門家へ相談したい。",
+      "expected_output": "role-advisor が発火し、技術選定とトレードオフの助言を Advisor agent へ委譲すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "採用技術は決まっています。実装はまだせず、ゴール、タスク、依存関係、Definition of Done を計画にまとめて。",
+      "expected_output": "技術判断ではなく計画作成依頼なので role-advisor は発火せず、role-planner を優先すること。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "仕様と計画は確定済みです。この内容に沿って認証 API を実装して。",
+      "expected_output": "実装依頼なので role-advisor は発火せず、role-implementer を優先すること。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}

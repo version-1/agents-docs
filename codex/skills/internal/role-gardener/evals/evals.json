@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-gardener",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Git 操作担当に、作業ブランチを最新の main へ rebase してもらって。",
+      "expected_output": "role-gardener が発火し、Git の rebase 操作を Gardener agent へ委譲すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "この PR の差分に回帰やセキュリティ上の問題がないかレビューして。",
+      "expected_output": "内容のレビュー依頼なので role-gardener は発火せず、role-reviewer を優先すること。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "Git 操作は不要です。指定済みのテストコマンドを実行し、終了コードだけ報告して。",
+      "expected_output": "一般的な機械作業なので role-gardener は発火せず、role-worker を優先すること。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}

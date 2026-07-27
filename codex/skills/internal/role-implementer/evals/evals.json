@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-implementer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Planner がまとめたタスクと Definition of Done に沿って、この機能を実装してテストも追加して。",
+      "expected_output": "role-implementer が発火し、計画済みのコード実装を Implementer agent へ委譲すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "実装はまだ不要です。まずゴール、スコープ、タスク、完了条件を計画にまとめて。",
+      "expected_output": "計画作成依頼なので role-implementer は発火せず、role-planner を優先すること。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "公開 API と振る舞いを維持したまま、責務が混在したサービスの構造改善を設計し、実装とレビューまで統括して。",
+      "expected_output": "挙動維持の構造改善を統括する依頼なので role-implementer は発火せず、role-refactor を優先すること。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}
