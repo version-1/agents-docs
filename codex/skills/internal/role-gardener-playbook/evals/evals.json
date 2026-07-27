@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-gardener-playbook",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Gardener として、現在のブランチを最新の main に rebase で追従させ、操作後の状態だけを報告して。",
+      "expected_output": "role-gardener-playbook が発火し、作業ツリーと追跡状態を確認してから repository の安全ルールに従って rebase し、操作後の客観的状態だけを報告すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "gh で PR #123 の内容を取得して、その設計が妥当かレビューして。",
+      "expected_output": "PR 情報の取得だけを Gardener の担当として扱い、取得内容の解釈やコードレビューは担当外として別ロールへ返すこと。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "このブランチを push して PR を作って。PR のタイトルと概要も考えて。",
+      "expected_output": "push と支給済み内容による PR 作成は担当範囲だが、PR title や description の作成は行わず、必要な入力または Documenter への委譲を求めること。",
+      "files": [],
+      "should_fire": true
+    }
+  ]
+}

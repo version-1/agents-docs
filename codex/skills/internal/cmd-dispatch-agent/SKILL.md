@@ -45,6 +45,7 @@ description: 指定された agent を起動し、結果を待たずに投げっ
 - `implementer`: 計画済み内容に沿った実装。
 - `documenter`: README、設計メモ、手順書などの文書化。
 - `advisor`: 技術判断、設計相談、ベストプラクティスの助言。
+- `gardener`: 内容の解釈を伴わない Git / GitHub の機械操作。
 - `default`: 指定がなく、用途からも特定できない場合。
 
 ## タスク文の作り方

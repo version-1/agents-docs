@@ -1,0 +1,4 @@
+interface:
+  display_name: "role-gardener"
+  short_description: "Git・GitHub 操作を Gardener agent へ安全に委譲する"
+  default_prompt: "$role-gardener を使って、指定された Git・GitHub 操作を Gardener agent に委譲してください。"
