@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-refactor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "公開 API と振る舞いを変えずに、責務が混在した長いメソッドを分割し、設計から実装とレビューまで進めて。",
+      "expected_output": "role-refactor が発火し、挙動維持の構造改善を Refactor agent へ委譲すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "新しい通知チャネルの仕様、実装計画、Definition of Done は確定済みです。計画に沿って機能追加を実装して。",
+      "expected_output": "計画済みの機能追加なので role-refactor は発火せず、role-implementer を優先すること。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "このリファクタリング済み差分が公開 API と振る舞いを維持しているかレビューして。",
+      "expected_output": "実装済み差分のレビュー依頼なので role-refactor は発火せず、role-reviewer を優先すること。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}

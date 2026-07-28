@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-reviewer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "実装済みの PR を、仕様違反、回帰、境界条件、検証不足の観点でマージ前レビューして。",
+      "expected_output": "role-reviewer が発火し、実装済み変更のレビューを Reviewer agent へ委譲すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "この機能がどこから呼ばれているか、関連ファイルと設定を調査して。",
+      "expected_output": "事実調査依頼なので role-reviewer は発火せず、role-scouter を優先すること。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "レビュー対象の実装はまだありません。この機能のゴール、スコープ、タスク、完了条件を整理して。",
+      "expected_output": "実装前の計画作成依頼なので role-reviewer は発火せず、role-planner を優先すること。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}

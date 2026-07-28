@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-scouter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "実装前に、この機能のエントリーポイント、呼び出し経路、関連設定、影響範囲を根拠付きで調査して。",
+      "expected_output": "role-scouter が発火し、コードベース調査を Scouter agent へ委譲すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "調査結果は揃っています。そこから実装タスクと Definition of Done を整理して。",
+      "expected_output": "計画作成依頼なので role-scouter は発火せず、role-planner を優先すること。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "調査済みの実装差分について、仕様違反、回帰、境界条件、検証不足をレビューして。",
+      "expected_output": "実装済み差分のリスク評価なので role-scouter は発火せず、role-reviewer を優先すること。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}

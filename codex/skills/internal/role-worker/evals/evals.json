@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-worker",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "判断は不要です。指定済みのテストと lint コマンドを実行し、終了コードと結果だけ報告して。",
+      "expected_output": "role-worker が発火し、明確な機械作業を Worker agent へ委譲すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "失敗ログとコードからテスト失敗の原因、影響範囲、関連箇所を根拠付きで調査して。",
+      "expected_output": "原因調査依頼なので role-worker は発火せず、role-scouter を優先すること。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "調査結果をもとに、同期処理と非同期処理のどちらへ設計変更すべきか推奨して。",
+      "expected_output": "技術判断の助言依頼なので role-worker は発火せず、role-advisor を優先すること。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}
