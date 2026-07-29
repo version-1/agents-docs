@@ -1,6 +1,7 @@
 model = "gpt-5.6-sol"
 personality = "pragmatic"
 web_search = "live"
+default_permissions = "project-edit"
 
 [agents.advisor]
 description = "技術的な助言を担当するエージェントです。"
@@ -46,8 +47,6 @@ nickname_candidates = ["Liam", "Noah", "Ethan"]
 description = "機械的なコマンド作業を担当するエージェントです。"
 config_file = "./agents/worker.toml"
 nickname_candidates = ["Alex", "Sam", "Ryan"]
-
-default_permissions = "project-edit"
 
 [permissions.project-edit]
 extends = ":workspace"
