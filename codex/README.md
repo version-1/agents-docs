@@ -26,7 +26,7 @@ agents
 ├── implementer.toml 実装を担当するエージェント
 ├── planner.toml     計画・設計を担当するエージェント
 ├── reviewer.toml    レビューを担当するエージェント
-└── scount.toml      調査を担当するエージェント
+└── scouter.toml     調査を担当するエージェント
 ```
 
 ### commands

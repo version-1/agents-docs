@@ -77,9 +77,9 @@ make deploy
 - `codex/skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも内容に合わせます。
 - skill の設計・命名時は [`docs/design-skill.md`](docs/design-skill.md) の方針も確認します。
 - skill の追加・更新時は [`docs/skill-library.md`](docs/skill-library.md) の一覧も更新します。
-- `codex/agents/*.toml` の `nickname_candidates` は覚えやすい英語の人名を 3 件ずつ設定します。
+- `codex/config.toml` の `[agents.<role>]` にある `nickname_candidates` は、覚えやすい英語の人名を 3 件ずつ設定します。
 - `deploy.json` は内部ファイルの配布先、`external-skills.json` は外部 skill の取得先を管理します。
-- `claude/agents/implemnter.md` と `codex/agents/scount.toml` は現状のファイル名です。リネームする場合は配布設定や参照も合わせて確認します。
+- `claude/agents/implemnter.md` は現状のファイル名です。リネームする場合は配布設定や参照も合わせて確認します。
 
 ## テスト実行時の補足
 
