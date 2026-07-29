@@ -207,6 +207,12 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["bun", "install", "--frozen-lockfile"],
+    decision = "allow",
+    justification = "ロックファイルを変更しない依存関係のインストールは安全"
+)
+
+prefix_rule(
     pattern = ["bundle", ["exec", "install"]],
     decision = "allow",
     justification = "Ruby操作は安全"
