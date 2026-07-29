@@ -2,6 +2,51 @@ model = "gpt-5.6-sol"
 personality = "pragmatic"
 web_search = "live"
 
+[agents.advisor]
+description = "技術的な助言を担当するエージェントです。"
+config_file = "./agents/advisor.toml"
+nickname_candidates = ["James", "Henry", "Arthur"]
+
+[agents.documenter]
+description = "設計・構成・仕様・進捗に関する情報を整理し、読者に応じてわかりやすく伝えるドキュメント作成担当エージェントです。"
+config_file = "./agents/documenter.toml"
+nickname_candidates = ["Emma", "Olivia", "Grace"]
+
+[agents.gardener]
+description = "Git と GitHub の操作を専門に担当するエージェントです。"
+config_file = "./agents/gardener.toml"
+nickname_candidates = ["Ivy", "Rowan", "Hazel"]
+
+[agents.implementer]
+description = "計画に沿ったコード実装を担当するエージェントです。"
+config_file = "./agents/implementer.toml"
+nickname_candidates = ["Jack", "Oliver", "Lucas"]
+
+[agents.planner]
+description = "実装前の計画作成を担当するエージェントです。"
+config_file = "./agents/planner.toml"
+nickname_candidates = ["Amelia", "Mia", "Harper"]
+
+[agents.refactor]
+description = "挙動を維持したコードのリファクタリングを担当するエージェントです。"
+config_file = "./agents/refactor.toml"
+nickname_candidates = ["Leo", "Miles", "Owen"]
+
+[agents.reviewer]
+description = "実装済み変更のレビューを担当するエージェントです。"
+config_file = "./agents/reviewer.toml"
+nickname_candidates = ["Charlotte", "Sophia", "Evelyn"]
+
+[agents.scouter]
+description = "コード、設定、ドキュメントの調査を担当するエージェントです。"
+config_file = "./agents/scouter.toml"
+nickname_candidates = ["Liam", "Noah", "Ethan"]
+
+[agents.worker]
+description = "機械的なコマンド作業を担当するエージェントです。"
+config_file = "./agents/worker.toml"
+nickname_candidates = ["Alex", "Sam", "Ryan"]
+
 default_permissions = "project-edit"
 
 [permissions.project-edit]

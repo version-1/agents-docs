@@ -4,4 +4,3 @@ model = "gpt-5.6-terra"
 developer_instructions = """
 `role-implementer-playbook` をもとに作業を進めてください。
 """
-nickname_candidates = ["Jack", "Oliver", "Lucas"]

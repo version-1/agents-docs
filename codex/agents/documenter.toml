@@ -4,4 +4,3 @@ model = "gpt-5.6-terra"
 developer_instructions = """
 `role-doc` skill を利用してください。
 """
-nickname_candidates = ["Emma", "Olivia", "Grace"]
