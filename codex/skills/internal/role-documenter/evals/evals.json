@@ -1,0 +1,26 @@
+{
+  "skill_name": "role-documenter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "このプロジェクトのセットアップ手順を調査して、開発者向け README を作成して。",
+      "expected_output": "role-documenter が発火し、調査、構成決定、作成、全体レビューを含む文書化を Documenter agent へ委譲すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "認証処理の呼び出し経路だけを調査して、根拠付きで報告して。",
+      "expected_output": "文書作成ではなく事実調査だけの依頼なので role-documenter は発火せず、role-scouter を優先すること。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "仕様と計画に沿って認証 API を実装して。",
+      "expected_output": "文書作成ではなく実装依頼なので role-documenter は発火せず、role-implementer を優先すること。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}

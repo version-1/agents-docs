@@ -1,0 +1,19 @@
+{
+  "skill_name": "role-documenter-playbook",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "既存コードと設定を確認し、新規参加者向けの開発環境セットアップガイドを作成して。",
+      "expected_output": "role-documenter-playbook が発火し、調査、読者と目的に応じた構成、文書作成、文書全体のレビュー、Progressive Disclosure の確認、レビュー反映、検証まで行うこと。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "既存の Runbook を更新して。重複した障害対応手順を整理し、必要なら文書構成も組み直して。",
+      "expected_output": "文書全体を確認し、冗長さ、重複、整合性、分割の必要性をレビューしたうえで、必要に応じて全体を再構築すること。",
+      "files": [],
+      "should_fire": true
+    }
+  ]
+}

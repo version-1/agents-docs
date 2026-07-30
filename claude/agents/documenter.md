@@ -5,4 +5,4 @@ model: sonnet
 tools: Read, Grep, Glob, Bash
 ---
 
-role-doc スキルを利用してください。
+`role-documenter-playbook` をもとに作業を進めてください。
