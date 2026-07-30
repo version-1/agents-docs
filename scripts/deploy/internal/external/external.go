@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	pathpkg "path"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -292,10 +293,10 @@ func parseGitHubSkillURL(raw string) (githubSkillURL, error) {
 	owner, repo, ref := parts[0], parts[1], parts[3]
 	path := strings.Join(parts[4:], "/")
 	if parts[2] == "blob" {
-		if filepath.Base(path) != "SKILL.md" {
+		if pathpkg.Base(path) != "SKILL.md" {
 			return githubSkillURL{}, fmt.Errorf("GitHub blob URL must end in SKILL.md")
 		}
-		path = filepath.ToSlash(filepath.Dir(path))
+		path = pathpkg.Dir(path)
 	}
 	if owner == "" || repo == "" || ref == "" || path == "" {
 		return githubSkillURL{}, fmt.Errorf("expected non-empty owner, repo, ref, and skill path")
