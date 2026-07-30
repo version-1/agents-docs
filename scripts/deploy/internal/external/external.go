@@ -34,7 +34,7 @@ type GitFetcher struct {
 	runGit func(args ...string) (string, error)
 }
 
-type githubTreeURL struct {
+type githubSkillURL struct {
 	owner string
 	repo  string
 	ref   string
@@ -88,7 +88,7 @@ func validateConfigSkill(i int, skill Skill) error {
 			return fmt.Errorf("externalSkills[%d].destination[%d] is required", i, j)
 		}
 	}
-	if _, err := parseGitHubTreeURL(skill.URL); err != nil {
+	if _, err := parseGitHubSkillURL(skill.URL); err != nil {
 		return fmt.Errorf("externalSkills[%d].url: %w", i, err)
 	}
 	return nil
@@ -246,55 +246,61 @@ func ReadSkillName(path string) (string, error) {
 }
 
 func (f GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
-	treeURL, err := parseGitHubTreeURL(skill.URL)
+	skillURL, err := parseGitHubSkillURL(skill.URL)
 	if err != nil {
 		return "", err
 	}
 
 	repoDir := filepath.Join(workDir, safePathName(skill.Name))
-	cloneURL := fmt.Sprintf("https://github.com/%s/%s.git", treeURL.owner, treeURL.repo)
-	if _, err := f.run("clone", "--depth", "1", "--filter=blob:none", "--sparse", "--branch", treeURL.ref, cloneURL, repoDir); err != nil {
+	cloneURL := fmt.Sprintf("https://github.com/%s/%s.git", skillURL.owner, skillURL.repo)
+	if _, err := f.run("clone", "--depth", "1", "--filter=blob:none", "--sparse", "--branch", skillURL.ref, cloneURL, repoDir); err != nil {
 		return "", err
 	}
-	if err := f.verifyTreeHash(skill, treeURL, repoDir); err != nil {
+	if err := f.verifyTreeHash(skill, skillURL, repoDir); err != nil {
 		return "", err
 	}
-	if _, err := f.run("-C", repoDir, "sparse-checkout", "set", "--", treeURL.path); err != nil {
+	if _, err := f.run("-C", repoDir, "sparse-checkout", "set", "--", skillURL.path); err != nil {
 		return "", err
 	}
-	return filepath.Join(repoDir, filepath.FromSlash(treeURL.path)), nil
+	return filepath.Join(repoDir, filepath.FromSlash(skillURL.path)), nil
 }
 
-func (f GitFetcher) verifyTreeHash(skill Skill, treeURL githubTreeURL, repoDir string) error {
-	actual, err := f.run("-C", repoDir, "rev-parse", "HEAD:"+treeURL.path)
+func (f GitFetcher) verifyTreeHash(skill Skill, skillURL githubSkillURL, repoDir string) error {
+	actual, err := f.run("-C", repoDir, "rev-parse", "HEAD:"+skillURL.path)
 	if err != nil {
 		return err
 	}
 	actual = strings.TrimSpace(actual)
 	if actual != skill.TreeHash {
-		return fmt.Errorf("external skill %q tree hash mismatch for %q: expected %s, got %s", skill.Name, treeURL.path, skill.TreeHash, actual)
+		return fmt.Errorf("external skill %q tree hash mismatch for %q: expected %s, got %s", skill.Name, skillURL.path, skill.TreeHash, actual)
 	}
 	return nil
 }
 
-func parseGitHubTreeURL(raw string) (githubTreeURL, error) {
+func parseGitHubSkillURL(raw string) (githubSkillURL, error) {
 	u, err := url.Parse(raw)
 	if err != nil {
-		return githubTreeURL{}, fmt.Errorf("parse GitHub tree URL: %w", err)
+		return githubSkillURL{}, fmt.Errorf("parse GitHub skill URL: %w", err)
 	}
 	if u.Scheme != "https" || u.Host != "github.com" {
-		return githubTreeURL{}, fmt.Errorf("only https://github.com/<owner>/<repo>/tree/<ref>/<path> URLs are supported")
+		return githubSkillURL{}, fmt.Errorf("only GitHub tree URLs or blob URLs ending in SKILL.md are supported")
 	}
 	parts := strings.Split(strings.Trim(u.Path, "/"), "/")
-	if len(parts) < 5 || parts[2] != "tree" {
-		return githubTreeURL{}, fmt.Errorf("expected https://github.com/<owner>/<repo>/tree/<ref>/<path>")
+	if len(parts) < 5 || (parts[2] != "tree" && parts[2] != "blob") {
+		return githubSkillURL{}, fmt.Errorf("expected a GitHub tree URL or a blob URL ending in SKILL.md")
 	}
 	owner, repo, ref := parts[0], parts[1], parts[3]
 	path := strings.Join(parts[4:], "/")
-	if owner == "" || repo == "" || ref == "" || path == "" {
-		return githubTreeURL{}, fmt.Errorf("expected non-empty owner, repo, ref, and path")
+	if parts[2] == "blob" {
+		if filepath.Base(path) != "SKILL.md" {
+			return githubSkillURL{}, fmt.Errorf("GitHub blob URL must end in SKILL.md")
+		}
+		path = filepath.ToSlash(filepath.Dir(path))
 	}
-	return githubTreeURL{owner: owner, repo: repo, ref: ref, path: path}, nil
+	if owner == "" || repo == "" || ref == "" || path == "" {
+		return githubSkillURL{}, fmt.Errorf("expected non-empty owner, repo, ref, and skill path")
+	}
+	return githubSkillURL{owner: owner, repo: repo, ref: ref, path: path}, nil
 }
 
 func (f GitFetcher) run(args ...string) (string, error) {

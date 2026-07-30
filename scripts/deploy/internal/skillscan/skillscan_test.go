@@ -18,7 +18,7 @@ func TestWalkSkillDirsFindsRegularSkillFiles(t *testing.T) {
 	root := t.TempDir()
 	writeFile(t, filepath.Join(root, "internal", "coding", "SKILL.md"))
 	writeFile(t, filepath.Join(root, "internal", "coding", "assets", "prompt.md"))
-	writeFile(t, filepath.Join(root, "external", "grill-me", "SKILL.md"))
+	writeFile(t, filepath.Join(root, "external", "grilling", "SKILL.md"))
 	writeFile(t, filepath.Join(root, "README.md"))
 
 	var got []Dir
@@ -30,7 +30,7 @@ func TestWalkSkillDirsFindsRegularSkillFiles(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	wantNames := []string{"grill-me", "coding"}
+	wantNames := []string{"grilling", "coding"}
 	var gotNames []string
 	for _, dir := range got {
 		gotNames = append(gotNames, dir.Name)
