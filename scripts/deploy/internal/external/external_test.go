@@ -46,6 +46,40 @@ func TestLoadRejectsInvalidTreeHash(t *testing.T) {
 	}
 }
 
+func TestLoadAcceptsGitHubSkillBlobURL(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "external-skills.json")
+	if err := os.WriteFile(path, []byte(`[
+  {"name":"grilling","url":"https://github.com/owner/repo/blob/main/skills/grilling/SKILL.md","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/grilling"]}
+]`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	skills, err := Load(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(skills) != 1 || skills[0].Name != "grilling" {
+		t.Fatalf("unexpected skills: %#v", skills)
+	}
+}
+
+func TestLoadRejectsGitHubBlobURLForNonSkillFile(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "external-skills.json")
+	if err := os.WriteFile(path, []byte(`[
+  {"name":"skill","url":"https://github.com/owner/repo/blob/main/skill/README.md","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/skill"]}
+]`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err := Load(path)
+	if err == nil {
+		t.Fatal("expected invalid blob URL error")
+	}
+	if !strings.Contains(err.Error(), "must end in SKILL.md") {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
 func TestGitFetcherFetchVerifiesTreeHash(t *testing.T) {
 	var calls []string
 	fetcher := GitFetcher{runGit: func(args ...string) (string, error) {
@@ -68,6 +102,30 @@ func TestGitFetcherFetchVerifiesTreeHash(t *testing.T) {
 	}
 	if isRevParseHead(calls) {
 		t.Fatalf("fetch should verify the skill tree hash, not repository HEAD: %v", calls)
+	}
+}
+
+func TestGitFetcherFetchUsesParentDirectoryForSkillBlobURL(t *testing.T) {
+	var calls []string
+	skill := testSkill("grilling")
+	skill.URL = "https://github.com/owner/repo/blob/main/skills/productivity/grilling/SKILL.md"
+	fetcher := GitFetcher{runGit: func(args ...string) (string, error) {
+		calls = append(calls, strings.Join(args, " "))
+		if isRevParseTree(args, "skills/productivity/grilling") {
+			return testTreeHash + "\n", nil
+		}
+		return "", nil
+	}}
+
+	src, err := fetcher.Fetch(skill, t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.HasSuffix(src, filepath.Join("skills", "productivity", "grilling")) {
+		t.Fatalf("unexpected source path: %s", src)
+	}
+	if !strings.HasSuffix(calls[2], "sparse-checkout set -- skills/productivity/grilling") {
+		t.Fatalf("unexpected sparse-checkout call: %v", calls)
 	}
 }
 

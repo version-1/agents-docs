@@ -14,7 +14,7 @@ commit 分割時の代表的な操作パターンをまとめる。
 3. 基準 ref がブランチなら、必要に応じて `git merge-base <base-ref> HEAD` で分岐点を確認する。
 4. `git log --oneline --reverse <base-ref>..HEAD` で差分に含まれる commit を確認する。
 5. `git diff --stat <base-ref>..HEAD` と `git diff <base-ref>..HEAD` で差分全体を読む。
-6. 必要に応じて `grill-me` skill を使い、変更単位、依存順、統合すべき commit、分けるべき commit を詰める。
+6. 必要に応じて `grilling` skill を使い、変更単位、依存順、統合すべき commit、分けるべき commit を詰める。
 7. バックアップ branch を作る。
 8. 基準 ref との差分に含まれる commit をいったん未コミット差分へ戻す。
 9. 変更単位ごとに stage し、`cmd-commit` skill を使って commit する。

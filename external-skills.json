@@ -7,13 +7,13 @@
     "destination": ["~/.codex/skills/external/skill-creator"]
   },
   {
-    "name": "grill-me",
-    "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
+    "name": "grilling",
+    "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md",
     "type": "git",
-    "treeHash": "c817f6f36acd483294144694a935a76d3e3eb101",
+    "treeHash": "10b0db61f9b3869243db8a1a0ee84f862139b94e",
     "destination": [
-      "~/.codex/skills/external/grill-me",
-      "~/.claude/skills/grill-me"
+      "~/.codex/skills/external/grilling",
+      "~/.claude/skills/grilling"
     ]
   },
   {

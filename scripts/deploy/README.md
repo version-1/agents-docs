@@ -137,19 +137,19 @@ make build-deploy
 ```json
 [
   {
-    "name": "grill-me",
-    "url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me",
+    "name": "grilling",
+    "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md",
     "type": "git",
-    "treeHash": "2a1ad17028306ebe45f0e49703fa28b9b2e7f499",
+    "treeHash": "10b0db61f9b3869243db8a1a0ee84f862139b94e",
     "destination": [
-      "~/.codex/skills/external/grill-me",
-      "~/.claude/skills/grill-me"
+      "~/.codex/skills/external/grilling",
+      "~/.claude/skills/grilling"
     ]
   }
 ]
 ```
 
-`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式だけを受け付けます。`treeHash` は必須で、`url` が指すディレクトリの Git tree hash と照合する 40 文字の hex hash を指定します。dry-run でも取得、tree hash 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、tree hash が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
+`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式、または `https://github.com/<owner>/<repo>/blob/<ref>/<path>/SKILL.md` 形式を受け付けます。`treeHash` は必須で、`url` が指す skill ディレクトリの Git tree hash と照合する 40 文字の hex hash を指定します。dry-run でも取得、tree hash 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、tree hash が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
 
 対象ディレクトリの tree hash は次のように確認できます。
 

@@ -21,7 +21,7 @@ internal skills
 │   │   └── cmd-rmbranch
 │   ├── beautify-commit
 │   │   ├── cmd-commit
-│   │   └── grill-me (external)
+│   │   └── grilling (external)
 │   └── ci-fix
 │       ├── code-general
 │       ├── code-test
@@ -95,7 +95,7 @@ internal skills
 | `cmd-start-branch` | `cmd-dispatch-agent` | 不要ブランチ整理を別 agent に投げるときに使う。 |
 | `cmd-start-branch` | `cmd-rmbranch` | 不要ブランチ整理 agent の依頼内容として使う。 |
 | `beautify-commit` | `cmd-commit` | 整理後の commit 作成で使う。 |
-| `beautify-commit` | `grill-me` | 分割方針が曖昧なときに整理方針を詰めるため使う。 |
+| `beautify-commit` | `grilling` | 分割方針が曖昧なときに整理方針を詰めるため使う。 |
 | `ci-fix` | `code-general` | CI 失敗の修正に実装変更が必要なときに使う。 |
 | `ci-fix` | `code-test` | テスト追加、flake 対策、検証コマンド整理が必要なときに使う。 |
 | `ci-fix` | `cmd-create-pr` | CI 修正を PR 作成や PR 更新まで反映するときに使う。 |
@@ -185,7 +185,7 @@ graph TD
     cmd_start_branch --> cmd_rmbranch["cmd-rmbranch"]
 
     beautify_commit["beautify-commit"] --> cmd_commit
-    beautify_commit --> grill_me["grill-me (external)"]
+    beautify_commit --> grilling["grilling (external)"]
 
     ci_fix["ci-fix"] --> code_general
     ci_fix --> code_test["code-test"]
