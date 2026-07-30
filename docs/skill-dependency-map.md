@@ -27,6 +27,8 @@ internal skills
 │       ├── code-test
 │       └── cmd-create-pr
 ├── role
+│   ├── role-documenter-playbook
+│   │   └── documenting
 │   ├── role-reviewer-playbook
 │   │   └── code-review
 │   ├── role-refactor-playbook
@@ -102,6 +104,7 @@ internal skills
 
 | Skill | 依存先 | 関係 |
 |---|---|---|
+| `role-documenter-playbook` | `documenting` | Documenter agent が文書の配置、優先順位、構成、記述スタイルを判断するときに使う。 |
 | `role-reviewer-playbook` | `code-review` | Reviewer agent が検証するとき、通常レビュー観点も併せて参照する。 |
 | `role-refactor-playbook` | `code-refactor` | Modification Design の根拠となる改善シグナルと既存の振る舞いを分析する。 |
 | `role-refactor-playbook` | `modification-design` | Refactor agent が変更後の責務、境界、依存方向を設計するときに併用する。 |
@@ -188,6 +191,7 @@ graph TD
     ci_fix --> code_test["code-test"]
     ci_fix --> cmd_create_pr
 
+    role_documenter_playbook["role-documenter-playbook"] --> documenting
     role_reviewer_playbook["role-reviewer-playbook"] --> code_review
     role_refactor_playbook["role-refactor-playbook"] --> code_refactor["code-refactor"]
     role_refactor_playbook["role-refactor-playbook"] --> modification_design["modification-design"]
