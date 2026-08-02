@@ -89,48 +89,11 @@ git reset <base>
 
 ## 古い commit を分割する
 
-直近ではない commit を分割する場合は、interactive rebase で対象 commit を `edit` にする。
-
-```bash
-git branch backup/<branch>-before-split-<date>
-git rebase -i <target>^
-```
-
-rebase todo で分割したい commit を `edit` に変更する。
-停止したら次を実行する。
-
-```bash
-git reset HEAD^
-```
-
-変更単位ごとに stage / commit し、分割が終わったら次を実行する。
-
-```bash
-git rebase --continue
-```
-
-注意:
-
-- rebase 中に conflict が起きたら、差分を読み、解消後に `git add <resolved-files>`、`git rebase --continue` を実行する。
-- conflict 解消で無関係な変更を混ぜない。
-- rebase を中止する必要がある場合は `git rebase --abort` を使えるが、実行前に現在の状態を確認する。
+直近ではない commit の分割には interactive rebase が必要だが、`grape rebase` は interactive mode をサポートしていない。`git rebase -i` へフォールバックせず、grape が対応するまでこの操作は実行しない。対象範囲と必要な操作を報告して終了する。
 
 ## commit を並べ替えたり統合したりしながら分割する
 
-複数 commit の一部を統合、一部を分割、一部を並べ替える場合は、interactive rebase を使う。
-
-使う操作:
-
-- `pick`: commit をそのまま残す。
-- `reword`: message だけ変更する。
-- `edit`: commit の中身を変更、分割する。
-- `squash` / `fixup`: 前の commit に統合する。
-- 行の順序変更: commit 順を変更する。
-
-注意:
-
-- 並べ替えは依存関係を壊しやすい。build や test が通る順序か確認する。
-- 同じファイルの近い行を複数 commit が触っている場合、conflict が増える可能性がある。
+複数 commit の一部を統合、一部を分割、一部を並べ替える操作にも interactive rebase が必要になる。`git rebase -i` へフォールバックせず、grape が対応するまで実行しない。
 
 ## 安全確認
 

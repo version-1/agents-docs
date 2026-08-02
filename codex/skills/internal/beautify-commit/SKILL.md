@@ -29,7 +29,8 @@ description: Git リポジトリで、ベースブランチまたは残したい
 - 基準 ref が未指定の場合、デフォルトブランチでよいか yes/no で確認してから進める。
 - 履歴を書き換える操作をするときは、対象 branch と対象 commit 範囲を明確にする。
 - push 済み、共有済み、PR 作成済みの履歴を書き換える場合は、実行前にユーザー確認を取る。
-- `git reset --hard`、`git rebase -i`、`git commit --amend`、`git push --force` は、必要性と影響を説明してから使う。
+- `git reset --hard`、`git commit --amend`、`git push --force` は、必要性と影響を説明してから使う。
+- `git rebase -i` は使わない。interactive rebase が必要な整理は grape が対応するまで実行せず、制約をユーザーへ報告する。
 - 分割作業の前に、可能なら `backup/<branch>-before-split-<date>` のようなバックアップ branch を作る。
 - 読んでいない差分を stage しない。`git add .` ではなく、ファイル単位または patch 単位で stage する。
 - 分割後は、それぞれの commit が単独で目的を説明できるか確認する。

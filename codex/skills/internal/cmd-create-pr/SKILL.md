@@ -1,6 +1,6 @@
 ---
 name: cmd-create-pr
-description: GitHub Pull Request を安全な手順で作成または更新するときに使う。ユーザーが「PR 作って」「PR 出して」「pull request 作成して」「この変更を PR にして」「pr を出す手順を進めて」などを依頼した場合は必ず使う。差分確認、検証、commit、最新 base branch への追従、role-reviewer による PR 前レビュー、High 指摘の自動対応、safe-git-push、PR description 作成、gh pr create / edit までの順序を整理し、未確認の変更や直接 git push を避ける。
+description: GitHub Pull Request を安全な手順で作成または更新するときに使う。ユーザーが「PR 作って」「PR 出して」「pull request 作成して」「この変更を PR にして」「pr を出す手順を進めて」などを依頼した場合は必ず使う。差分確認、検証、commit、最新 base branch への追従、role-reviewer による PR 前レビュー、High 指摘の自動対応、grape push、PR description 作成、gh pr create / edit までの順序を整理し、未確認の変更や直接 git push を避ける。
 ---
 
 # Create PR
@@ -16,8 +16,9 @@ GitHub Pull Request を出す前後の作業を、安全で再現しやすい手
 - PR は「読んだ差分」「必要な検証」「意図が分かる commit」「レビューしやすい description」が揃ってから作る。
 - ユーザーの未確認変更を勝手に commit、push、PR に含めない。
 - PR 作成前に `git fetch origin` で base branch を更新し、head branch を最新 base に追従させる。古い base のままレビュー、push、PR 作成を進めない。
-- `git push` は直接実行しない。prompt なしで push する場合は、引数なしの `~/.codex/bin/safe-git-push` を使う。
-- `safe-git-push` が拒否した場合や見つからない場合は、拒否理由を確認してユーザーに方針を確認する。
+- `git push` は直接実行せず、`grape push` を使う。
+- rebase の開始には `git rebase` を直接使わず、`grape rebase` を使う。競合後の継続、中止、スキップには `git rebase --continue`、`git rebase --abort`、`git rebase --skip` を使える。
+- `grape` が拒否した場合や見つからない場合は Git コマンドへ自動的にフォールバックせず、拒否理由を確認してユーザーに方針を確認する。
 - 既存 PR がある場合は、新規作成ではなく更新を検討する。
 - PR を新規作成または更新する前に `$role-reviewer` で差分をレビューし、High severity の指摘は PR 作成前に自動対応する。
 - PR 本文を作るときは `$format-pr-description` を使う。
@@ -62,13 +63,13 @@ git fetch origin
    - `git merge-base --is-ancestor origin/<base> HEAD` が成功するなら、head は最新 base に追従済み。
    - 成功しない場合は、まず `git log --oneline HEAD..origin/<base>` と `git log --oneline origin/<base>..HEAD` で base 側と head 側の差分を確認する。
    - current branch に独自 commit がない場合だけ、`git merge --ff-only origin/<base>` で fast-forward してよい。
-   - current branch に独自 commit がある場合は、merge commit 作成、rebase、作業の積み直しのどれを使うかユーザーへ確認する。確認なしに rebase や merge commit を作らない。
+   - current branch に独自 commit がある場合は、merge commit 作成、`grape rebase`、作業の積み直しのどれを使うかユーザーへ確認する。確認なしに rebase や merge commit を作らない。
 7. 追従後に変更内容に合う検証を実行する。文書だけの変更なら、Markdown のリンク、見出し、差分確認で十分な場合がある。
 8. `git log --oneline <base>..HEAD` と `git diff --stat <base>...HEAD` で PR 差分を確認する。
 9. `$role-reviewer` で PR 差分をレビューする。レビュー対象は `<base>...HEAD` の差分、実行済み検証、未コミット変更の有無、最新 base への追従状況。
 10. High severity の指摘がある場合は、PR 作成前に自動で対応する。対応後は必要な検証を再実行し、必要に応じて `$cmd-commit` で追加 commit を作る。
 11. High 指摘が残っていないことを確認するまで `$role-reviewer` の確認を繰り返す。
-12. `~/.codex/bin/safe-git-push` で current branch を push する。
+12. `grape push` で current branch を push する。
 13. `$format-pr-description` で PR description を作る。
 14. 既存 PR がなければ `gh pr create`、既存 PR があれば `gh pr edit` で description を更新する。
 15. `gh pr view` で URL、base、head、state を確認する。

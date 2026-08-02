@@ -23,7 +23,7 @@ Codex / Claude などの AI エージェントに配布するルール、プロ�
 - `make deploy` で `deploy.json` と `external-skills.json` に基づいて設定とスキルを配置します。
 
 `make deploy` は Codex 用の補助コマンドも `~/.codex/bin` に配置します。
-`safe-git-push` は agent が prompt なしで使うための安全な `git push` wrapper です。
+push と rebase には、ポリシーに基づいて Git 操作を制限する `grape` を使います。
 `safe-gh-edit` は自分が作成した PR / Issue だけを prompt なしで編集するための `gh pr edit` / `gh issue edit` wrapper です。
 `safe-local-curl` は localhost / loopback / private address 宛ての確認だけを prompt なしで行うための安全な `curl` wrapper です。
 

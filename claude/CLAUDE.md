@@ -37,13 +37,14 @@ KPI やカバレッジ目標が与えられたら、達成するまで試行す�
 
 ## ブランチ運用
 
-- 作業ブランチをデフォルトブランチの最新状態へ追従させるときは、merge ではなく rebase を使用します。
+- 作業ブランチをデフォルトブランチの最新状態へ追従させるときは、merge や `git rebase` ではなく `grape rebase` を使用します。
 
 ## コマンド実行確認
 - prompt なしで実行できるのは、許可済みルールに合致し、実行内容と影響範囲が明確なコマンドだけです。
 - 破壊的操作、外部送信、認証情報や設定の変更、履歴改変、実行先が曖昧なコマンドは、実行前にユーザーへ確認します。
-- `git push` や `git push -f` は直接実行しません。prompt なしで push する場合は、引数なしの `~/.codex/bin/safe-git-push` を使います。
-- `~/.codex/bin/safe-git-push` が拒否した場合やコマンドが見つからない場合は、拒否理由を確認してからユーザーに方針を確認します。
+- `git push` や `git push -f` は直接実行せず、`grape push` を使います。
+- rebase の開始には `git rebase` を直接使わず、`grape rebase` を使います。競合後の継続、中止、スキップに限り、`git rebase --continue`、`git rebase --abort`、`git rebase --skip` を使えます。
+- `grape` が拒否した場合やコマンドが見つからない場合は Git コマンドへ自動的にフォールバックせず、拒否理由を確認してからユーザーに方針を確認します。
 - `gh pr edit` や `gh issue edit` は直接実行しません。prompt なしで自分が作成した PR / Issue を編集する場合は、`~/.codex/bin/safe-gh-edit <pr|issue> <number> [gh edit flags...]` を使います。
 - `~/.codex/bin/safe-gh-edit` が拒否した場合やコマンドが見つからない場合は、拒否理由を確認してからユーザーに方針を確認します。
 - curl は localhost / loopback / Docker network 内の private address 宛てなら prompt なしで実行可能
