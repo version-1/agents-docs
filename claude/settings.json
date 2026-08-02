@@ -85,8 +85,6 @@
     "ask": [
       "Bash(git push)",
       "Bash(git push *)",
-      "Bash(git rebase)",
-      "Bash(git rebase *)",
       "Bash(git reset --hard)",
       "Bash(git reset --hard *)",
       "Bash(git worktree remove *)",

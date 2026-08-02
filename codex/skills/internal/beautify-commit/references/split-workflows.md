@@ -115,4 +115,4 @@ git reset <base>
 - `git log --oneline --decorate -n <必要数>` で commit 一覧を確認する。
 - `git status --short` が想定どおりか確認する。
 - 可能なら関連テスト、lint、build を実行する。
-- push 済み履歴を書き換えた場合は、通常の push では失敗する可能性と force-with-lease が必要になり得ることを伝える。
+- push 済み履歴を書き換えた場合は、通常の push では失敗する可能性と `grape push --force-with-lease` が必要になり得ることを伝える。
