@@ -55,5 +55,15 @@
       "~/.codex/skills/external/tq-orchestrator",
       "~/.claude/skills/tq-orchestrator"
     ]
+  },
+  {
+    "name": "grape-usage",
+    "url": "https://github.com/version-1/grape/tree/main/.codex/skills/grape-usage",
+    "type": "git",
+    "treeHash": "127cab5302a2f2c8b6170de7751cda7ed29bace2",
+    "destination": [
+      "~/.codex/skills/external/grape-usage",
+      "~/.claude/skills/grape-usage"
+    ]
   }
 ]
