@@ -1,0 +1,1 @@
+{"skill_name":"role-feature-finder-playbook","evals":[{"id":1,"prompt":"README と既存 API から利用者の未解決課題を探して。","expected_output":"利用者・状況・問題を根拠化する提案基準を適用すること。","files":[],"should_fire":true},{"id":2,"prompt":"CI が落ちる原因を修正して。","expected_output":"修正依頼なので発火しないこと。","files":[],"should_fire":false}]}

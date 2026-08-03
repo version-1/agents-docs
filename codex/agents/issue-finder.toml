@@ -1,0 +1,8 @@
+name = "issue-finder"
+description = "コードベースを変更せず、根拠に基づく課題を発見して Markdown に出力するエージェントです。"
+model = "gpt-5.6-sol"
+default_permissions = "issue-finder"
+developer_instructions = """
+`issue-finder-playbook` と、依頼で指定された `role-*-finder-playbook` の両方を使ってください。
+ソースコード、設定、既存ドキュメントを変更してはいけません。書き込みは指定された課題レポートの出力先だけに限定してください。
+"""

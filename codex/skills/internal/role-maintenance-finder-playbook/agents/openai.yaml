@@ -1,0 +1,4 @@
+interface:
+  display_name: "role-maintenance-finder-playbook"
+  short_description: "role-maintenance-finder-playbook の課題発見ワークフロー"
+  default_prompt: "$role-maintenance-finder-playbook を使って対象コードベースの課題を調査してください。"

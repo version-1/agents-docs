@@ -1,0 +1,33 @@
+{
+  "skill_name": "issue-finder-playbook",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "コードは変更せず、見つけた課題を /tmp/audit に Markdown で出力して。",
+      "expected_output": "共通の調査・根拠・安全性・出力 contract を適用し、開始前後の worktree を比較すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "課題を最大10件、課題ごとの Markdown にし、重複と追加候補は補助ファイルへ分けて。変更案が一意の課題だけ Modification Design を含めて。",
+      "expected_output": "課題単位ファイル、上限、補助ファイル、Modification Design の条件を適用すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 3,
+      "prompt": "最新情報が必要な箇所だけ公式情報を調べ、外部へは何も書き込まず課題を調査して。",
+      "expected_output": "必要時のみ安全な外部調査を行い、参照元と確認日を記録すること。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "この不具合を修正してテストも追加して。",
+      "expected_output": "課題発見ではなく実装依頼なので発火しないこと。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}

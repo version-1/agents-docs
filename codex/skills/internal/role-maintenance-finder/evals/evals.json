@@ -1,0 +1,1 @@
+{"skill_name":"role-maintenance-finder","evals":[{"id":1,"prompt":"変更しにくくテストしづらい構造を課題として洗い出して。","expected_output":"issue-finder agent と maintenance finder playbook へ委譲すること。","files":[],"should_fire":true},{"id":2,"prompt":"この重複コードをリファクタリングして。","expected_output":"実装依頼なので発火しないこと。","files":[],"should_fire":false}]}

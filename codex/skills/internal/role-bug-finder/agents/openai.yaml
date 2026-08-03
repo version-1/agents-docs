@@ -1,0 +1,4 @@
+interface:
+  display_name: "role-bug-finder"
+  short_description: "role-bug-finder の課題発見ワークフロー"
+  default_prompt: "$role-bug-finder を使って対象コードベースの課題を調査してください。"
