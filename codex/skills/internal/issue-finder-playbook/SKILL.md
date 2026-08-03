@@ -22,7 +22,7 @@ description: Issue Finder agent がコードベースを変更せず、指定さ
 
 - finder 種別: 対応する分野別 playbook で決定する。
 - 調査対象: 指定がなければ現在のリポジトリ全体。パス、差分、commit、PR などの指定があれば限定する。
-- 出力先: 指定がなければ `/tmp/issue-finder/`。
+- 出力先: 指定がなければ `/tmp/issue-finder/`。指定先は `$TMPDIR` または `/tmp` 配下に限定する。それ以外が指定された場合は、system temporary directory 配下の出力先を利用者に指定してもらう。
 - 最大課題数: 指定がなければ10件。
 
 調査対象、除外対象、未調査領域を成果物に明記する。「リポジトリ全体」は完全性の保証ではなく、実際に確認した範囲を併記する。
@@ -65,7 +65,7 @@ description: Issue Finder agent がコードベースを変更せず、指定さ
 
 ## 出力 contract
 
-課題ごとに `<finder種別>-<対象名>-<YYYYMMDD-HHMMSS>-<slug>.md` を作成する。slug は英小文字、数字、ハイフンで一意にする。
+課題ごとに `<finder種別>-<対象名>-<YYYYMMDD-HHMMSS>-<slug>.md` を作成する。`finder種別`、`対象名`、`slug` はそれぞれ英小文字、数字、ハイフンだけへ正規化し、先頭・末尾のハイフンを除去する。path separator、`.`、`..`、空白、絶対 path を含めず、正規化後のファイル名が出力先直下にあることを確認してから書き込む。slug は課題ごとに一意にする。
 
 各課題ファイルへ次の順で記載する。
 
