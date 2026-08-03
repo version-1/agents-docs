@@ -1,0 +1,1 @@
+{"skill_name":"role-feature-finder","evals":[{"id":1,"prompt":"既存仕様や TODO を根拠に次の機能候補を発見して。","expected_output":"issue-finder agent と feature finder playbook へ委譲すること。","files":[],"should_fire":true},{"id":2,"prompt":"流行している機能を自由にブレインストーミングして。","expected_output":"根拠のないアイデア出しなので発火しないこと。","files":[],"should_fire":false}]}

@@ -1,0 +1,1 @@
+{"skill_name":"role-bug-finder-playbook","evals":[{"id":1,"prompt":"境界値や異常系を含めてコードベースの不具合を発見して。","expected_output":"再現可能な不具合の探索基準を適用すること。","files":[],"should_fire":true},{"id":2,"prompt":"責務分離が悪い箇所だけを探して。","expected_output":"保守性調査なので発火しないこと。","files":[],"should_fire":false}]}

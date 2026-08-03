@@ -60,7 +60,7 @@
     "name": "grape-usage",
     "url": "https://github.com/version-1/grape/tree/main/.codex/skills/grape-usage",
     "type": "git",
-    "treeHash": "127cab5302a2f2c8b6170de7751cda7ed29bace2",
+    "treeHash": "ae0c8a8bd9d8ea2f996c27865d44108a1ceb3d8c",
     "destination": [
       "~/.codex/skills/external/grape-usage",
       "~/.claude/skills/grape-usage"

@@ -27,6 +27,15 @@ internal skills
 │       ├── code-test
 │       └── cmd-create-pr
 ├── role
+│   ├── finder roles
+│   │   ├── role-bug-finder -> issue-finder-playbook, role-bug-finder-playbook
+│   │   ├── role-maintenance-finder -> issue-finder-playbook, role-maintenance-finder-playbook
+│   │   ├── role-feature-finder -> issue-finder-playbook, role-feature-finder-playbook
+│   │   ├── role-vulnerability-finder -> issue-finder-playbook, role-vulnerability-finder-playbook
+│   │   └── role-documentation-finder -> issue-finder-playbook, role-documentation-finder-playbook
+│   ├── issue-finder-playbook
+│   │   ├── modification-design
+│   │   └── lego-programming
 │   ├── role-documenter-playbook
 │   │   └── documenting
 │   ├── role-reviewer-playbook
@@ -104,6 +113,13 @@ internal skills
 
 | Skill | 依存先 | 関係 |
 |---|---|---|
+| `role-bug-finder` | `issue-finder-playbook`, `role-bug-finder-playbook` | Issue Finder agent へ共通調査 contract と不具合判定基準を指定する。 |
+| `role-maintenance-finder` | `issue-finder-playbook`, `role-maintenance-finder-playbook` | Issue Finder agent へ共通調査 contract と保守性判定基準を指定する。 |
+| `role-feature-finder` | `issue-finder-playbook`, `role-feature-finder-playbook` | Issue Finder agent へ共通調査 contract と機能提案基準を指定する。 |
+| `role-vulnerability-finder` | `issue-finder-playbook`, `role-vulnerability-finder-playbook` | Issue Finder agent へ共通調査 contract と脆弱性判定基準を指定する。 |
+| `role-documentation-finder` | `issue-finder-playbook`, `role-documentation-finder-playbook` | Issue Finder agent へ共通調査 contract と文書課題判定基準を指定する。 |
+| `issue-finder-playbook` | `modification-design` | 変更方針を確定できる課題へ変更後設計を埋め込むときに使う。 |
+| `issue-finder-playbook` | `lego-programming` | Modification Design の責務境界を判断するときに併用する。 |
 | `role-documenter-playbook` | `documenting` | Documenter agent が文書の配置、優先順位、構成、記述スタイルを判断するときに使う。 |
 | `role-reviewer-playbook` | `code-review` | Reviewer agent が検証するとき、通常レビュー観点も併せて参照する。 |
 | `role-refactor-playbook` | `code-refactor` | Modification Design の根拠となる改善シグナルと既存の振る舞いを分析する。 |
@@ -176,6 +192,19 @@ internal skills
 
 ```mermaid
 graph TD
+    role_bug_finder["role-bug-finder"] --> issue_finder_playbook["issue-finder-playbook"]
+    role_bug_finder --> role_bug_finder_playbook["role-bug-finder-playbook"]
+    role_maintenance_finder["role-maintenance-finder"] --> issue_finder_playbook
+    role_maintenance_finder --> role_maintenance_finder_playbook["role-maintenance-finder-playbook"]
+    role_feature_finder["role-feature-finder"] --> issue_finder_playbook
+    role_feature_finder --> role_feature_finder_playbook["role-feature-finder-playbook"]
+    role_vulnerability_finder["role-vulnerability-finder"] --> issue_finder_playbook
+    role_vulnerability_finder --> role_vulnerability_finder_playbook["role-vulnerability-finder-playbook"]
+    role_documentation_finder["role-documentation-finder"] --> issue_finder_playbook
+    role_documentation_finder --> role_documentation_finder_playbook["role-documentation-finder-playbook"]
+    issue_finder_playbook --> modification_design
+    issue_finder_playbook --> lego_programming
+
     cmd_create_pr["cmd-create-pr"] --> cmd_commit["cmd-commit"]
     cmd_create_pr --> role_reviewer["role-reviewer"]
     cmd_create_pr --> code_review["code-review"]

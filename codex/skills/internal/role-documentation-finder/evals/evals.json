@@ -1,0 +1,1 @@
+{"skill_name":"role-documentation-finder","evals":[{"id":1,"prompt":"ドキュメントの不整合と progressive disclosure の課題を探して。","expected_output":"issue-finder agent と documentation finder playbook へ委譲すること。","files":[],"should_fire":true},{"id":2,"prompt":"README を分かりやすく書き直して。","expected_output":"文書編集依頼なので発火しないこと。","files":[],"should_fire":false}]}

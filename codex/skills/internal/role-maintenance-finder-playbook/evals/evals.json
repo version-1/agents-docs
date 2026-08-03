@@ -1,0 +1,1 @@
+{"skill_name":"role-maintenance-finder-playbook","evals":[{"id":1,"prompt":"責務混在や変更容易性の問題を根拠付きで調査して。","expected_output":"具体的な変更コストに結び付く保守性基準を適用すること。","files":[],"should_fire":true},{"id":2,"prompt":"認証 bypass の可能性だけを調査して。","expected_output":"脆弱性調査なので発火しないこと。","files":[],"should_fire":false}]}

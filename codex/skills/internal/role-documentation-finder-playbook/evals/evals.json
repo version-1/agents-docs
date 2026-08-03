@@ -1,0 +1,1 @@
+{"skill_name":"role-documentation-finder-playbook","evals":[{"id":1,"prompt":"文書の重複、矛盾、導線、情報粒度の問題を調査して。","expected_output":"読者への具体的影響を伴う文書課題基準を適用すること。","files":[],"should_fire":true},{"id":2,"prompt":"コメントの typo をすべて直して。","expected_output":"編集依頼なので発火しないこと。","files":[],"should_fire":false}]}

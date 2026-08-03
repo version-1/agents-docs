@@ -23,6 +23,11 @@ description = "計画に沿ったコード実装を担当するエージェン�
 config_file = "./agents/implementer.toml"
 nickname_candidates = ["Jack", "Oliver", "Lucas"]
 
+[agents.issue-finder]
+description = "コードベースを変更せず、根拠に基づく課題を発見して Markdown に出力するエージェントです。"
+config_file = "./agents/issue-finder.toml"
+nickname_candidates = ["Morgan", "Casey", "Jordan"]
+
 [agents.planner]
 description = "実装前の計画作成を担当するエージェントです。"
 config_file = "./agents/planner.toml"
@@ -64,6 +69,20 @@ mode = "limited"
 
 [permissions.project-edit.network.unix_sockets]
 {{codex.permissions.project_edit.network.unix_sockets}}
+
+[permissions.issue-finder]
+description = "Read project files and write issue reports only to system temporary directories."
+
+[permissions.issue-finder.filesystem]
+":minimal" = "read"
+":tmpdir" = "write"
+":slash_tmp" = "write"
+
+[permissions.issue-finder.filesystem.":workspace_roots"]
+"." = "read"
+
+[permissions.issue-finder.network]
+enabled = false
 
 [mcp_servers.notion]
 url = "https://mcp.notion.com/mcp"

@@ -40,6 +40,17 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 | Skill | 概要 | 使う場面 |
 |---|---|---|
+| `issue-finder-playbook` | Issue Finder agent の調査、安全制約、品質基準、Markdown 出力 contract を定義する。 | 各 finder playbook と組み合わせて、コードを変更せず課題を発見・出力するとき。 |
+| `role-bug-finder` | `issue-finder` agent へ不具合発見を委譲する。 | コードベースの再現可能な不具合、仕様違反、境界条件の欠陥を探すとき。 |
+| `role-bug-finder-playbook` | 不具合発見の探索観点と判定基準を定義する。 | Issue Finder agent が不具合を調査するとき。 |
+| `role-maintenance-finder` | `issue-finder` agent へ保守性課題の発見を委譲する。 | 責務混在、複雑性、重複、変更・テスト困難性を探すとき。 |
+| `role-maintenance-finder-playbook` | 保守性課題の探索観点と判定基準を定義する。 | Issue Finder agent が保守性を調査するとき。 |
+| `role-feature-finder` | `issue-finder` agent へ機能提案の発見を委譲する。 | リポジトリ内の根拠から利用者の未解決課題と機能案を探すとき。 |
+| `role-feature-finder-playbook` | 根拠のある機能提案の探索観点と判定基準を定義する。 | Issue Finder agent が機能提案を調査するとき。 |
+| `role-vulnerability-finder` | `issue-finder` agent へ脆弱性発見を委譲する。 | コード、設定、依存関係、権限境界の悪用可能な問題を安全に探すとき。 |
+| `role-vulnerability-finder-playbook` | 脆弱性発見の安全境界、探索観点、判定基準を定義する。 | Issue Finder agent が脆弱性を調査するとき。 |
+| `role-documentation-finder` | `issue-finder` agent へ文書課題の発見を委譲する。 | 文書の不整合、配置、導線、progressive disclosure の問題を探すとき。 |
+| `role-documentation-finder-playbook` | 文書課題の探索観点と判定基準を定義する。 | Issue Finder agent が文書構造と整合性を調査するとき。 |
 | `role-advisor` | `advisor` agent へ技術助言を委譲する。 | 技術判断や設計相談が必要なとき。 |
 | `role-advisor-playbook` | Advisor agent の助言方針を定義する。 | `advisor` agent が技術助言を行うとき。 |
 | `role-documenter` | `documenter` agent へ技術文書の作成・更新を委譲する。 | 調査から構成、作成、文書全体のレビューまで一貫した文書化が必要なとき。 |
