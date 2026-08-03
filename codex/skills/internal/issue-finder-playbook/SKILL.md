@@ -22,7 +22,7 @@ description: Issue Finder agent がコードベースを変更せず、指定さ
 
 - finder 種別: 対応する分野別 playbook で決定する。
 - 調査対象: 指定がなければ現在のリポジトリ全体。パス、差分、commit、PR などの指定があれば限定する。
-- 出力先: 指定がなければ `/tmp/issue-finder/`。指定先は `$TMPDIR` または `/tmp` 配下に限定する。それ以外が指定された場合は、system temporary directory 配下の出力先を利用者に指定してもらう。
+- 出力先: 指定がなければ `/tmp/issue-finder/`。指定先を canonical path に解決し、symlink を含まず、解決後も `$TMPDIR` または `/tmp` 配下にある場合だけ使う。それ以外が指定された場合は、system temporary directory 配下の出力先を利用者に指定してもらう。
 - 最大課題数: 指定がなければ10件。
 
 調査対象、除外対象、未調査領域を成果物に明記する。「リポジトリ全体」は完全性の保証ではなく、実際に確認した範囲を併記する。
