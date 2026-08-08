@@ -25,7 +25,7 @@
     {
       "id": 4,
       "prompt": "GitHub Actions の Go テスト CI を追加する作業ブランチを作って",
-      "expected_output": "CI ワークフロー変更として ci を選び、Go テスト CI 用のブランチを最新デフォルトブランチから作成して、不要ブランチ整理を非同期 agent に依頼する。",
+      "expected_output": "他の種別に当てはまらない CI の保守作業として chore を選び、Go テスト CI 用のブランチを最新デフォルトブランチから作成して、不要ブランチ整理を非同期 agent に依頼する。",
       "files": [],
       "should_fire": true
     }

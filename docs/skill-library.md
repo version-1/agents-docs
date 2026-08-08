@@ -24,7 +24,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `cmd-create-pr` | GitHub Pull Request を安全な手順で作成または更新する。 | PR 作成、PR 提出、pull request 作成を依頼されたとき。差分確認、検証、commit、role-reviewer による PR 前レビュー、High 指摘の自動対応、grape push、PR description 作成、gh pr create / edit の順序を整理する。 |
 | `cmd-dispatch-agent` | 指定された agent を起動し、結果を待たずにタスクを投げる。 | ユーザーが agent 起動、worker への委譲、投げっぱなし実行を明示したとき。明示がなくても、単純で不明瞭な点がない自己完結タスクを任せたいとき。 |
 | `cmd-rmbranch` | `main` と `develop` を残し、不要なローカルブランチを安全に削除する。 | ローカルブランチ整理を依頼されたとき。未マージブランチは確認してから扱う。 |
-| `cmd-start-branch` | 最新のデフォルトブランチから作業ブランチを作り、不要ブランチ整理を非同期に依頼する。 | 新しい作業を始める前に「ブランチ切って」「作業開始用ブランチを作って」などを依頼されたとき。ブランチ名を報告してタスク詳細を待つ。 |
+| `cmd-start-branch` | 最新のデフォルトブランチから許可された prefix の作業ブランチを作り、不要ブランチ整理を非同期に依頼する。 | 新しい作業を始める前に「ブランチ切って」「作業開始用ブランチを作って」などを依頼されたとき。ブランチ名を報告してタスク詳細を待つ。 |
 | `beautify-commit` | ベースブランチまたは基準 commit との差分を、意味のある変更単位の commit へ安全に整理する。 | commit 分割、履歴整理、大きすぎる差分の再 commit、ベースブランチや commit hash を基準にした差分整理を依頼されたとき。interactive rebase が必要な整理は grape の対応まで実行しない。 |
 | `ci-fix` | GitHub Actions / CI の失敗を調査し、原因切り分けから修正、再検証まで進める。 | CI、GitHub Actions、checks、workflow、test / lint / build failure の修正を依頼されたとき。 |
 | `code-refactor` | 挙動を変えずにコードを簡略化、リファクタリングする。 | レビュー指摘、quality report、diff、指定ファイルをもとに可読性、保守性、テスト容易性を改善するとき。 |

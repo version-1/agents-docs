@@ -70,12 +70,8 @@ description: Git リポジトリで新しい作業を始める前に、最新の
 | `feat` | 新機能、既存機能へのユーザー向け能力追加 | `feat/report-filter`, `feat/42-export-csv` |
 | `fix` | バグ修正、不具合回避、期待と違う挙動の修正 | `fix/login-timeout`, `fix/price-rounding` |
 | `refactor` | 挙動を変えない構造整理、責務分割、命名整理 | `refactor/split-auth-service`, `refactor/repository-contract` |
-| `test` | テスト追加、テスト修正、fixture や検証手順の整備 | `test/add-order-cases`, `test/stabilize-api-spec` |
-| `perf` | 性能改善、メモリ削減、クエリ最適化 | `perf/cache-rate-lookup`, `perf/reduce-render-cost` |
-| `style` | フォーマット、lint、見た目だけのコード整形。UI 見た目変更は `feat` または `fix` を優先する | `style/format-go-files`, `style/lint-imports` |
-| `ci` | CI、ワークフロー、ビルドパイプライン、リリース自動化 | `ci/add-test-workflow`, `ci/cache-go-build` |
 | `docs` | README、設計メモ、Runbook など文書だけの変更 | `docs/update-runbook`, `docs/add-skill-guide` |
-| `chore` | 依存更新、設定整理、生成物更新、運用上の雑務。上記に当てはまるならそちらを優先する | `chore/update-deps`, `chore/start-task-branch` |
+| `chore` | テスト、性能、整形、CI、依存更新、設定整理、生成物更新など、他の種別に当てはまらない保守作業 | `chore/add-order-tests`, `chore/add-test-workflow` |
 
 ## 報告に含めること
 
