@@ -58,6 +58,7 @@ Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、
 
 ## ブランチ運用
 
+- worktree で作業するブランチには、`worktrees/<番号>/` prefix を付けます（例: `worktrees/1/feat/refine-ui`）。
 - 作業ブランチをデフォルトブランチの最新状態へ追従させるときは、merge や `git rebase` ではなく `grape rebase` を使用します。
 
 ## 配布時の確認
