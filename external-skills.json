@@ -10,7 +10,7 @@
     "name": "grilling",
     "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md",
     "type": "git",
-    "treeHash": "10b0db61f9b3869243db8a1a0ee84f862139b94e",
+    "treeHash": "fd99bcbb818f7ef766b83656fb5fac0b58e223ad",
     "destination": [
       "~/.codex/skills/external/grilling",
       "~/.claude/skills/grilling"
