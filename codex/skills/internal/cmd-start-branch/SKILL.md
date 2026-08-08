@@ -35,9 +35,11 @@ description: Git リポジトリで新しい作業を始める前に、最新の
    - ローカル差分や競合リスクがある場合は止めて、ブランチ作成前に状況を報告する。
 4. タスク内容からブランチ名を作る。
    - 「ブランチ種別の選び方」の表から、指示内容に最も合う種別を選ぶ。
-   - 形式は `<type>/<short-task>` にする。
+   - `git rev-parse --show-toplevel` で、現在地が `.worktrees/<番号>` の worktree か確認する。
+   - worktree では `worktrees/<番号>/<type>/<short-task>`、それ以外では `<type>/<short-task>` の形式にする。
+   - worktree の番号を特定できない場合は推測せず、ユーザーへ確認する。
    - 英小文字、数字、ハイフンを使う。
-   - 例: `feat/add-start-branch-skill`, `fix/login-timeout`, `refactor/split-auth-service`
+   - 例: `worktrees/1/feat/add-start-branch-skill`, `fix/login-timeout`, `refactor/split-auth-service`
 5. `git checkout -b <branch-name>` で作業ブランチを作成する。
    - 同名ブランチがある場合は、既存ブランチの位置と状態を確認し、上書きせず別名を提案する。
 6. `$cmd-dispatch-agent` を使って、別 agent に `$cmd-rmbranch` を依頼する。
@@ -55,7 +57,7 @@ description: Git リポジトリで新しい作業を始める前に、最新の
 ## ブランチ名の判断
 
 - ユーザーがタスク名や Issue 番号を示している場合は、それを優先する。
-- Issue 番号がある場合は `feat/123-short-task` のように先頭へ入れる。
+- Issue 番号がある場合は `feat/123-short-task` のようにタスク名の先頭へ入れる。worktree では `worktrees/1/feat/123-short-task` のようにする。
 - まだ内容が薄い場合は `chore/start-task-branch` のような仮名にし、後で必要なら rename を提案する。
 - 既存ブランチと衝突する場合は末尾に短い識別子を足す。
 
