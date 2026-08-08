@@ -254,7 +254,7 @@ func (f GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
 
 	repoDir := filepath.Join(workDir, safePathName(skill.Name))
 	cloneURL := fmt.Sprintf("https://github.com/%s/%s.git", skillURL.owner, skillURL.repo)
-	if _, err := f.run("clone", "--depth", "1", "--filter=blob:none", "--sparse", "--branch", skillURL.ref, cloneURL, repoDir); err != nil {
+	if err := f.clone(skillURL.ref, cloneURL, repoDir); err != nil {
 		return "", err
 	}
 	if err := f.verifyTreeHash(skill, skillURL, repoDir); err != nil {
@@ -264,6 +264,22 @@ func (f GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
 		return "", err
 	}
 	return filepath.Join(repoDir, filepath.FromSlash(skillURL.path)), nil
+}
+
+func (f GitFetcher) clone(ref, cloneURL, repoDir string) error {
+	if !gitObjectHashPattern.MatchString(ref) {
+		_, err := f.run("clone", "--depth", "1", "--filter=blob:none", "--sparse", "--branch", ref, cloneURL, repoDir)
+		return err
+	}
+
+	if _, err := f.run("clone", "--depth", "1", "--filter=blob:none", "--sparse", "--no-checkout", cloneURL, repoDir); err != nil {
+		return err
+	}
+	if _, err := f.run("-C", repoDir, "fetch", "--depth", "1", "origin", ref); err != nil {
+		return err
+	}
+	_, err := f.run("-C", repoDir, "checkout", "--detach", "FETCH_HEAD")
+	return err
 }
 
 func (f GitFetcher) verifyTreeHash(skill Skill, skillURL githubSkillURL, repoDir string) error {

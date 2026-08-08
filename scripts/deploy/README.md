@@ -149,7 +149,7 @@ make build-deploy
 ]
 ```
 
-`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式、または `https://github.com/<owner>/<repo>/blob/<ref>/<path>/SKILL.md` 形式を受け付けます。`treeHash` は必須で、`url` が指す skill ディレクトリの Git tree hash と照合する 40 文字の hex hash を指定します。dry-run でも取得、tree hash 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、tree hash が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
+`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式、または `https://github.com/<owner>/<repo>/blob/<ref>/<path>/SKILL.md` 形式を受け付けます。`<ref>` には branch、tag、40 文字の commit SHA を指定できます。`treeHash` は必須で、`url` が指す skill ディレクトリの Git tree hash と照合する 40 文字の hex hash を指定します。dry-run でも取得、tree hash 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、tree hash が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
 
 対象ディレクトリの tree hash は次のように確認できます。
 

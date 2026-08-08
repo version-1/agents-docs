@@ -35,9 +35,11 @@ description: Git リポジトリで新しい作業を始める前に、最新の
    - ローカル差分や競合リスクがある場合は止めて、ブランチ作成前に状況を報告する。
 4. タスク内容からブランチ名を作る。
    - 「ブランチ種別の選び方」の表から、指示内容に最も合う種別を選ぶ。
-   - 形式は `<type>/<short-task>` にする。
+   - `git rev-parse --show-toplevel` で、現在地が `.worktrees/<番号>` の worktree か確認する。
+   - worktree では `worktrees/<番号>/<type>/<short-task>`、それ以外では `<type>/<short-task>` の形式にする。
+   - worktree の番号を特定できない場合は推測せず、ユーザーへ確認する。
    - 英小文字、数字、ハイフンを使う。
-   - 例: `feat/add-start-branch-skill`, `fix/login-timeout`, `refactor/split-auth-service`
+   - 例: `worktrees/1/feat/add-start-branch-skill`, `fix/login-timeout`, `refactor/split-auth-service`
 5. `git checkout -b <branch-name>` で作業ブランチを作成する。
    - 同名ブランチがある場合は、既存ブランチの位置と状態を確認し、上書きせず別名を提案する。
 6. `$cmd-dispatch-agent` を使って、別 agent に `$cmd-rmbranch` を依頼する。
@@ -55,7 +57,7 @@ description: Git リポジトリで新しい作業を始める前に、最新の
 ## ブランチ名の判断
 
 - ユーザーがタスク名や Issue 番号を示している場合は、それを優先する。
-- Issue 番号がある場合は `feat/123-short-task` のように先頭へ入れる。
+- Issue 番号がある場合は `feat/123-short-task` のようにタスク名の先頭へ入れる。worktree では `worktrees/1/feat/123-short-task` のようにする。
 - まだ内容が薄い場合は `chore/start-task-branch` のような仮名にし、後で必要なら rename を提案する。
 - 既存ブランチと衝突する場合は末尾に短い識別子を足す。
 
@@ -70,12 +72,8 @@ description: Git リポジトリで新しい作業を始める前に、最新の
 | `feat` | 新機能、既存機能へのユーザー向け能力追加 | `feat/report-filter`, `feat/42-export-csv` |
 | `fix` | バグ修正、不具合回避、期待と違う挙動の修正 | `fix/login-timeout`, `fix/price-rounding` |
 | `refactor` | 挙動を変えない構造整理、責務分割、命名整理 | `refactor/split-auth-service`, `refactor/repository-contract` |
-| `test` | テスト追加、テスト修正、fixture や検証手順の整備 | `test/add-order-cases`, `test/stabilize-api-spec` |
-| `perf` | 性能改善、メモリ削減、クエリ最適化 | `perf/cache-rate-lookup`, `perf/reduce-render-cost` |
-| `style` | フォーマット、lint、見た目だけのコード整形。UI 見た目変更は `feat` または `fix` を優先する | `style/format-go-files`, `style/lint-imports` |
-| `ci` | CI、ワークフロー、ビルドパイプライン、リリース自動化 | `ci/add-test-workflow`, `ci/cache-go-build` |
 | `docs` | README、設計メモ、Runbook など文書だけの変更 | `docs/update-runbook`, `docs/add-skill-guide` |
-| `chore` | 依存更新、設定整理、生成物更新、運用上の雑務。上記に当てはまるならそちらを優先する | `chore/update-deps`, `chore/start-task-branch` |
+| `chore` | テスト、性能、整形、CI、依存更新、設定整理、生成物更新など、他の種別に当てはまらない保守作業 | `chore/add-order-tests`, `chore/add-test-workflow` |
 
 ## 報告に含めること
 

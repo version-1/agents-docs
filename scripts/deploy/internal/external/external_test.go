@@ -129,6 +129,35 @@ func TestGitFetcherFetchUsesParentDirectoryForSkillBlobURL(t *testing.T) {
 	}
 }
 
+func TestGitFetcherFetchChecksOutCommitRef(t *testing.T) {
+	var calls []string
+	skill := testSkill("grilling")
+	skill.URL = "https://github.com/owner/repo/blob/697d4ce9742da558fd1ba6697c8e9775e2e302dd/skills/productivity/grilling/SKILL.md"
+	fetcher := GitFetcher{runGit: func(args ...string) (string, error) {
+		calls = append(calls, strings.Join(args, " "))
+		if isRevParseTree(args, "skills/productivity/grilling") {
+			return testTreeHash + "\n", nil
+		}
+		return "", nil
+	}}
+
+	if _, err := fetcher.Fetch(skill, t.TempDir()); err != nil {
+		t.Fatal(err)
+	}
+	if len(calls) != 5 {
+		t.Fatalf("expected clone, fetch, checkout, rev-parse, sparse-checkout calls, got %v", calls)
+	}
+	if !strings.Contains(calls[0], "--no-checkout") || strings.Contains(calls[0], "--branch") {
+		t.Fatalf("commit ref clone should not use --branch: %v", calls)
+	}
+	if !strings.HasSuffix(calls[1], "fetch --depth 1 origin 697d4ce9742da558fd1ba6697c8e9775e2e302dd") {
+		t.Fatalf("unexpected commit fetch call: %v", calls)
+	}
+	if !strings.HasSuffix(calls[2], "checkout --detach FETCH_HEAD") {
+		t.Fatalf("unexpected commit checkout call: %v", calls)
+	}
+}
+
 func TestGitFetcherFetchRejectsTreeHashMismatch(t *testing.T) {
 	actual := "abcdef0123456789abcdef0123456789abcdef01"
 	fetcher := GitFetcher{runGit: func(args ...string) (string, error) {
