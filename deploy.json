@@ -1,8 +1,8 @@
 {
   "items": [
     {
-      "source": "codex/skills",
-      "destination": "~/.codex/skills",
+      "source": "codex/skills/internal",
+      "destination": "~/.codex/skills/internal",
       "replace": true,
       "exclude": [
         "**/.DS_Store",
