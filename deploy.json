@@ -6,8 +6,8 @@
       "replace": true,
       "exclude": [
         "**/.DS_Store",
-        "internal/deprecated",
-        "internal/depricated"
+        "deprecated",
+        "depricated"
       ]
     },
     {
