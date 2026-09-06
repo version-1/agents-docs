@@ -30,7 +30,7 @@
     "name": "frontend-design",
     "url": "https://github.com/anthropics/skills/tree/main/skills/frontend-design",
     "type": "git",
-    "treeHash": "0d5b74a14bdf3ebcd64f352d06376a2ef05ed296",
+    "treeHash": "d79e2a5bb4df4a386c2adcdd9ab8709bba28c3f6",
     "destination": [
       "~/.codex/skills/external/frontend-design",
       "~/.claude/skills/frontend-design"
@@ -40,7 +40,7 @@
     "name": "tasq-cli",
     "url": "https://github.com/version-1/tasq/tree/main/.agents/skills/tasq-cli",
     "type": "git",
-    "treeHash": "0359a69b4273d312dcf366de7c97003810a330bc",
+    "treeHash": "31ed88681650306f8edf34ef1237eb0a767eddb1",
     "destination": [
       "~/.codex/skills/external/tasq-cli",
       "~/.claude/skills/tasq-cli"
@@ -60,7 +60,7 @@
     "name": "grape-usage",
     "url": "https://github.com/version-1/grape/tree/main/.codex/skills/grape-usage",
     "type": "git",
-    "treeHash": "ae0c8a8bd9d8ea2f996c27865d44108a1ceb3d8c",
+    "treeHash": "b033e1952bad6cc0b621bb0629d0f20854fc4cdb",
     "destination": [
       "~/.codex/skills/external/grape-usage",
       "~/.claude/skills/grape-usage"
