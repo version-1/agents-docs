@@ -1,6 +1,6 @@
 name = "reviewer"
 description = "実装済み変更のレビューを担当するエージェントです。"
-model = "gpt-5.6-sol"
+model = "gpt-6-astra"
 developer_instructions = """
 `role-reviewer-playbook` をもとに作業を進めてください。
 """
