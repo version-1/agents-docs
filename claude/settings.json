@@ -1,6 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "autoUpdatesChannel": "stable",
+  "autoCompactWindow": 300000,
+  "model": "claude-fable-5-1[1m]",
   "language": "japanese",
   "permissions": {
     "defaultMode": "auto",
@@ -180,7 +182,8 @@
   },
   "env": {
     "EDITOR": "claude-vim",
-    "VISUAL": "claude-vim"
+    "VISUAL": "claude-vim",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "30"
   },
   "attribution": {
     "commit": "",
