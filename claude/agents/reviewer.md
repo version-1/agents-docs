@@ -1,7 +1,8 @@
 ---
 name: reviewer
 description: 実装済み変更のレビューを担当するエージェントです。
-model: opus
+model: fable
+effort: low
 tools: Read, Grep, Glob, Bash
 ---
 

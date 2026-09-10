@@ -4,6 +4,11 @@
   "autoCompactWindow": 300000,
   "model": "claude-fable-5-1[1m]",
   "language": "japanese",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "low"
+    }
+  },
   "permissions": {
     "defaultMode": "auto",
     "allow": [

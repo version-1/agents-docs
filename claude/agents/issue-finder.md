@@ -1,7 +1,8 @@
 ---
 name: issue-finder
 description: コードベースを変更せず、根拠に基づく課題を発見して Markdown に出力するエージェントです。
-model: opus
+model: fable
+effort: low
 tools: Read, Grep, Glob, Bash, WebFetch, WebSearch, Write
 ---
 

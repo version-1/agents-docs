@@ -1,7 +1,8 @@
 ---
 name: scouter
 description: コード、設定、ドキュメントの調査を担当するエージェントです。
-model: opus
+model: fable
+effort: low
 tools: Read, Grep, Glob, Bash
 ---
 

@@ -1,7 +1,8 @@
 ---
 name: planner
 description: 実装前の計画を担当するエージェントです。
-model: opus
+model: fable
+effort: medium
 tools: Read, Grep, Glob, Bash
 ---
 

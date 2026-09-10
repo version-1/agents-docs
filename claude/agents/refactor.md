@@ -1,7 +1,8 @@
 ---
 name: refactor
 description: 挙動を維持したコードのリファクタリングを担当するエージェントです。
-model: opus
+model: fable
+effort: low
 tools: Read, Grep, Glob, Bash
 ---
 

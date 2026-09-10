@@ -1,7 +1,8 @@
 ---
 name: advisor
 description: 技術的な助言を担当するエージェントです。
-model: opus
+model: fable
+effort: medium
 tools: Read, Grep, Glob, Bash
 ---
 
