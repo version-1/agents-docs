@@ -50,7 +50,7 @@
     "name": "tq-orchestrator",
     "url": "https://github.com/version-1/tasq/tree/main/.agents/skills/tq-orchestrator",
     "type": "git",
-    "treeHash": "ffe4cb370b68cf6af528983590d3e5c8f97d0293",
+    "treeHash": "6f9ac05781c6e863a01a852b68691a8a2386e4fd",
     "destination": [
       "~/.codex/skills/external/tq-orchestrator",
       "~/.claude/skills/tq-orchestrator"
