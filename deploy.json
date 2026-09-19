@@ -78,6 +78,13 @@
       "exclude": [
         "**/.DS_Store"
       ]
+    },
+    {
+      "source": "cursor/cli-config.json",
+      "destination": "~/.cursor/cli-config.json",
+      "exclude": [
+        "**/.DS_Store"
+      ]
     }
   ]
 }

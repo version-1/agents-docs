@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "editor": {
+    "vimMode": false
+  },
+  "permissions": {
+    "allow": [
+      "Shell(ls)",
+      "Shell(tree)",
+      "Shell(git:status *)",
+      "Shell(git:diff *)",
+      "Shell(git:log *)",
+      "Shell(git:show *)",
+      "Shell(git:rev-parse *)",
+      "Shell(git:merge-base *)",
+      "Shell(git:ls-files *)",
+      "Shell(git:grep *)",
+      "Shell(git:remote -v)",
+      "Shell(git:branch --show-current)",
+      "Shell(git:branch --list *)"
+    ],
+    "deny": [
+      "Shell(rm)",
+      "Shell(sudo)",
+      "Shell(scp)",
+      "Shell(chown)",
+      "Shell(git:push --force*)",
+      "Shell(git:clean -fd*)",
+      "Read(.env*)",
+      "Read(**/.env*)",
+      "Read(./secrets/**)"
+    ]
+  },
+  "approvalMode": "allowlist"
+}
