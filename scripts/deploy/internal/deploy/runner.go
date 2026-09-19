@@ -130,7 +130,7 @@ func (r Runner) deployConfiguredItems(cfg config.Config, cwd, configDir, backupR
 		if err != nil {
 			return err
 		}
-		if err := r.deployItem(i, src, dst, excludeMatcher, item.Replace, item.Flatten, item.Template, backupRoot, vars, opts); err != nil {
+		if err := r.deployItem(i, src, dst, excludeMatcher, item.Replace, item.Flatten, item.Template, item.MergeJSON, backupRoot, vars, opts); err != nil {
 			return err
 		}
 	}
@@ -238,7 +238,7 @@ func (r Runner) deployExternalSkill(index int, skill external.Skill, src, dst, b
 	return nil
 }
 
-func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Matcher, replace, flatten, tmpl bool, backupRoot string, vars template.Vars, opts Options) error {
+func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Matcher, replace, flatten, tmpl, mergeJSON bool, backupRoot string, vars template.Vars, opts Options) error {
 	info, err := os.Stat(src)
 	if err != nil {
 		return fmt.Errorf("stat source for items[%d] %q: %w", index, src, err)
@@ -246,6 +246,9 @@ func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Ma
 
 	report := &itemReport{}
 	if info.IsDir() {
+		if mergeJSON {
+			return fmt.Errorf("items[%d]: mergeJSON requires a file source", index)
+		}
 		if tmpl {
 			return fmt.Errorf("items[%d]: template requires a file source", index)
 		}
@@ -263,6 +266,9 @@ func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Ma
 			report.Skipped++
 			r.printSummary(report, opts)
 			return nil
+		}
+		if mergeJSON {
+			return r.deployMergedJSONFile(index, src, dst, backupRoot, report, opts)
 		}
 		if tmpl && vars != nil {
 			return r.deployTemplateFile(index, src, dst, info.Mode(), replace, backupRoot, vars, report, opts)
@@ -361,6 +367,25 @@ func (r Runner) deployFile(index int, src, dst string, mode os.FileMode, replace
 	}
 	if err := fileops.CopyFile(src, dst, mode, fileOptions(opts)); err != nil {
 		return err
+	}
+	report.CopiedFiles++
+	r.printSummary(report, opts)
+	return nil
+}
+
+func (r Runner) deployMergedJSONFile(index int, src, dst, backupRoot string, report *itemReport, opts Options) error {
+	r.printItemHeader(index, "merge-json", src, dst, opts)
+	merged, mode, err := mergedJSONFile(src, dst)
+	if err != nil {
+		return err
+	}
+	if err := r.backupDestination(dst, backupRoot, opts); err != nil {
+		return err
+	}
+	if !opts.DryRun {
+		if err := writeJSONAtomically(dst, merged, mode); err != nil {
+			return err
+		}
 	}
 	report.CopiedFiles++
 	r.printSummary(report, opts)

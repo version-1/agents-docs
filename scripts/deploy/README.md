@@ -81,6 +81,10 @@ make build-deploy
 
 `replace` は省略可能です。`true` の場合、コピー前に `destination` を削除してから配置します。`false` または未指定の場合は既存ファイルを上書きするだけで、コピー先にある余分なファイルは残します。
 
+`mergeJSON` は JSON ファイル専用です。`true` の場合、コピー元のトップレベルキーだけをコピー先へ反映し、その他のキーは保持します。`permissions.deny` は既存の拒否ルールを失わないよう和集合にします。コピー先がない場合はコピー元の内容で作成し、権限は `0600` にします。既存ファイルが JSON オブジェクトでない場合は変更せずに失敗します。`template`、`flatten`、`replace` とは併用できません。Cursor CLI の配布では認証・モデルなどの個人設定を残しつつ、権限設定を反映するために使用します。
+
+Cursor CLI では `permissions.allow` と `editor.vimMode` は配布元の値になります。既存の自動許可や Vim 設定を使い続けたい場合は、配布前に `cursor/cli-config.json` を確認してください。既存の `permissions.deny` と認証・モデルなどの設定は保持します。
+
 `flatten` は省略可能です。`true` の場合、`source` 配下から `SKILL.md` を持つディレクトリを探し、そのディレクトリを `destination/<ディレクトリ名>` に配置します。例えば `source/internal/role-planner/SKILL.md` は `destination/role-planner/SKILL.md` として配置されます。`flatten` はディレクトリの `source` でのみ使用できます。同じディレクトリ名の skill が複数見つかった場合は、上書きせずエラーにします。
 
 `exclude` は省略可能です。コピー元の中で除外したいファイルやディレクトリを glob で指定します。

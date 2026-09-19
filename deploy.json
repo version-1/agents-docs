@@ -82,6 +82,7 @@
     {
       "source": "cursor/cli-config.json",
       "destination": "~/.cursor/cli-config.json",
+      "mergeJSON": true,
       "exclude": [
         "**/.DS_Store"
       ]

@@ -7,16 +7,22 @@
     "allow": [
       "Shell(ls)",
       "Shell(tree)",
+      "Shell(git:status)",
       "Shell(git:status *)",
+      "Shell(git:diff)",
       "Shell(git:diff *)",
+      "Shell(git:log)",
       "Shell(git:log *)",
+      "Shell(git:show)",
       "Shell(git:show *)",
       "Shell(git:rev-parse *)",
       "Shell(git:merge-base *)",
+      "Shell(git:ls-files)",
       "Shell(git:ls-files *)",
       "Shell(git:grep *)",
       "Shell(git:remote -v)",
       "Shell(git:branch --show-current)",
+      "Shell(git:branch --list)",
       "Shell(git:branch --list *)"
     ],
     "deny": [
