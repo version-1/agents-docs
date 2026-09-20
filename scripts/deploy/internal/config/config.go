@@ -17,6 +17,7 @@ type Item struct {
 	Replace     bool     `json:"replace"`
 	Flatten     bool     `json:"flatten"`
 	Template    bool     `json:"template"`
+	MergeJSON   bool     `json:"mergeJSON"`
 }
 
 func Load(path string) (Config, error) {
@@ -42,6 +43,9 @@ func Load(path string) (Config, error) {
 		}
 		if item.Template && item.Flatten {
 			return Config{}, fmt.Errorf("items[%d]: template and flatten cannot be used together", i)
+		}
+		if item.MergeJSON && (item.Template || item.Flatten || item.Replace) {
+			return Config{}, fmt.Errorf("items[%d]: mergeJSON cannot be combined with template, flatten, or replace", i)
 		}
 	}
 	return cfg, nil

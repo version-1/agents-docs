@@ -1,7 +1,7 @@
 [
   {
     "name": "skill-creator",
-    "url": "https://github.com/anthropics/skills/tree/main/skills/skill-creator",
+    "url": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/skill-creator",
     "type": "git",
     "treeHash": "3cf9a8db32597ba3e24b584a3d696f4e11c7d7b6",
     "destination": ["~/.codex/skills/external/skill-creator"]
@@ -18,9 +18,9 @@
   },
   {
     "name": "empirical-prompt-tuning",
-    "url": "https://github.com/mizchi/skills/tree/main/meta/empirical-prompt-tuning",
+    "url": "https://github.com/mizchi/skills/tree/aa223d8c85ba4313e2ec6fb9251cc65d46ed3291/empirical-prompt-tuning",
     "type": "git",
-    "treeHash": "84f108582bb31004a5fa6dfbfec4f93969a57d59",
+    "treeHash": "f77c32a428257ee43bbcdd7de08b14f57fe38bb4",
     "destination": [
       "~/.codex/skills/external/empirical-prompt-tuning",
       "~/.claude/skills/empirical-prompt-tuning"
@@ -28,7 +28,7 @@
   },
   {
     "name": "frontend-design",
-    "url": "https://github.com/anthropics/skills/tree/main/skills/frontend-design",
+    "url": "https://github.com/anthropics/skills/tree/34040c9c568585f6929bedeaad110ad08f079624/skills/frontend-design",
     "type": "git",
     "treeHash": "d79e2a5bb4df4a386c2adcdd9ab8709bba28c3f6",
     "destination": [
@@ -38,7 +38,7 @@
   },
   {
     "name": "tasq-cli",
-    "url": "https://github.com/version-1/tasq/tree/main/.agents/skills/tasq-cli",
+    "url": "https://github.com/version-1/tasq/tree/8fe534810005eb403791ca7307104a67501a71ea/.agents/skills/tasq-cli",
     "type": "git",
     "treeHash": "31ed88681650306f8edf34ef1237eb0a767eddb1",
     "destination": [
@@ -48,9 +48,9 @@
   },
   {
     "name": "tq-orchestrator",
-    "url": "https://github.com/version-1/tasq/tree/main/.agents/skills/tq-orchestrator",
+    "url": "https://github.com/version-1/tasq/tree/8fe534810005eb403791ca7307104a67501a71ea/.agents/skills/tq-orchestrator",
     "type": "git",
-    "treeHash": "ffe4cb370b68cf6af528983590d3e5c8f97d0293",
+    "treeHash": "6f9ac05781c6e863a01a852b68691a8a2386e4fd",
     "destination": [
       "~/.codex/skills/external/tq-orchestrator",
       "~/.claude/skills/tq-orchestrator"
@@ -58,7 +58,7 @@
   },
   {
     "name": "grape-usage",
-    "url": "https://github.com/version-1/grape/tree/main/.codex/skills/grape-usage",
+    "url": "https://github.com/version-1/grape/tree/5fed6c52d22340c9443cf83f7b98e1d609c1fe31/.codex/skills/grape-usage",
     "type": "git",
     "treeHash": "b033e1952bad6cc0b621bb0629d0f20854fc4cdb",
     "destination": [
