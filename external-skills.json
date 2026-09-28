@@ -37,6 +37,36 @@
     ]
   },
   {
+    "name": "pptx",
+    "url": "https://github.com/anthropics/skills/tree/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/pptx",
+    "type": "git",
+    "treeHash": "64529c8b3f35fe632b7256bd2f6d46e4b40160ce",
+    "destination": [
+      "~/.codex/skills/external/pptx",
+      "~/.claude/skills/pptx"
+    ]
+  },
+  {
+    "name": "pdf",
+    "url": "https://github.com/anthropics/skills/tree/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/pdf",
+    "type": "git",
+    "treeHash": "6369f4649de69bd6857c9bc3b058a77206009238",
+    "destination": [
+      "~/.codex/skills/external/pdf",
+      "~/.claude/skills/pdf"
+    ]
+  },
+  {
+    "name": "xlsx",
+    "url": "https://github.com/anthropics/skills/tree/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/xlsx",
+    "type": "git",
+    "treeHash": "fe6471cc9b5b97aae0b576ccb92ffd9b0207589d",
+    "destination": [
+      "~/.codex/skills/external/xlsx",
+      "~/.claude/skills/xlsx"
+    ]
+  },
+  {
     "name": "tasq-cli",
     "url": "https://github.com/version-1/tasq/tree/8fe534810005eb403791ca7307104a67501a71ea/.agents/skills/tasq-cli",
     "type": "git",

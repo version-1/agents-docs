@@ -130,7 +130,7 @@ func (r Runner) deployConfiguredItems(cfg config.Config, cwd, configDir, backupR
 		if err != nil {
 			return err
 		}
-		if err := r.deployItem(i, src, dst, excludeMatcher, item.Replace, item.Flatten, item.Template, item.MergeJSON, backupRoot, vars, opts); err != nil {
+		if err := r.deployItem(i, src, dst, excludeMatcher, item.Preserve, item.Replace, item.Flatten, item.Template, item.MergeJSON, backupRoot, vars, opts); err != nil {
 			return err
 		}
 	}
@@ -228,7 +228,7 @@ func (r Runner) deployExternalSkill(index int, skill external.Skill, src, dst, b
 	if err := r.backupDestination(dst, backupRoot, opts); err != nil {
 		return err
 	}
-	if err := r.replaceDestination(dst, true, opts); err != nil {
+	if err := r.replaceDestination(dst, true, nil, opts); err != nil {
 		return err
 	}
 	if err := r.copySkillDir(src, src, dst, matcher.Matcher{}, report, opts); err != nil {
@@ -238,7 +238,7 @@ func (r Runner) deployExternalSkill(index int, skill external.Skill, src, dst, b
 	return nil
 }
 
-func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Matcher, replace, flatten, tmpl, mergeJSON bool, backupRoot string, vars template.Vars, opts Options) error {
+func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Matcher, preserve []string, replace, flatten, tmpl, mergeJSON bool, backupRoot string, vars template.Vars, opts Options) error {
 	info, err := os.Stat(src)
 	if err != nil {
 		return fmt.Errorf("stat source for items[%d] %q: %w", index, src, err)
@@ -253,9 +253,12 @@ func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Ma
 			return fmt.Errorf("items[%d]: template requires a file source", index)
 		}
 		if flatten {
-			return r.deployFlattenedSkillDirs(index, src, dst, excludeMatcher, replace, backupRoot, report, opts)
+			return r.deployFlattenedSkillDirs(index, src, dst, excludeMatcher, preserve, replace, backupRoot, report, opts)
 		}
-		return r.deployDir(index, src, dst, excludeMatcher, replace, backupRoot, report, opts)
+		return r.deployDir(index, src, dst, excludeMatcher, preserve, replace, backupRoot, report, opts)
+	}
+	if len(preserve) > 0 {
+		return fmt.Errorf("items[%d]: preserve requires a directory source", index)
 	}
 	if flatten {
 		return fmt.Errorf("items[%d]: flatten requires a directory source", index)
@@ -278,7 +281,7 @@ func (r Runner) deployItem(index int, src, dst string, excludeMatcher matcher.Ma
 	return fmt.Errorf("unsupported source for items[%d] %q: only regular files and directories are supported", index, src)
 }
 
-func (r Runner) deployFlattenedSkillDirs(index int, src, dst string, excludeMatcher matcher.Matcher, replace bool, backupRoot string, report *itemReport, opts Options) error {
+func (r Runner) deployFlattenedSkillDirs(index int, src, dst string, excludeMatcher matcher.Matcher, preserve []string, replace bool, backupRoot string, report *itemReport, opts Options) error {
 	r.printItemHeader(index, "flattened-skill-dirs", src, dst, opts)
 	skillDirs, err := findFlattenedSkillDirs(src, dst, excludeMatcher, report)
 	if err != nil {
@@ -288,7 +291,7 @@ func (r Runner) deployFlattenedSkillDirs(index int, src, dst string, excludeMatc
 	if err := r.backupDestination(dst, backupRoot, opts); err != nil {
 		return err
 	}
-	if err := r.replaceDestination(dst, replace, opts); err != nil {
+	if err := r.replaceDestination(dst, replace, preserve, opts); err != nil {
 		return err
 	}
 
@@ -334,12 +337,12 @@ func (r Runner) copySkillDir(skillDir, excludeRoot, destinationRoot string, excl
 	})
 }
 
-func (r Runner) deployDir(index int, src, dst string, excludeMatcher matcher.Matcher, replace bool, backupRoot string, report *itemReport, opts Options) error {
+func (r Runner) deployDir(index int, src, dst string, excludeMatcher matcher.Matcher, preserve []string, replace bool, backupRoot string, report *itemReport, opts Options) error {
 	r.printItemHeader(index, "dir", src, dst, opts)
 	if err := r.backupDestination(dst, backupRoot, opts); err != nil {
 		return err
 	}
-	if err := r.replaceDestination(dst, replace, opts); err != nil {
+	if err := r.replaceDestination(dst, replace, preserve, opts); err != nil {
 		return err
 	}
 
@@ -362,7 +365,7 @@ func (r Runner) deployFile(index int, src, dst string, mode os.FileMode, replace
 	if err := r.backupDestination(dst, backupRoot, opts); err != nil {
 		return err
 	}
-	if err := r.replaceDestination(dst, replace, opts); err != nil {
+	if err := r.replaceDestination(dst, replace, nil, opts); err != nil {
 		return err
 	}
 	if err := fileops.CopyFile(src, dst, mode, fileOptions(opts)); err != nil {
@@ -407,7 +410,7 @@ func (r Runner) deployTemplateFile(index int, src, dst string, mode os.FileMode,
 	if err := r.backupDestination(dst, backupRoot, opts); err != nil {
 		return err
 	}
-	if err := r.replaceDestination(dst, replace, opts); err != nil {
+	if err := r.replaceDestination(dst, replace, nil, opts); err != nil {
 		return err
 	}
 
@@ -459,18 +462,53 @@ func (r Runner) backupDestination(dst, backupRoot string, opts Options) error {
 	return nil
 }
 
-func (r Runner) replaceDestination(dst string, replace bool, opts Options) error {
+func (r Runner) replaceDestination(dst string, replace bool, preserve []string, opts Options) error {
 	if !replace {
 		return nil
 	}
 	if opts.DryRun {
-		r.printReplace("remove existing destination", opts)
+		if len(preserve) > 0 {
+			r.printReplace("remove existing destination entries except preserved names", opts)
+		} else {
+			r.printReplace("remove existing destination", opts)
+		}
+		return nil
+	}
+	if len(preserve) > 0 {
+		if err := removeDestinationEntries(dst, preserve); err != nil {
+			return fmt.Errorf("replace entries in %q: %w", dst, err)
+		}
+		r.printReplace("removed existing destination entries except preserved names", opts)
 		return nil
 	}
 	if err := os.RemoveAll(dst); err != nil {
 		return fmt.Errorf("remove %q: %w", dst, err)
 	}
 	r.printReplace("removed existing destination", opts)
+	return nil
+}
+
+func removeDestinationEntries(dst string, preserve []string) error {
+	entries, err := os.ReadDir(dst)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+		return err
+	}
+
+	preserved := make(map[string]struct{}, len(preserve))
+	for _, name := range preserve {
+		preserved[name] = struct{}{}
+	}
+	for _, entry := range entries {
+		if _, ok := preserved[entry.Name()]; ok {
+			continue
+		}
+		if err := os.RemoveAll(filepath.Join(dst, entry.Name())); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
