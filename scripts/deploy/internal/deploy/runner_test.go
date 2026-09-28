@@ -419,6 +419,47 @@ func TestRunnerReplaceRemovesDestinationBeforeCopyingDirectory(t *testing.T) {
 	}
 }
 
+func TestRunnerReplacePreservesConfiguredDestinationEntries(t *testing.T) {
+	root := t.TempDir()
+	srcDir := filepath.Join(root, "src")
+	dstDir := filepath.Join(root, "dest")
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(dstDir, ".system"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(dstDir, "stale"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(srcDir, "current.txt"), []byte("current"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dstDir, ".system", "managed.txt"), []byte("managed"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dstDir, "stale", "old.txt"), []byte("old"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	config := filepath.Join(root, "deploy.json")
+	writeConfig(t, config, `{
+  "items": [
+    {"source": "src", "destination": "dest", "replace": true, "preserve": [".system"]}
+  ]
+}`)
+
+	var out bytes.Buffer
+	runner := NewRunner(&out)
+	if err := runFromDir(t, root, func() error { return runner.Run(config, Options{NoColor: true}) }); err != nil {
+		t.Fatal(err)
+	}
+
+	assertFileContent(t, filepath.Join(dstDir, "current.txt"), "current")
+	assertFileContent(t, filepath.Join(dstDir, ".system", "managed.txt"), "managed")
+	assertNotExist(t, filepath.Join(dstDir, "stale"))
+}
+
 func TestRunnerKeepsDestinationExtrasWhenReplaceIsFalse(t *testing.T) {
 	root := t.TempDir()
 	srcDir := filepath.Join(root, "src")

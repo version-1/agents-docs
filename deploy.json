@@ -4,6 +4,9 @@
       "source": "codex/skills",
       "destination": "~/.codex/skills",
       "replace": true,
+      "preserve": [
+        ".system"
+      ],
       "exclude": [
         "**/.DS_Store",
         "internal/deprecated",

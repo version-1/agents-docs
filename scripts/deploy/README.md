@@ -81,6 +81,8 @@ make build-deploy
 
 `replace` は省略可能です。`true` の場合、コピー前に `destination` を削除してから配置します。`false` または未指定の場合は既存ファイルを上書きするだけで、コピー先にある余分なファイルは残します。
 
+`preserve` は `replace: true` のディレクトリでのみ指定できます。`destination` 直下で削除せずに保持する名前を配列で指定します。Codex が管理する system skill を保持する場合は `preserve: [".system"]` とします。保持対象以外の既存エントリはコピー前に削除されます。
+
 `mergeJSON` は JSON ファイル専用です。`true` の場合、コピー元のトップレベルキーだけをコピー先へ反映し、その他のキーは保持します。`permissions.deny` は既存の拒否ルールを失わないよう和集合にします。コピー先がない場合はコピー元の内容で作成し、権限は `0600` にします。既存ファイルが JSON オブジェクトでない場合は変更せずに失敗します。`template`、`flatten`、`replace` とは併用できません。Cursor CLI の配布では認証・モデルなどの個人設定を残しつつ、権限設定を反映するために使用します。
 
 Cursor CLI では `permissions.allow` と `editor.vimMode` は配布元の値になります。既存の自動許可や Vim 設定を使い続けたい場合は、配布前に `cursor/cli-config.json` を確認してください。既存の `permissions.deny` と認証・モデルなどの設定は保持します。

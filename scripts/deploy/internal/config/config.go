@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 type Config struct {
@@ -14,6 +15,7 @@ type Item struct {
 	Source      string   `json:"source"`
 	Destination string   `json:"destination"`
 	Exclude     []string `json:"exclude"`
+	Preserve    []string `json:"preserve"`
 	Replace     bool     `json:"replace"`
 	Flatten     bool     `json:"flatten"`
 	Template    bool     `json:"template"`
@@ -46,6 +48,14 @@ func Load(path string) (Config, error) {
 		}
 		if item.MergeJSON && (item.Template || item.Flatten || item.Replace) {
 			return Config{}, fmt.Errorf("items[%d]: mergeJSON cannot be combined with template, flatten, or replace", i)
+		}
+		if len(item.Preserve) > 0 && !item.Replace {
+			return Config{}, fmt.Errorf("items[%d]: preserve requires replace", i)
+		}
+		for _, name := range item.Preserve {
+			if name == "" || name == "." || name == ".." || filepath.Base(name) != name {
+				return Config{}, fmt.Errorf("items[%d]: preserve entry %q must be a destination child name", i, name)
+			}
 		}
 	}
 	return cfg, nil
