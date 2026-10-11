@@ -76,6 +76,36 @@ func TestLoadAcceptsCommitPinnedGistSkillURL(t *testing.T) {
 	}
 }
 
+func TestLoadAcceptsCommitPinnedGistSkillURLWithLegacyID(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "external-skills.json")
+	if err := os.WriteFile(path, []byte(`[
+  {"name":"legacy-gist","url":"https://gist.github.com/k16shikano/0123456789abcdef0123/8f2d57610a73efc97d743c9b0b0ecb1002e09fa4","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/legacy-gist"]}
+]`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := Load(path); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestLoadRejectsInvalidGistSkillID(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "external-skills.json")
+	if err := os.WriteFile(path, []byte(`[
+  {"name":"invalid-gist","url":"https://gist.github.com/k16shikano/not-a-gist-id/8f2d57610a73efc97d743c9b0b0ecb1002e09fa4","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/invalid-gist"]}
+]`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err := Load(path)
+	if err == nil {
+		t.Fatal("expected invalid Gist ID error")
+	}
+	if !strings.Contains(err.Error(), "20- or 32-character Gist ID") {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
 func TestLoadRejectsUnpinnedGistSkillURL(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "external-skills.json")
 	if err := os.WriteFile(path, []byte(`[

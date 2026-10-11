@@ -49,7 +49,7 @@ type gistSkillURL struct {
 
 var (
 	gitObjectHashPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
-	gistIDPattern        = regexp.MustCompile(`^[0-9a-f]{32}$`)
+	gistIDPattern        = regexp.MustCompile(`^(?:[0-9a-f]{20}|[0-9a-f]{32})$`)
 )
 
 func Load(path string) ([]Skill, error) {
@@ -359,7 +359,7 @@ func parseGistSkillURL(raw string) (gistSkillURL, error) {
 		return gistSkillURL{}, fmt.Errorf("expected a Gist URL ending in a 40-character commit SHA")
 	}
 	if parts[0] == "" || !gistIDPattern.MatchString(parts[1]) {
-		return gistSkillURL{}, fmt.Errorf("expected non-empty Gist owner and 32-character Gist ID")
+		return gistSkillURL{}, fmt.Errorf("expected non-empty Gist owner and 20- or 32-character Gist ID")
 	}
 	return gistSkillURL{id: parts[1], ref: parts[2]}, nil
 }
