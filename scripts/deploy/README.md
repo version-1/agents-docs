@@ -14,6 +14,15 @@ make deploy
 `make deploy-dry-run` は repo root の `deploy.json` と `external-skills.json` を使って、コピー予定の内容だけを表示します。
 `make deploy` は同じ設定ファイルを使って実際にコピーします。
 
+skills だけを配布する場合はタグを指定します。`make apply` は `make deploy` の別名です。
+
+```bash
+make deploy-dry-run TAG=skills
+make apply TAG=skills
+```
+
+`TAG` を省略すると全件を配布します。リポジトリのタグは `skills`、`agents`、`rules`、`bin`、`instructions`、`config` です。タグは完全一致で 1 つ指定し、一致する項目がない場合は配布前にエラーになります。
+
 Go コマンドで直接実行する場合:
 
 ```bash
@@ -37,6 +46,7 @@ make build-deploy
 |---|---|---|
 | `-config` | Yes | コピー元とコピー先を書いた JSON 設定ファイル |
 | `-external-skills` | No | 外部 skill を取得して配布する JSON 設定ファイル |
+| `-tag` | No | 指定タグを持つ item だけを配布する |
 | `-dry-run` | No | 実際にはコピーせず、item ごとの予定と件数サマリを出力する |
 | `-no-color` | No | ANSI カラー出力を無効にする |
 
@@ -49,6 +59,7 @@ make build-deploy
   "items": [
     {
       "source": "codex/skills",
+      "tags": ["skills"],
       "destination": "~/.codex/skills",
       "replace": true,
       "exclude": [
@@ -74,6 +85,8 @@ make build-deploy
 ```
 
 `items` は上から順番に処理されます。ディレクトリもファイルも同じ `source` / `destination` 形式で指定できます。
+
+`tags` は省略可能な文字列配列です。例えば `"tags": ["skills"]` を付けると `-tag=skills` の対象になります。タグ未指定時は `tags` のない項目も含めて処理します。
 
 コピー先に既存のファイルまたはディレクトリがある場合は、コピー前にバックアップします。バックアップは 1 回の実行につき 1 つのタイムスタンプ付きディレクトリにまとめて作成され、`destination` の絶対パス構造を再現します。バックアップ先は設定ファイルと同じディレクトリ配下の `.deploy-backups/<timestamp>/` です。
 
@@ -139,6 +152,8 @@ Cursor CLI では `permissions.allow` と `editor.vimMode` は配布元の値に
 ### 外部 skill 設定
 
 `-external-skills` を指定すると、外部の skill をネットワーク経由で取得して `destination` に配布します。未指定の場合、従来どおり `-config` の内容だけを処理します。
+
+外部 skill は `skills` タグとして扱います。`-tag=skills` またはタグ未指定時に取得・配布し、それ以外のタグでは外部 skill 設定を読み込まず、取得も行いません。
 
 ```json
 [

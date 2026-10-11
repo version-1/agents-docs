@@ -12,6 +12,7 @@ type Config struct {
 }
 
 type Item struct {
+	Tags        []string `json:"tags"`
 	Source      string   `json:"source"`
 	Destination string   `json:"destination"`
 	Exclude     []string `json:"exclude"`

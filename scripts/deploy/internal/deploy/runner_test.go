@@ -93,6 +93,13 @@ func TestRunnerDryRunDoesNotWriteFiles(t *testing.T) {
 }
 
 func TestRunnerDeploysExternalSkills(t *testing.T) {
+	for _, tag := range []string{"", "skills"} {
+		t.Run(tag, func(t *testing.T) { testRunnerDeploysExternalSkills(t, tag) })
+	}
+}
+
+func testRunnerDeploysExternalSkills(t *testing.T, tag string) {
+	t.Helper()
 	root := t.TempDir()
 	writeSkill(t, filepath.Join(root, "codex", "skills", "internal", "coding"), "coding", "internal")
 	externalSource := filepath.Join(root, "external-source", "grilling")
@@ -101,7 +108,7 @@ func TestRunnerDeploysExternalSkills(t *testing.T) {
 	config := filepath.Join(root, "deploy.json")
 	writeConfig(t, config, `{
   "items": [
-    {"source": "codex/skills", "destination": "dest/codex-skills"}
+    {"source": "codex/skills", "destination": "dest/codex-skills", "tags": ["skills"]}
   ]
 }`)
 	externalConfig := filepath.Join(root, "external-skills.json")
@@ -118,7 +125,7 @@ func TestRunnerDeploysExternalSkills(t *testing.T) {
 	var out bytes.Buffer
 	runner := newRunnerWithFetcher(&out, fakeExternalSkillFetcher{sources: map[string]string{"grilling": externalSource}})
 	if err := runFromDir(t, root, func() error {
-		return runner.Run(config, Options{ExternalSkillsPath: externalConfig, NoColor: true})
+		return runner.Run(config, Options{Tag: tag, ExternalSkillsPath: externalConfig, NoColor: true})
 	}); err != nil {
 		t.Fatal(err)
 	}

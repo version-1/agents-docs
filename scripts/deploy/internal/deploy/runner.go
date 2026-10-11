@@ -18,6 +18,7 @@ import (
 )
 
 type Options struct {
+	Tag                string
 	DryRun             bool
 	NoColor            bool
 	ExternalSkillsPath string
@@ -73,6 +74,13 @@ func (r Runner) Run(configPath string, opts Options) error {
 	cfg, err := config.Load(absConfigPath)
 	if err != nil {
 		return err
+	}
+	cfg, err = selectTaggedItems(cfg, opts.Tag)
+	if err != nil {
+		return err
+	}
+	if opts.Tag != "" && opts.Tag != "skills" {
+		opts.ExternalSkillsPath = ""
 	}
 
 	var vars template.Vars

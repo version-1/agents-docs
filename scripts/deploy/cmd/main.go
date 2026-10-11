@@ -10,6 +10,7 @@ import (
 
 func main() {
 	var (
+		tag                = flag.String("tag", "", "deploy only items with this tag (external skills use the skills tag)")
 		configPath         = flag.String("config", "", "deployment config file path")
 		externalSkillsPath = flag.String("external-skills", "", "external skills config file path")
 		localConfigPath    = flag.String("local-config", "", "local config file path for template variable binding")
@@ -24,7 +25,7 @@ func main() {
 	}
 
 	runner := deploy.NewRunner(os.Stdout)
-	if err := runner.Run(*configPath, deploy.Options{DryRun: *dryRun, NoColor: *noColor, ExternalSkillsPath: *externalSkillsPath, LocalConfigPath: *localConfigPath}); err != nil {
+	if err := runner.Run(*configPath, deploy.Options{Tag: *tag, DryRun: *dryRun, NoColor: *noColor, ExternalSkillsPath: *externalSkillsPath, LocalConfigPath: *localConfigPath}); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
 	}

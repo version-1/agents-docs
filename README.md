@@ -21,6 +21,7 @@ Codex / Claude などの AI エージェントに配布するルール、プロ�
 - `make build-deploy` で deploy 用のバイナリを生成します。
 - `make deploy-dry-run` で `deploy.json` と `external-skills.json` に基づくコピー予定を確認します。
 - `make deploy` で `deploy.json` と `external-skills.json` に基づいて設定とスキルを配置します。
+- `make apply TAG=skills` で skills だけを配置します。事前確認は `make deploy-dry-run TAG=skills`、タグ省略時は全件配布です。詳細は [deploy の使い方](scripts/deploy/README.md) を参照してください。
 
 `make deploy` は Codex 用の補助コマンドも `~/.codex/bin` に配置します。
 push と rebase には、ポリシーに基づいて Git 操作を制限する `grape` を使います。
