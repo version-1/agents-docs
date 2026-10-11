@@ -95,5 +95,15 @@
       "~/.codex/skills/external/grape-usage",
       "~/.claude/skills/grape-usage"
     ]
+  },
+  {
+    "name": "japanese-tech-writing",
+    "url": "https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d/8f2d57610a73efc97d743c9b0b0ecb1002e09fa4",
+    "type": "git",
+    "treeHash": "fc505daaec7a40d8d80892c0362fd4e1f51198d7",
+    "destination": [
+      "~/.codex/skills/external/japanese-tech-writing",
+      "~/.claude/skills/japanese-tech-writing"
+    ]
   }
 ]

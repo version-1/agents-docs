@@ -42,7 +42,15 @@ type githubSkillURL struct {
 	path  string
 }
 
-var gitObjectHashPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
+type gistSkillURL struct {
+	id  string
+	ref string
+}
+
+var (
+	gitObjectHashPattern = regexp.MustCompile(`^[0-9a-f]{40}$`)
+	gistIDPattern        = regexp.MustCompile(`^(?:[0-9a-f]{20}|[0-9a-f]{32})$`)
+)
 
 func Load(path string) ([]Skill, error) {
 	b, err := os.ReadFile(path)
@@ -89,7 +97,7 @@ func validateConfigSkill(i int, skill Skill) error {
 			return fmt.Errorf("externalSkills[%d].destination[%d] is required", i, j)
 		}
 	}
-	if _, err := parseGitHubSkillURL(skill.URL); err != nil {
+	if err := parseSkillURL(skill.URL); err != nil {
 		return fmt.Errorf("externalSkills[%d].url: %w", i, err)
 	}
 	return nil
@@ -247,6 +255,10 @@ func ReadSkillName(path string) (string, error) {
 }
 
 func (f GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
+	if gistURL, err := parseGistSkillURL(skill.URL); err == nil {
+		return f.fetchGistSkill(skill, gistURL, workDir)
+	}
+
 	skillURL, err := parseGitHubSkillURL(skill.URL)
 	if err != nil {
 		return "", err
@@ -264,6 +276,21 @@ func (f GitFetcher) Fetch(skill Skill, workDir string) (string, error) {
 		return "", err
 	}
 	return filepath.Join(repoDir, filepath.FromSlash(skillURL.path)), nil
+}
+
+func (f GitFetcher) fetchGistSkill(skill Skill, skillURL gistSkillURL, workDir string) (string, error) {
+	repoDir := filepath.Join(workDir, safePathName(skill.Name))
+	cloneURL := fmt.Sprintf("https://gist.github.com/%s.git", skillURL.id)
+	if err := f.clone(skillURL.ref, cloneURL, repoDir); err != nil {
+		return "", err
+	}
+	if err := f.verifyGistTreeHash(skill, repoDir); err != nil {
+		return "", err
+	}
+	if err := os.RemoveAll(filepath.Join(repoDir, ".git")); err != nil {
+		return "", fmt.Errorf("remove Gist repository metadata: %w", err)
+	}
+	return repoDir, nil
 }
 
 func (f GitFetcher) clone(ref, cloneURL, repoDir string) error {
@@ -292,6 +319,49 @@ func (f GitFetcher) verifyTreeHash(skill Skill, skillURL githubSkillURL, repoDir
 		return fmt.Errorf("external skill %q tree hash mismatch for %q: expected %s, got %s", skill.Name, skillURL.path, skill.TreeHash, actual)
 	}
 	return nil
+}
+
+func (f GitFetcher) verifyGistTreeHash(skill Skill, repoDir string) error {
+	actual, err := f.run("-C", repoDir, "rev-parse", "HEAD^{tree}")
+	if err != nil {
+		return err
+	}
+	actual = strings.TrimSpace(actual)
+	if actual != skill.TreeHash {
+		return fmt.Errorf("external skill %q tree hash mismatch for gist root: expected %s, got %s", skill.Name, skill.TreeHash, actual)
+	}
+	return nil
+}
+
+func parseSkillURL(raw string) error {
+	u, err := url.Parse(raw)
+	if err != nil {
+		return fmt.Errorf("parse skill URL: %w", err)
+	}
+	if u.Host == "gist.github.com" {
+		_, err := parseGistSkillURL(raw)
+		return err
+	}
+	_, err = parseGitHubSkillURL(raw)
+	return err
+}
+
+func parseGistSkillURL(raw string) (gistSkillURL, error) {
+	u, err := url.Parse(raw)
+	if err != nil {
+		return gistSkillURL{}, fmt.Errorf("parse Gist skill URL: %w", err)
+	}
+	if u.Scheme != "https" || u.Host != "gist.github.com" {
+		return gistSkillURL{}, fmt.Errorf("only commit-pinned Gist URLs are supported")
+	}
+	parts := strings.Split(strings.Trim(u.Path, "/"), "/")
+	if len(parts) != 3 || !gitObjectHashPattern.MatchString(parts[2]) {
+		return gistSkillURL{}, fmt.Errorf("expected a Gist URL ending in a 40-character commit SHA")
+	}
+	if parts[0] == "" || !gistIDPattern.MatchString(parts[1]) {
+		return gistSkillURL{}, fmt.Errorf("expected non-empty Gist owner and 20- or 32-character Gist ID")
+	}
+	return gistSkillURL{id: parts[1], ref: parts[2]}, nil
 }
 
 func parseGitHubSkillURL(raw string) (githubSkillURL, error) {

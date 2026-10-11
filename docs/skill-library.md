@@ -142,6 +142,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `grilling` | `mattpocock/skills` | 判断定義型 / 判断基準・評価型 | 計画や設計を厳しく質問し、曖昧さや判断漏れを潰すために使う。 |
 | `empirical-prompt-tuning` | `mizchi/skills` | 判断定義型 / スコアリング・査定型 | skill やプロンプトを実験的に改善し、評価と反復で性能を詰めるために使う。 |
 | `grape-usage` | `version-1/grape` | 行動定義型 / リファレンス型 | 安全な push、ポリシーで制限された rebase、worktree 操作など、grape コマンドの正確な利用方法を確認するときに使う。 |
+| `japanese-tech-writing` | `k16shikano/fd287c3133457c4fd8f5601d34aa817d` | 判断定義型 / 判断基準・評価型 | 日本語の技術文書・書籍原稿を執筆・推敲するときに、段落構成、論証、読者の負荷、語り、表現の規範を適用する。 |
 
 ## 運用メモ
 
