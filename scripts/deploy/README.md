@@ -170,7 +170,7 @@ Cursor CLI では `permissions.allow` と `editor.vimMode` は配布元の値に
 ]
 ```
 
-`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式、または `https://github.com/<owner>/<repo>/blob/<ref>/<path>/SKILL.md` 形式を受け付けます。`<ref>` には branch、tag、40 文字の commit SHA を指定できます。`treeHash` は必須で、`url` が指す skill ディレクトリの Git tree hash と照合する 40 文字の hex hash を指定します。dry-run でも取得、tree hash 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、tree hash が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
+`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式、または `https://github.com/<owner>/<repo>/blob/<ref>/<path>/SKILL.md` 形式を受け付けます。`<ref>` には branch、tag、40 文字の commit SHA を指定できます。Gist は `https://gist.github.com/<owner>/<gist-id>/<commit-sha>` 形式のみを受け付け、commit SHA を必須にします。`treeHash` は必須で、GitHub URL では対象 skill ディレクトリ、Gist URL では Gist ルートの Git tree hash と照合する 40 文字の hex hash を指定します。dry-run でも取得、tree hash 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、tree hash が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
 
 対象ディレクトリの tree hash は次のように確認できます。
 
@@ -179,6 +179,12 @@ git -C <repo> rev-parse HEAD:<path>
 ```
 
 tree hash は対象ディレクトリ配下の内容に対する hash です。リポジトリ内の別ディレクトリだけが更新されても変わりません。
+
+Gist のルートを外部 skill として使う場合は、次のように確認します。
+
+```bash
+git -C <gist-repo> rev-parse HEAD^{tree}
+```
 
 外部 skill 同士の `name` 重複、内部 skill と外部 skill の同名衝突、外部 skill の `destination` 重複は上書きせずエラーにします。
 

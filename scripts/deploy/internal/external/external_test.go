@@ -63,6 +63,36 @@ func TestLoadAcceptsGitHubSkillBlobURL(t *testing.T) {
 	}
 }
 
+func TestLoadAcceptsCommitPinnedGistSkillURL(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "external-skills.json")
+	if err := os.WriteFile(path, []byte(`[
+  {"name":"japanese-tech-writing","url":"https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d/8f2d57610a73efc97d743c9b0b0ecb1002e09fa4","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/japanese-tech-writing"]}
+]`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := Load(path); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestLoadRejectsUnpinnedGistSkillURL(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "external-skills.json")
+	if err := os.WriteFile(path, []byte(`[
+  {"name":"japanese-tech-writing","url":"https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d","type":"git","treeHash":"0123456789abcdef0123456789abcdef01234567","destination":["dest/japanese-tech-writing"]}
+]`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err := Load(path)
+	if err == nil {
+		t.Fatal("expected unpinned Gist URL error")
+	}
+	if !strings.Contains(err.Error(), "40-character commit SHA") {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
 func TestLoadRejectsGitHubBlobURLForNonSkillFile(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "external-skills.json")
 	if err := os.WriteFile(path, []byte(`[
@@ -155,6 +185,63 @@ func TestGitFetcherFetchChecksOutCommitRef(t *testing.T) {
 	}
 	if !strings.HasSuffix(calls[2], "checkout --detach FETCH_HEAD") {
 		t.Fatalf("unexpected commit checkout call: %v", calls)
+	}
+}
+
+func TestGitFetcherFetchesCommitPinnedGistRoot(t *testing.T) {
+	var calls []string
+	skill := testSkill("japanese-tech-writing")
+	skill.URL = "https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d/8f2d57610a73efc97d743c9b0b0ecb1002e09fa4"
+	workDir := t.TempDir()
+	gitDir := filepath.Join(workDir, skill.Name, ".git")
+	if err := os.MkdirAll(gitDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	fetcher := GitFetcher{runGit: func(args ...string) (string, error) {
+		calls = append(calls, strings.Join(args, " "))
+		if len(args) >= 3 && args[len(args)-2] == "rev-parse" && args[len(args)-1] == "HEAD^{tree}" {
+			return testTreeHash + "\n", nil
+		}
+		return "", nil
+	}}
+
+	src, err := fetcher.Fetch(skill, workDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.HasSuffix(src, filepath.Join("japanese-tech-writing")) {
+		t.Fatalf("unexpected source path: %s", src)
+	}
+	if len(calls) != 4 {
+		t.Fatalf("expected clone, fetch, checkout, and tree verification calls, got %v", calls)
+	}
+	if !strings.Contains(calls[0], "https://gist.github.com/fd287c3133457c4fd8f5601d34aa817d.git") {
+		t.Fatalf("unexpected clone URL: %v", calls)
+	}
+	if !strings.HasSuffix(calls[3], "rev-parse HEAD^{tree}") {
+		t.Fatalf("expected root tree verification: %v", calls)
+	}
+	if _, err := os.Stat(gitDir); !os.IsNotExist(err) {
+		t.Fatalf("Gist source must not include Git metadata: %v", err)
+	}
+}
+
+func TestGitFetcherRejectsGistTreeHashMismatch(t *testing.T) {
+	skill := testSkill("japanese-tech-writing")
+	skill.URL = "https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d/8f2d57610a73efc97d743c9b0b0ecb1002e09fa4"
+	fetcher := GitFetcher{runGit: func(args ...string) (string, error) {
+		if len(args) >= 3 && args[len(args)-2] == "rev-parse" && args[len(args)-1] == "HEAD^{tree}" {
+			return "abcdef0123456789abcdef0123456789abcdef01\n", nil
+		}
+		return "", nil
+	}}
+
+	_, err := fetcher.Fetch(skill, t.TempDir())
+	if err == nil {
+		t.Fatal("expected Gist tree hash mismatch")
+	}
+	if !strings.Contains(err.Error(), "gist root") {
+		t.Fatalf("unexpected error: %v", err)
 	}
 }
 
