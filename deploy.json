@@ -2,6 +2,7 @@
   "items": [
     {
       "source": "codex/skills",
+      "tags": ["skills"],
       "destination": "~/.codex/skills",
       "replace": true,
       "preserve": [
@@ -15,11 +16,13 @@
     },
     {
       "source": "codex/rules",
+      "tags": ["rules"],
       "destination": "~/.codex/rules",
       "replace": false
     },
     {
       "source": "codex/bin",
+      "tags": ["bin"],
       "destination": "~/.codex/bin",
       "replace": false,
       "exclude": [
@@ -28,6 +31,7 @@
     },
     {
       "source": "codex/agents",
+      "tags": ["agents"],
       "destination": "~/.codex/agents",
       "replace": true,
       "exclude": [
@@ -36,6 +40,7 @@
     },
     {
       "source": "codex/AGENTS.md",
+      "tags": ["instructions"],
       "destination": "~/.codex/AGENTS.md",
       "exclude": [
         "**/.DS_Store"
@@ -43,6 +48,7 @@
     },
     {
       "source": "codex/config.toml",
+      "tags": ["config"],
       "destination": "~/.codex/config.toml",
       "template": true,
       "exclude": [
@@ -52,6 +58,7 @@
     {
       "source": "codex/skills",
       "destination": "~/.claude/skills",
+      "tags": ["skills"],
       "replace": true,
       "flatten": true,
       "exclude": [
@@ -62,6 +69,7 @@
     },
     {
       "source": "claude/agents",
+      "tags": ["agents"],
       "destination": "~/.claude/agents",
       "replace": true,
       "exclude": [
@@ -70,6 +78,7 @@
     },
     {
       "source": "claude/CLAUDE.md",
+      "tags": ["instructions"],
       "destination": "~/.claude/CLAUDE.md",
       "exclude": [
         "**/.DS_Store"
@@ -77,6 +86,7 @@
     },
     {
       "source": "claude/settings.json",
+      "tags": ["config"],
       "destination": "~/.claude/settings.json",
       "exclude": [
         "**/.DS_Store"
@@ -84,6 +94,7 @@
     },
     {
       "source": "cursor/cli-config.json",
+      "tags": ["config"],
       "destination": "~/.cursor/cli-config.json",
       "mergeJSON": true,
       "exclude": [
