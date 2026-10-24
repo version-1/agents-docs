@@ -2,11 +2,34 @@
 
 このドキュメントは、`skills/internal` で管理している skill の用途を素早く把握するための一覧です。
 
-各 skill の実体は `skills/internal/<skill-name>/SKILL.md` にあります。配布時は plugin 内の `skills/<skill-name>` へ配置されるため、skill 本文の相対 resource 参照も plugin 内で解決されます。外部 skill は `external-skills.json` の URL と hash lock に従い、選択時だけ取得されます。
+各 skill の実体は `skills/internal/<skill-name>/SKILL.md` にあります。配布時は plugin 内の `skills/<skill-name>` へ配置されるため、skill 本文の相対 resource 参照も plugin 内で解決されます。外部 skill は `external-skills.json` の URL と hash lock に従い、marketplace build 時に取得・検証されます。
 
 ## Plugin groups と個別選択
 
 group の正本は `skill-groups.json` です。build は group plugin と各 skill の個別 `skill-<name>` plugin をすべて生成します。相対 resource を参照する個別 plugin には必須の closure が同梱されます。具体的な生成・登録・移行手順は [plugin 配布](plugin-distribution.md) を参照してください。
+
+| グループ | 用途 | 代表 skill / 数 |
+|---|---|---|
+| `git` | ブランチ、コミット、履歴整理 | `cmd-commit`、`grape-usage` / 5 |
+| `delivery` | PR 作成、説明、CI 修正 | `cmd-create-pr`、`ci-fix` / 3 |
+| `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
+| `code-foundations` | 共通実装原則、命名、設計分割、追跡 | `code-general`、`code-naming` / 4 |
+| `design` | UI構成と変更設計 | `component-design`、`modification-design` / 2 |
+| `frontend` | CSS、React、TypeScript の実装 | `code-react`、`code-ts` / 4 |
+| `backend` | Go、Ruby/Rails の実装 | `code-go`、`code-ruby` / 2 |
+| `testing` | テスト設計と回帰テスト | `code-test` / 1 |
+| `code-review` | 仕様、品質、保守性のレビュー | `code-review`、`code-refactor` / 4 |
+| `planning-advice` | 技術助言と実装前の計画 | `role-advisor`、`role-planner` / 4 |
+| `implementation` | 実装と構造改善の委譲 | `role-implementer`、`role-refactor` / 4 |
+| `review-roles` | agent による実装レビュー | `role-reviewer`、`role-reviewer-playbook` / 2 |
+| `operations` | Git/GitHub、機械作業、調査の委譲 | `role-gardener`、`role-scouter` / 6 |
+| `documentation` | 文書、図解、文書化の委譲 | `documenting`、`role-documenter` / 4 |
+| `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder / 11 |
+| `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
+| `office` | PDF、プレゼン、スプレッドシート | `pdf`、`pptx`、`xlsx` / 3 |
+| `tracking` | tasq の課題管理とオーケストレーション | `tasq-cli`、`tq-orchestrator` / 2 |
+| `thinking` | 計画・判断の問い直し | `grilling` / 1 |
+| `technical-writing` | 日本語技術文書の執筆・推敲 | `japanese-tech-writing` / 1 |
 
 分類は [docs/guide/skill-category.md](guide/skill-category.md) の考え方に合わせています。複数の性質を持つ skill は、主な用途で分類しています。
 

@@ -49,7 +49,7 @@ skills/internal + external-skills.json + skill-groups.json
        必要な plugin を add              必要な plugin を install
 ```
 
-外部 skill は marketplace build 時に全 11 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。現在の生成数は 8 group plugin と 68 個別 plugin（internal 57、external 11）の計 76 plugin である。
+外部 skill は marketplace build 時に全 11 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。現在の生成数は 20 group plugin と 68 個別 plugin（internal 57、external 11）の計 88 plugin である。
 
 ## 生成と任意のローカル配布
 
@@ -80,8 +80,8 @@ backup は deploy config と同じ場所の `.deploy-backups/<time>/<absolute de
 
 ```bash
 codex plugin marketplace add <repo>/out/marketplace
-codex plugin add workflow@agents-docs
-codex plugin add skill-code-go@agents-docs
+codex plugin add delivery@agents-docs
+codex plugin add backend@agents-docs
 ```
 
 確認には `codex plugin list --marketplace agents-docs` または `codex plugin list --available --json` を使う。ローカル path の marketplace は `upgrade` の対象ではない。再生成後の反映方法は利用中の CLI の help で確認し、Codex を再起動して反映を確認する。
@@ -92,17 +92,17 @@ Claude Code では marketplace と install scope を明示する。
 
 ```bash
 claude plugin marketplace add --scope user <repo>/out/marketplace
-claude plugin install -s user workflow@agents-docs
-claude plugin install -s user skill-code-go@agents-docs
+claude plugin install -s user delivery@agents-docs
+claude plugin install -s user backend@agents-docs
 ```
 
 scope は `user`、`project`、`local` から利用場所に合わせて選ぶ。更新は `claude plugin marketplace update agents-docs`、`claude plugin update -s <scope> <plugin>` で行い、restart が必要である。有効化は `claude plugin enable -s <scope> <plugin>` を使う。無効化は利用中の host help を確認して操作する。
 
 ## 選択例と依存の注意
 
-`workflow` は delivery / review のまとまった作業に、`code` は実装・テスト・レビューの skill 群に向く。たとえば Codex で workflow 全体と Go だけを使うなら `workflow@agents-docs` と `skill-code-go@agents-docs` を追加する。Claude でも同じ plugin 名を install できる。
+`delivery` は PR 作成、説明、CI 修正に、`backend` は Go または Ruby/Rails の実装に向く。たとえば Codex で Go の実装から PR 作成まで行うなら、`backend@agents-docs`、`code-foundations@agents-docs`、`delivery@agents-docs` を追加する。Claude でも同じ plugin 名を install できる。
 
-ただし workflow 単独では、`cmd-create-pr` が参照する `role-reviewer`、`role-reviewer-playbook`、`code-review` のような cross-group 依存は含まれない。PR 作成まで行う場合は `roles@agents-docs` と `skill-code-review@agents-docs`、Go 実装まで行う場合は `skill-code-go@agents-docs` も追加する。host は行動上の依存を自動 install しないため、必要な group / skill plugin を明示する。
+group をまたぐ行動上の依存は host が自動 install しない。たとえば `delivery` の `cmd-create-pr` を使って PR 作成まで行うには、Git 操作の `git@agents-docs`、レビューの `review-roles@agents-docs` と `code-review@agents-docs` も追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。必要な group / skill plugin は明示する。
 
 group plugin と、その group に含まれる `skill-<name>` を重複 install しない。同じ skill が二重に読み込まれるおそれがあるためである。異なる group にまたがる依存がある場合は、依存先の group plugin または依存先 skill plugin も install する。個別 plugin の必須相対 resource は closure に含まれるが、別 plugin に属する行動上の依存までは自動 install しない。
 
