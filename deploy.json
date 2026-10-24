@@ -1,18 +1,11 @@
 {
   "items": [
     {
-      "source": "codex/skills",
+      "source": "out/marketplace",
       "tags": ["skills"],
-      "destination": "~/.codex/skills",
+      "destination": "~/.local/share/agents-docs/marketplace",
       "replace": true,
-      "preserve": [
-        ".system"
-      ],
-      "exclude": [
-        "**/.DS_Store",
-        "internal/deprecated",
-        "internal/depricated"
-      ]
+      "exclude": ["**/.DS_Store"]
     },
     {
       "source": "codex/rules",
@@ -53,18 +46,6 @@
       "template": true,
       "exclude": [
         "**/.DS_Store"
-      ]
-    },
-    {
-      "source": "codex/skills",
-      "destination": "~/.claude/skills",
-      "tags": ["skills"],
-      "replace": true,
-      "flatten": true,
-      "exclude": [
-        "**/.DS_Store",
-        "internal/deprecated",
-        "internal/depricated"
       ]
     },
     {

@@ -34,8 +34,7 @@ description: コードベース内の特定シンボル、関数、メソッド�
 
 - Go: references/go.md を必ず読む。
   - このファイルは、この SKILL.md と同じディレクトリの references/ 配下にある。
-  - 見つからない場合は ~/.claude/skills/code-tracer/references/go.md を試す。
-  - それでも見つからない場合はユーザーに報告し、references なしで進めない。
+  - 見つからない場合はユーザーに報告し、references なしで進めない。
 
 該当するリファレンスがない場合は、言語サーバー、静的解析、参照検索、ビルドツール、既存 IDE 設定から使える根拠を選ぶ。
 

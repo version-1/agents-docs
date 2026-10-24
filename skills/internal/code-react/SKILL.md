@@ -14,10 +14,9 @@ React 実装で、コンポーネント境界、状態、表示ロジックを�
 - まず [../code-general/SKILL.md](../code-general/SKILL.md) を読む。
 - React 実装では references/react.md を必ず読む。
   - このファイルは、この SKILL.md と同じディレクトリの references/ 配下にある。
-  - 見つからない場合は ~/.claude/skills/code-react/references/react.md を試す。
-  - それでも見つからない場合はユーザーに報告し、references なしで進めない。
+  - 見つからない場合はユーザーに報告し、references なしで進めない。
 - TypeScript の型設計も必要な場合は code-ts の references/lang.md も必ず読む。
-  - このファイルは ~/.claude/skills/code-ts/references/lang.md にある。
+  - このファイルは [../code-ts/references/lang.md](../code-ts/references/lang.md) にある。
   - 見つからない場合はユーザーに報告し、references なしで進めない。
 
 ## component-design との使い分け

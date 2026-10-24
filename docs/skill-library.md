@@ -1,8 +1,12 @@
 # Skill Library
 
-このドキュメントは、`codex/skills` で管理している skill の用途を素早く把握するための一覧です。
+このドキュメントは、`skills/internal` で管理している skill の用途を素早く把握するための一覧です。
 
-各 skill の実体は `codex/skills/internal/<skill-name>/SKILL.md` にあります。外部 skill は `external-skills.json` の設定に従って deploy 時に取得されます。
+各 skill の実体は `skills/internal/<skill-name>/SKILL.md` にあります。配布時は plugin 内の `skills/<skill-name>` へ配置されるため、skill 本文の相対 resource 参照も plugin 内で解決されます。外部 skill は `external-skills.json` の URL と hash lock に従い、選択時だけ取得されます。
+
+## Plugin groups と個別選択
+
+group の正本は `skill-groups.json` です。build は group plugin と各 skill の個別 `skill-<name>` plugin をすべて生成します。相対 resource を参照する個別 plugin には必須の closure が同梱されます。具体的な生成・登録・移行手順は [plugin 配布](plugin-distribution.md) を参照してください。
 
 分類は [docs/guide/skill-category.md](guide/skill-category.md) の考え方に合わせています。複数の性質を持つ skill は、主な用途で分類しています。
 
@@ -123,7 +127,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 ### E. Deprecated Internal Skills
 
-`codex/skills/internal/deprecated/` 配下の skill は履歴保持用です。`make deploy` / `make apply` では配布されません。
+`skills/internal/deprecated/` 配下の skill は履歴保持用です。plugin には含めません。
 
 | Skill | 理由 |
 |---|---|
@@ -133,7 +137,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 ## External Skills
 
-外部 skill は `external-skills.json` で取得元と配布先を管理します。
+外部 skill は `external-skills.json` で取得元と hash lock を管理します。marketplace build が全外部 skill を検証・取り込み、配布先は plugin membership から決まります。
 
 | Skill | 取得元 | 主な分類 | 概要 |
 |---|---|---|---|
@@ -150,6 +154,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 - 追加時は [docs/guide/skill-category.md](guide/skill-category.md) を参照し、主用途に最も近い分類へ配置する。
 - 複数カテゴリにまたがる skill は、重複掲載せず主分類に置き、必要に応じて概要に複合要素を明記する。
 - `code-general` や `code-review` のようにガードレールや思想を含む skill でも、一覧では主な行動や判断の用途を優先して配置する。
-- `codex/skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用の説明も `SKILL.md` と矛盾しないように更新する。
+- `skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用の説明も `SKILL.md` と矛盾しないように更新する。
 - 他 skill への明示的な依存や利用順序を追加したら、[docs/skill-dependency-map.md](skill-dependency-map.md) も更新する。
-- deploy 前は `make deploy-dry-run` で配布対象に含まれることを確認する。
+- 配布前は `make build-plugins` と `make deploy-plugins-dry-run` で生成対象と配布予定を確認する。

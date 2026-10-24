@@ -2,11 +2,17 @@
 
 ## ディレクトリ構成
 
-このレポジトリでは、実際に AI に配布するドキュメントを `codex/` と `claude/` 配下に配置します。
+このレポジトリでは、agent や設定などの環境固有資産を `codex/` と `claude/` 配下に配置します。skill の正本は環境共通の `skills/internal/` に置き、plugin marketplace へ生成します。
 
 `docs/` 配下は設計や運用方針など、レポジトリ自体の補助ドキュメントを置く場所です。
 
-## deploy 設定
+## Skill plugin の構成
+
+`skill-groups.json` が plugin group の membership を定義します。`out/marketplace` には全 group と全 skill の個別 plugin を生成し、Codex / Claude が必要な plugin を明示的に登録・install します。詳細は [plugin 配布](plugin-distribution.md) を正本とします。
+
+既存の `~/.codex/skills` と `~/.claude/skills` は自動で削除しません。`.system` と他者管理の skill を含むため、移行・退避・rollback の手順は plugin 配布文書に従います。
+
+## 非-skill 資産の deploy 設定
 
 `deploy.json` の `items` に、コピー元とコピー先を設定します。
 
@@ -14,8 +20,8 @@
 {
   "items": [
     {
-      "source": "codex/skills",
-      "destination": "~/.codex/skills",
+      "source": "codex/agents",
+      "destination": "~/.codex/agents",
       "replace": true,
       "exclude": [
         "**/.DS_Store",

@@ -1,203 +1,71 @@
 ## deploy
 
-任意のファイルやディレクトリを、設定ファイルに書いた配置先へコピーするコマンドです。
+`scripts/deploy` は plugin marketplace と、agent、設定、rule、補助コマンドなどの非-skill 資産を配布する Go コマンドです。skill は `~/.codex/skills` や `~/.claude/skills` へコピーせず、plugin marketplace として生成・配布します。
 
-### 使い方
+skill plugin の生成、配布、Codex / Claude への登録は [plugin 配布](../../docs/plugin-distribution.md) を参照してください。
 
-リポジトリルートから実行する場合:
+## 利用方法
+
+通常はリポジトリ root で次を実行します。
 
 ```bash
 make deploy-dry-run
 make deploy
 ```
 
-`make deploy-dry-run` は repo root の `deploy.json` と `external-skills.json` を使って、コピー予定の内容だけを表示します。
-`make deploy` は同じ設定ファイルを使って実際にコピーします。
-
-skills だけを配布する場合はタグを指定します。`make apply` は `make deploy` の別名です。
+`make deploy-dry-run` は非-skill 資産と plugin marketplace の配布予定を確認します。`make deploy` は同じ対象を配布します。skill plugin だけを操作する場合は次を使います。
 
 ```bash
-make deploy-dry-run TAG=skills
-make apply TAG=skills
+make build-plugins
+make deploy-plugins-dry-run
+make deploy-plugins
 ```
 
-`TAG` を省略すると全件を配布します。リポジトリのタグは `skills`、`agents`、`rules`、`bin`、`instructions`、`config` です。タグは完全一致で 1 つ指定し、一致する項目がない場合は配布前にエラーになります。
+plugin 配布は `~/.local/share/agents-docs/marketplace` を backup 後に置き換えます。host の marketplace 登録、plugin の追加・有効化、cache の操作は deploy の責務ではありません。
 
-Go コマンドで直接実行する場合:
+## deploy CLI
+
+直接実行する場合は、`deploy.json` に定義した plugin marketplace と非-skill 資産を扱います。
 
 ```bash
-go run ./scripts/deploy/cmd -config=deploy.json -external-skills=external-skills.json -dry-run
-go run ./scripts/deploy/cmd -config=deploy.json -external-skills=external-skills.json
+go run ./scripts/deploy/cmd -config=deploy.json -dry-run
+go run ./scripts/deploy/cmd -config=deploy.json
 ```
-
-`-dry-run` を付けると、実際にはコピーせずにバックアップ、削除、作成予定のディレクトリとコピー予定のファイルを出力します。
-
-ビルド済みバイナリを使う場合:
-
-```bash
-make build-deploy
-./bin/deploy -config=./deploy.json -external-skills=./external-skills.json -dry-run
-./bin/deploy -config=./deploy.json -external-skills=./external-skills.json
-```
-
-### オプション
 
 | フラグ | 必須 | 説明 |
 |---|---|---|
 | `-config` | Yes | コピー元とコピー先を書いた JSON 設定ファイル |
-| `-external-skills` | No | 外部 skill を取得して配布する JSON 設定ファイル |
 | `-tag` | No | 指定タグを持つ item だけを配布する |
-| `-dry-run` | No | 実際にはコピーせず、item ごとの予定と件数サマリを出力する |
+| `-dry-run` | No | 実際にはコピーせず、予定と件数を出力する |
 | `-no-color` | No | ANSI カラー出力を無効にする |
 
-### 設定ファイル
-
-設定ファイルは JSON です。`source` の相対パスは deploy コマンドを実行したカレントディレクトリから解決されます。`destination` の相対パスは設定ファイルのあるディレクトリから解決されます。`~/` から始まるパスはホームディレクトリへ展開されます。
+`source` の相対パスはコマンドのカレントディレクトリ、`destination` の相対パスは設定ファイルのあるディレクトリから解決します。`~/` はホームディレクトリに展開します。
 
 ```json
 {
   "items": [
     {
-      "source": "codex/skills",
-      "tags": ["skills"],
-      "destination": "~/.codex/skills",
-      "replace": true,
-      "exclude": [
-        "**/.DS_Store",
-        "**/*.tmp"
-      ]
-    },
-    {
       "source": "codex/agents",
+      "tags": ["agents"],
       "destination": "~/.codex/agents",
       "replace": true
     },
     {
       "source": "codex/AGENTS.md",
+      "tags": ["instructions"],
       "destination": "~/.codex/AGENTS.md"
-    },
-    {
-      "source": "codex/config.toml",
-      "destination": "~/.codex/config.toml"
     }
   ]
 }
 ```
 
-`items` は上から順番に処理されます。ディレクトリもファイルも同じ `source` / `destination` 形式で指定できます。
+コピー先が存在する場合は先に backup を作成します。`replace: true` では backup 後にコピー先を洗い替えます。`preserve` は `replace: true` のディレクトリで保持する直下名を指定します。`mergeJSON: true` は JSON ファイルのトップレベルキーを既存設定へマージします。`template`、`exclude`、`tags` の詳細は `deploy.json` とテストを参照してください。
 
-`tags` は省略可能な文字列配列です。例えば `"tags": ["skills"]` を付けると `-tag=skills` の対象になります。タグ未指定時は `tags` のない項目も含めて処理します。
-
-コピー先に既存のファイルまたはディレクトリがある場合は、コピー前にバックアップします。バックアップは 1 回の実行につき 1 つのタイムスタンプ付きディレクトリにまとめて作成され、`destination` の絶対パス構造を再現します。バックアップ先は設定ファイルと同じディレクトリ配下の `.deploy-backups/<timestamp>/` です。
-
-リポジトリルートから `./bin/deploy -config=./deploy.json` を実行する場合、`source` は `codex/skills` のようにリポジトリルート基準で指定します。
-
-`replace` は省略可能です。`true` の場合、コピー前に `destination` を削除してから配置します。`false` または未指定の場合は既存ファイルを上書きするだけで、コピー先にある余分なファイルは残します。
-
-`preserve` は `replace: true` のディレクトリでのみ指定できます。`destination` 直下で削除せずに保持する名前を配列で指定します。Codex が管理する system skill を保持する場合は `preserve: [".system"]` とします。保持対象以外の既存エントリはコピー前に削除されます。
-
-`mergeJSON` は JSON ファイル専用です。`true` の場合、コピー元のトップレベルキーだけをコピー先へ反映し、その他のキーは保持します。`permissions.deny` は既存の拒否ルールを失わないよう和集合にします。コピー先がない場合はコピー元の内容で作成し、権限は `0600` にします。既存ファイルが JSON オブジェクトでない場合は変更せずに失敗します。`template`、`flatten`、`replace` とは併用できません。Cursor CLI の配布では認証・モデルなどの個人設定を残しつつ、権限設定を反映するために使用します。
-
-Cursor CLI では `permissions.allow` と `editor.vimMode` は配布元の値になります。既存の自動許可や Vim 設定を使い続けたい場合は、配布前に `cursor/cli-config.json` を確認してください。既存の `permissions.deny` と認証・モデルなどの設定は保持します。
-
-`flatten` は省略可能です。`true` の場合、`source` 配下から `SKILL.md` を持つディレクトリを探し、そのディレクトリを `destination/<ディレクトリ名>` に配置します。例えば `source/internal/role-planner/SKILL.md` は `destination/role-planner/SKILL.md` として配置されます。`flatten` はディレクトリの `source` でのみ使用できます。同じディレクトリ名の skill が複数見つかった場合は、上書きせずエラーにします。
-
-`exclude` は省略可能です。コピー元の中で除外したいファイルやディレクトリを glob で指定します。
-
-- パターンは `source` からの相対パスに対して評価します。
-- パス区切りは `/` で指定します。
-- `*` は `/` を含まない任意の文字列に一致します。
-- `?` は `/` を含まない任意の 1 文字に一致します。
-- `**` は `/` を含む任意の文字列に一致します。
-- `/` を含まないパターンはファイル名・ディレクトリ名だけにも一致します。
-- ディレクトリに一致した場合、その配下はまとめてスキップします。
-
-例:
-
-```json
-{
-  "items": [
-    {
-      "source": "./src",
-      "destination": "./dest",
-      "replace": true,
-      "exclude": [
-        "*.tmp",
-        "**/*.log",
-        "cache/**"
-      ]
-    }
-  ]
-}
-```
-
-### dry-run の出力例
-
-```text
-[DRY-RUN] item[0] dir
-  source:      /repo/codex/skills
-  destination: /Users/me/.codex/skills
-  backup: /repo/scripts/deploy/.deploy-backups/20260421-142600/Users/me/.codex/skills
-  replace: remove existing destination
-  summary: 18 copied, 12 dirs, 1 skipped
-
-[DRY-RUN] item[1] file
-  source:      /repo/codex/config.toml
-  destination: /Users/me/.codex/config.toml
-  summary: 1 copied, 0 dirs, 0 skipped
-```
-
-通常の出力は見出し、バックアップ、洗い替え、サマリを色分けします。CI やログ保存などで ANSI エスケープを避けたい場合は `-no-color` を指定します。
-
-### 外部 skill 設定
-
-`-external-skills` を指定すると、外部の skill をネットワーク経由で取得して `destination` に配布します。未指定の場合、従来どおり `-config` の内容だけを処理します。
-
-外部 skill は `skills` タグとして扱います。`-tag=skills` またはタグ未指定時に取得・配布し、それ以外のタグでは外部 skill 設定を読み込まず、取得も行いません。
-
-```json
-[
-  {
-    "name": "grilling",
-    "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md",
-    "type": "git",
-    "treeHash": "10b0db61f9b3869243db8a1a0ee84f862139b94e",
-    "destination": [
-      "~/.codex/skills/external/grilling",
-      "~/.claude/skills/grilling"
-    ]
-  }
-]
-```
-
-`type` は現在 `git` のみ対応します。`url` は `https://github.com/<owner>/<repo>/tree/<ref>/<path>` 形式、または `https://github.com/<owner>/<repo>/blob/<ref>/<path>/SKILL.md` 形式を受け付けます。`<ref>` には branch、tag、40 文字の commit SHA を指定できます。Gist は `https://gist.github.com/<owner>/<gist-id>/<commit-sha>` 形式のみを受け付け、commit SHA を必須にします。`treeHash` は必須で、GitHub URL では対象 skill ディレクトリ、Gist URL では Gist ルートの Git tree hash と照合する 40 文字の hex hash を指定します。dry-run でも取得、tree hash 照合、`SKILL.md` の存在確認を行うため、URL が不正、取得できない、tree hash が一致しない、または取得先に `SKILL.md` がない場合はエラーになります。
-
-対象ディレクトリの tree hash は次のように確認できます。
+## 開発時の確認
 
 ```bash
-git -C <repo> rev-parse HEAD:<path>
+cd scripts/deploy
+go test ./...
 ```
 
-tree hash は対象ディレクトリ配下の内容に対する hash です。リポジトリ内の別ディレクトリだけが更新されても変わりません。
-
-Gist のルートを外部 skill として使う場合は、次のように確認します。
-
-```bash
-git -C <gist-repo> rev-parse HEAD^{tree}
-```
-
-外部 skill 同士の `name` 重複、内部 skill と外部 skill の同名衝突、外部 skill の `destination` 重複は上書きせずエラーにします。
-
-### コピー仕様
-
-- `source` がファイルの場合、`destination` を配置先ファイルパスとしてコピーします。
-- `source` がディレクトリの場合、ディレクトリの中身を `destination` ディレクトリ配下へコピーします。
-- `flatten` が `true` の場合、`source` 配下の `SKILL.md` を持つディレクトリだけを `destination` 直下へフラットにコピーします。
-- コピー先に既存のファイルまたはディレクトリがある場合、コピー前にバックアップします。
-- バックアップ先は `.deploy-backups/<timestamp>/` 配下で、`destination` の絶対パス構造を再現します。
-- 実行時には `backup: <backup path>` を出力します。
-- 既存ファイルは上書きします。
-- `replace` が `false` または未指定の場合、コピー先にある余分なファイルは削除しません。
-- `replace` が `true` の場合、コピー前に `destination` を削除します。
-- 通常ファイルとディレクトリ以外はスキップします。
-- `exclude` に一致したファイルやディレクトリはスキップします。
+公開仕様を変更するときは、この README、[DESIGN.md](DESIGN.md)、および [plugin 配布](../../docs/plugin-distribution.md) の該当箇所を同時に更新します。

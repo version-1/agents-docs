@@ -1,0 +1,11 @@
+{
+  "groups": {
+    "workflow": {"skills": ["cmd-batch", "cmd-commit", "cmd-create-pr", "cmd-dispatch-agent", "cmd-rmbranch", "cmd-start-branch", "ci-fix", "beautify-commit", "format-pr-description"], "description": "workflow and delivery"},
+    "code": {"skills": ["code-css", "code-general", "code-go", "code-naming", "code-next-developer-review", "code-quality-review", "code-react", "code-refactor", "code-review", "code-ruby", "code-test", "code-tracer", "code-ts", "lego-programming", "component-design", "modification-design"], "description": "implementation and review"},
+    "roles": {"skills": ["role-advisor", "role-advisor-playbook", "role-bug-finder", "role-bug-finder-playbook", "role-documentation-finder", "role-documentation-finder-playbook", "role-documenter", "role-documenter-playbook", "role-feature-finder", "role-feature-finder-playbook", "role-gardener", "role-gardener-playbook", "role-implementer", "role-implementer-playbook", "role-maintenance-finder", "role-maintenance-finder-playbook", "role-planner", "role-planner-playbook", "role-refactor", "role-refactor-playbook", "role-reviewer", "role-reviewer-playbook", "role-scouter", "role-scouter-playbook", "role-vulnerability-finder", "role-vulnerability-finder-playbook", "role-worker", "role-worker-playbook", "issue-finder-playbook"], "description": "agent roles"},
+    "documentation": {"skills": ["documenting", "format-rich-html-diagram"], "description": "documentation"},
+    "authoring": {"skills": ["agent-retro", "skill-creator", "empirical-prompt-tuning"], "description": "skill authoring"},
+    "frontend": {"skills": ["frontend-design"], "description": "frontend"}, "office": {"skills": ["pdf", "pptx", "xlsx"], "description": "office files"},
+    "tools": {"skills": ["tasq-cli", "tq-orchestrator", "grape-usage", "grilling", "japanese-tech-writing"], "description": "tooling"}
+  }
+}
