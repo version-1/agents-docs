@@ -1,0 +1,188 @@
+{
+  "groups": {
+    "core": {
+      "includes": [
+        "git",
+        "delivery",
+        "planning-advice",
+        "implementation",
+        "operations",
+        "documentation"
+      ],
+      "description": "Git操作から計画、実装、調査、文書化までの基本的なagent作業をまとめて進める"
+    },
+    "git": {
+      "skills": [
+        "cmd-commit",
+        "cmd-rmbranch",
+        "cmd-start-branch",
+        "beautify-commit",
+        "grape-usage"
+      ],
+      "description": "ブランチ、コミット、履歴整理などのGit操作を安全に進める"
+    },
+    "delivery": {
+      "skills": [
+        "cmd-create-pr",
+        "format-pr-description",
+        "ci-fix"
+      ],
+      "description": "Pull Requestの作成、説明、CI修正を進める"
+    },
+    "agent-orchestration": {
+      "skills": [
+        "cmd-batch",
+        "cmd-dispatch-agent"
+      ],
+      "description": "複数agentへの作業分割と委譲を計画する"
+    },
+    "code-foundations": {
+      "skills": [
+        "code-general",
+        "code-naming",
+        "code-tracer"
+      ],
+      "description": "言語共通の実装原則、命名、コード追跡に使う"
+    },
+    "lego-programming": {
+      "skills": [
+        "lego-programming"
+      ],
+      "description": "責務分離と再利用可能な部品境界を設計・実装・見直しする"
+    },
+    "design": {
+      "skills": [
+        "component-design",
+        "modification-design"
+      ],
+      "description": "UI構成と変更後の責務・契約を実装前に設計する"
+    },
+    "frontend": {
+      "skills": [
+        "code-css",
+        "code-react",
+        "code-ts",
+        "frontend-design"
+      ],
+      "description": "CSS、React、TypeScriptを使うフロントエンド実装を進める"
+    },
+    "backend": {
+      "skills": [
+        "code-go",
+        "code-ruby"
+      ],
+      "description": "GoまたはRuby/Railsのバックエンド実装とテストに使う"
+    },
+    "testing": {
+      "skills": [
+        "code-test"
+      ],
+      "description": "テスト観点、回帰テスト、テスト戦略を設計する"
+    },
+    "code-review": {
+      "skills": [
+        "code-review",
+        "code-quality-review",
+        "code-next-developer-review",
+        "code-refactor"
+      ],
+      "description": "仕様・品質・保守性をレビューし、必要なリファクタリングを行う"
+    },
+    "planning-advice": {
+      "skills": [
+        "role-advisor",
+        "role-advisor-playbook",
+        "role-planner",
+        "role-planner-playbook",
+        "role-scouter",
+        "role-scouter-playbook"
+      ],
+      "description": "技術助言、実装前の計画作成、コードベース調査をagentへ委譲する"
+    },
+    "implementation": {
+      "skills": [
+        "role-implementer",
+        "role-implementer-playbook",
+        "role-refactor",
+        "role-refactor-playbook"
+      ],
+      "description": "実装または挙動を保つ構造改善をagentへ委譲する"
+    },
+    "review-roles": {
+      "skills": [
+        "role-reviewer",
+        "role-reviewer-playbook"
+      ],
+      "description": "実装済み変更の仕様適合と回帰をagentにレビューさせる"
+    },
+    "operations": {
+      "skills": [
+        "role-gardener",
+        "role-gardener-playbook",
+        "role-worker",
+        "role-worker-playbook"
+      ],
+      "description": "Git/GitHub操作と機械作業をagentへ委譲する"
+    },
+    "documentation": {
+      "skills": [
+        "documenting",
+        "format-rich-html-diagram",
+        "role-documenter",
+        "role-documenter-playbook"
+      ],
+      "description": "技術文書、図解、文書作成agentへの委譲に使う"
+    },
+    "finder": {
+      "skills": [
+        "issue-finder-playbook",
+        "role-bug-finder",
+        "role-bug-finder-playbook",
+        "role-documentation-finder",
+        "role-documentation-finder-playbook",
+        "role-feature-finder",
+        "role-feature-finder-playbook",
+        "role-maintenance-finder",
+        "role-maintenance-finder-playbook",
+        "role-vulnerability-finder",
+        "role-vulnerability-finder-playbook"
+      ],
+      "description": "不具合、文書、機能、保守性、脆弱性の課題をコード変更なしで発見する"
+    },
+    "authoring": {
+      "skills": [
+        "agent-retro",
+        "skill-creator",
+        "empirical-prompt-tuning"
+      ],
+      "description": "skillの作成、改善、作業知見の再利用を行う"
+    },
+    "office": {
+      "skills": [
+        "pdf",
+        "pptx",
+        "xlsx"
+      ],
+      "description": "PDF、プレゼンテーション、スプレッドシートを扱う"
+    },
+    "tracking": {
+      "skills": [
+        "tasq-cli",
+        "tq-orchestrator"
+      ],
+      "description": "tasqの課題を取得し、作業をオーケストレーションする"
+    },
+    "thinking": {
+      "skills": [
+        "grilling"
+      ],
+      "description": "計画や意思決定を厳密に問い、見落としを減らす"
+    },
+    "technical-writing": {
+      "skills": [
+        "japanese-tech-writing"
+      ],
+      "description": "日本語の技術文書を執筆・推敲する"
+    }
+  }
+}

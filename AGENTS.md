@@ -1,5 +1,5 @@
 これは agents-docs レポジトリ用の AGENTS.md です。
-Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、`make deploy` でローカル環境へ配布します。
+Codex / Claude 向けの agent、skill、設定、プロンプトを管理します。skill は plugin marketplace として、その他の資産は `make deploy` でローカル環境へ配布します。
 
 エージェント作業の標準フローは [`WORKFLOW.md`](WORKFLOW.md) を参照してください。
 
@@ -11,8 +11,9 @@ Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、
 ├── WORKFLOW.md                    エージェント作業の標準ワークフロー
 ├── README.md                      リポジトリ概要と基本コマンド
 ├── Makefile                       deploy ビルドと配布コマンド
-├── deploy.json                    内部ファイルの配布設定
-├── external-skills.json           外部 skill の取得・配布設定
+├── deploy.json                    plugin marketplace と非-skill 資産の配布設定
+├── skill-groups.json              plugin group の skill 構成
+├── external-skills.json           外部 skill の取得元と hash lock
 ├── bin                            生成されたバイナリ置き場
 │   └── deploy                     deploy 用バイナリ
 ├── codex                          Codex CLI 用の配布元
@@ -22,13 +23,8 @@ Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、
 │   │   └── <role>.toml            各 agent の説明、指示、nickname 候補
 │   ├── prompts                    再利用プロンプト
 │   ├── rules                      Codex ルール
-│   └── skills                     Codex skill 定義
-│       ├── internal               この repo で管理する skill
-│       │   ├── cmd-*              コマンド系 skill
-│       │   ├── code-*             コード調査・設計・レビュー系 skill
-│       │   ├── role-*             agent ロール用 skill
-│       │   └── <name>             その他の internal skill
-│       └── external               外部 skill の配置先
+├── skills                         Codex / Claude 共通の skill 正本
+│   └── internal                   この repo で管理する skill
 ├── claude                         Claude 向けの配布元
 │   ├── CLAUDE.md                  Claude に配布する指示
 │   ├── agents                     Claude agent 定義
@@ -52,8 +48,10 @@ Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、
 ## コマンド
 
 - `make build-deploy` で deploy 用のバイナリを生成します。
-- `make deploy-dry-run` で `deploy.json` と `external-skills.json` に基づくコピー予定を確認します。
-- `make deploy` で Codex / Claude 用の設定、agent、skill、prompt、rule を配布します。
+- `make build-plugins` で全 skill plugin marketplace を生成します。
+- `make deploy-plugins-dry-run` で marketplace の配布予定を確認します。
+- `make deploy-plugins` で marketplace を配布します。
+- `make deploy[-dry-run]` は非-skill 資産と plugin marketplace を配布します。
 - `make apply` は `make deploy` の別名です。
 
 ## ブランチ運用
@@ -67,20 +65,22 @@ Codex / Claude 向けの agent、skill、設定、プロンプトを管理し、
 通常は、次の順で実行します。
 
 ```bash
-make deploy-dry-run
-make deploy
+make build-plugins
+make deploy-plugins-dry-run
+make deploy-plugins
 ```
 
-`deploy-dry-run` でコピー予定、バックアップ先、削除予定、スキップ件数を確認してから `deploy` してください。
+plugin の利用には配布後、Codex / Claude での marketplace 登録と plugin 有効化が必要です。手順は [`docs/plugin-distribution.md`](docs/plugin-distribution.md) を参照してください。
 
 ## 変更時の注意
 
-- `codex/skills/internal/<name>/SKILL.md` が Codex skill の本体です。
-- `codex/skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも内容に合わせます。
+- `skills/internal/<name>/SKILL.md` が共通 skill の本体です。
+- `skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも内容に合わせます。
 - skill の設計・命名時は [`docs/design-skill.md`](docs/design-skill.md) の方針も確認します。
 - skill の追加・更新時は [`docs/skill-library.md`](docs/skill-library.md) の一覧も更新します。
 - `codex/config.toml` の `[agents.<role>]` にある `nickname_candidates` は、覚えやすい英語の人名を 3 件ずつ設定します。
-- `deploy.json` は内部ファイルの配布先、`external-skills.json` は外部 skill の取得先を管理します。
+- `skill-groups.json` は plugin group の membership、`external-skills.json` は外部 skill の取得元と hash lock を管理します。
+- `deploy.json` は plugin marketplace と非-skill 資産の配布先を管理します。
 - `claude/agents/implemnter.md` は現状のファイル名です。リネームする場合は配布設定や参照も合わせて確認します。
 
 ## テスト実行時の補足

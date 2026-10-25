@@ -9,19 +9,29 @@ Codex / Claude などの AI エージェントに配布するルール、プロ�
 - agent の役割定義とメタデータ
 - skill の本体と UI 表示用メタデータ
 - 再利用するプロンプトとルール
-- ローカル環境へ配布するための設定と deploy ツール
+- skill plugin marketplace を生成・配布するツール
 
 ## skill 一覧
 
 - [docs/skill-library.md](docs/skill-library.md)
 - [docs/skill-dependency-map.md](docs/skill-dependency-map.md)
 
+## Skill plugin の利用
+
+skill の正本は `skills/internal/` です。全 group と全 skill の個別 plugin を marketplace に生成し、Codex / Claude では必要な plugin だけを native install します。生成・配布と host への登録・有効化は別の段階です。詳細は [plugin 配布](docs/plugin-distribution.md) を参照してください。
+
+```bash
+make build-plugins
+make deploy-plugins-dry-run
+make deploy-plugins
+```
+
 ## コマンド
 
-- `make build-deploy` で deploy 用のバイナリを生成します。
-- `make deploy-dry-run` で `deploy.json` と `external-skills.json` に基づくコピー予定を確認します。
-- `make deploy` で `deploy.json` と `external-skills.json` に基づいて設定とスキルを配置します。
-- `make apply TAG=skills` で skills だけを配置します。事前確認は `make deploy-dry-run TAG=skills`、タグ省略時は全件配布です。詳細は [deploy の使い方](scripts/deploy/README.md) を参照してください。
+- `make build-deploy` で非-skill 資産を配布する deploy 用バイナリを生成します。
+- `make deploy-dry-run` で非-skill 資産と plugin marketplace の配布予定を確認します。
+- `make deploy` で非-skill 資産と plugin marketplace を配布します。
+- `make deploy-plugins[-dry-run]` は plugin marketplace だけを扱います。`TAG=skills` は marketplace 配布を対象にします。
 
 `make deploy` は Codex 用の補助コマンドも `~/.codex/bin` に配置します。
 push と rebase には、ポリシーに基づいて Git 操作を制限する `grape` を使います。
@@ -30,20 +40,15 @@ push と rebase には、ポリシーに基づいて Git 操作を制限する `
 
 ## デプロイ手順
 
-1. `make deploy-dry-run` を実行して、コピー予定のファイルとディレクトリを確認します。
-2. `make deploy` を実行して、Codex / Claude 用の設定とスキルを反映します。
-
-通常はこの2コマンドを続けて実行します。
-
-```bash
-make deploy-dry-run
-make deploy
-```
+1. `make build-plugins` を実行します。
+2. 必要なら `make deploy-plugins-dry-run`、`make deploy-plugins` を実行します。
+3. [plugin 配布](docs/plugin-distribution.md) に従い、Codex / Claude で marketplace を登録して必要な plugin を有効化します。
 
 ## 設定ファイル
 
-- `deploy.json`: 内部の skill / agent / 設定ファイルの配布先を定義します。
-- `external-skills.json`: GitHub など外部 URL から取得する skill を定義します。
+- `skill-groups.json`: plugin group と含める skill を定義します。
+- `external-skills.json`: 外部 skill の取得元と hash lock を定義します。
+- `deploy.json`: plugin marketplace と非-skill の agent / 設定などの配布先を定義します。
 
 ## 関連ドキュメント
 

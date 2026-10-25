@@ -192,6 +192,11 @@ func (r Runner) prepareExternalSkills(path string, cfg config.Config, cwd string
 	if err != nil {
 		return nil, "", nil, err
 	}
+	for _, skill := range skills {
+		if len(skill.Destination) == 0 {
+			return nil, "", nil, fmt.Errorf("external skill %q has no legacy destination; use the plugin builder", skill.Name)
+		}
+	}
 	if err := external.ValidateConflicts(skills, cfg, cwd); err != nil {
 		return nil, "", nil, err
 	}

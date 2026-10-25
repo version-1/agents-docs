@@ -89,9 +89,6 @@ func validateConfigSkill(i int, skill Skill) error {
 	if !gitObjectHashPattern.MatchString(skill.TreeHash) {
 		return fmt.Errorf("externalSkills[%d].treeHash must be a 40-character lowercase hex string", i)
 	}
-	if len(skill.Destination) == 0 {
-		return fmt.Errorf("externalSkills[%d].destination must include at least one path", i)
-	}
 	for j, destination := range skill.Destination {
 		if destination == "" {
 			return fmt.Errorf("externalSkills[%d].destination[%d] is required", i, j)

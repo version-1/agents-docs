@@ -78,14 +78,14 @@ internal skill を追加または更新した場合は、`SKILL.md` だけで完
 
 新しい internal skill を追加した場合は、最低限次を確認します。
 
-- `codex/skills/internal/<skill-name>/SKILL.md` に `name` と `description` があり、trigger 条件が具体的か。
+- `skills/internal/<skill-name>/SKILL.md` に `name` と `description` があり、trigger 条件が具体的か。
 - `docs/skill-library.md` に skill の用途を追記したか。
 - 追加先の分類は `docs/guide/skill-category.md` の考え方に合っているか。
-- `codex/skills/internal/<skill-name>/evals/evals.json` が必要な skill では、代表的な利用ケースを追加したか。
-- `codex/skills/internal/<skill-name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも `SKILL.md` と矛盾しないように更新したか。
+- `skills/internal/<skill-name>/evals/evals.json` が必要な skill では、代表的な利用ケースを追加したか。
+- `skills/internal/<skill-name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも `SKILL.md` と矛盾しないように更新したか。
 - 既存 skill との依存や利用順序が増えた場合は、`docs/skill-dependency-map.md` と該当 skill の本文から辿れるようにしたか。
 
-外部 skill を追加または更新する場合は、`external-skills.json` の取得元、commit、配布先を更新し、`docs/skill-library.md` の外部 skill 一覧も合わせて確認します。
+外部 skill を追加または更新する場合は、`external-skills.json` の取得元と hash lock、`skill-groups.json` の membership を更新し、`docs/skill-library.md` の外部 skill 一覧も合わせて確認します。
 
 ## 完了前確認
 
@@ -101,8 +101,9 @@ git diff
 このリポジトリでは、配布設定や skill を変更した場合は通常次の順で確認します。
 
 ```bash
-make deploy-dry-run
-make deploy
+make build-plugins
+make deploy-plugins-dry-run
+make deploy-plugins
 ```
 
 文書だけの変更では、Markdown のリンク、見出し、読み順が自然かを確認します。

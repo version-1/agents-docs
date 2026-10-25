@@ -1,8 +1,8 @@
 {
   "items": [
     {
-      "source": "codex/skills",
-      "destination": "~/.codex/skills",
+      "source": "out/marketplace",
+      "destination": "~/.local/share/agents-docs/marketplace",
       "replace": true,
       "exclude": [
         "**/.DS_Store"
@@ -20,12 +20,6 @@
     {
       "source": "codex/config.toml",
       "destination": "~/.codex/config.toml"
-    },
-    {
-      "source": "codex/skills",
-      "destination": "~/.claude/skills",
-      "replace": true,
-      "flatten": true
     },
     {
       "source": "claude/agents",

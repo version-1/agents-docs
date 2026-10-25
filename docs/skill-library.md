@@ -1,8 +1,37 @@
 # Skill Library
 
-このドキュメントは、`codex/skills` で管理している skill の用途を素早く把握するための一覧です。
+このドキュメントは、`skills/internal` で管理している skill の用途を素早く把握するための一覧です。
 
-各 skill の実体は `codex/skills/internal/<skill-name>/SKILL.md` にあります。外部 skill は `external-skills.json` の設定に従って deploy 時に取得されます。
+各 skill の実体は `skills/internal/<skill-name>/SKILL.md` にあります。配布時は plugin 内の `skills/<skill-name>` へ配置されるため、skill 本文の相対 resource 参照も plugin 内で解決されます。外部 skill は `external-skills.json` の URL と hash lock に従い、marketplace build 時に取得・検証されます。
+
+## Plugin groups と個別選択
+
+group の正本は `skill-groups.json` です。build は group plugin と各 skill の個別 `skill-<name>` plugin をすべて生成します。`includes` を持つ group は参照先 group の skill を合成して同梱します。相対 resource を参照する個別 plugin には必須の closure が同梱されます。具体的な生成・登録・移行手順は [plugin 配布](plugin-distribution.md) を参照してください。
+
+| グループ | 用途 | 代表 skill / 数 |
+|---|---|---|
+| `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`planning-advice`、`implementation`、`operations`、`documentation` を合成 / 26 |
+| `git` | ブランチ、コミット、履歴整理 | `cmd-commit`、`grape-usage` / 5 |
+| `delivery` | PR 作成、説明、CI 修正 | `cmd-create-pr`、`ci-fix` / 3 |
+| `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
+| `code-foundations` | 共通実装原則、命名、コード追跡 | `code-general`、`code-naming` / 3 |
+| `lego-programming` | 責務分離と部品境界の設計・実装 | `lego-programming` / 1 |
+| `design` | UI構成と変更設計 | `component-design`、`modification-design` / 2 |
+| `frontend` | CSS、React、TypeScript の実装 | `code-react`、`code-ts` / 4 |
+| `backend` | Go、Ruby/Rails の実装 | `code-go`、`code-ruby` / 2 |
+| `testing` | テスト設計と回帰テスト | `code-test` / 1 |
+| `code-review` | 仕様、品質、保守性のレビュー | `code-review`、`code-refactor` / 4 |
+| `planning-advice` | 技術助言、実装前の計画、調査 | `role-advisor`、`role-planner`、`role-scouter` / 6 |
+| `implementation` | 実装と構造改善の委譲 | `role-implementer`、`role-refactor` / 4 |
+| `review-roles` | agent による実装レビュー | `role-reviewer`、`role-reviewer-playbook` / 2 |
+| `operations` | Git/GitHub、機械作業の委譲 | `role-gardener`、`role-worker` / 4 |
+| `documentation` | 文書、図解、文書化の委譲 | `documenting`、`role-documenter` / 4 |
+| `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder / 11 |
+| `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
+| `office` | PDF、プレゼン、スプレッドシート | `pdf`、`pptx`、`xlsx` / 3 |
+| `tracking` | tasq の課題管理とオーケストレーション | `tasq-cli`、`tq-orchestrator` / 2 |
+| `thinking` | 計画・判断の問い直し | `grilling` / 1 |
+| `technical-writing` | 日本語技術文書の執筆・推敲 | `japanese-tech-writing` / 1 |
 
 分類は [docs/guide/skill-category.md](guide/skill-category.md) の考え方に合わせています。複数の性質を持つ skill は、主な用途で分類しています。
 
@@ -123,7 +152,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 ### E. Deprecated Internal Skills
 
-`codex/skills/internal/deprecated/` 配下の skill は履歴保持用です。`make deploy` / `make apply` では配布されません。
+`skills/internal/deprecated/` 配下の skill は履歴保持用です。plugin には含めません。
 
 | Skill | 理由 |
 |---|---|
@@ -133,7 +162,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 ## External Skills
 
-外部 skill は `external-skills.json` で取得元と配布先を管理します。
+外部 skill は `external-skills.json` で取得元と hash lock を管理します。marketplace build が全外部 skill を検証・取り込み、配布先は plugin membership から決まります。
 
 | Skill | 取得元 | 主な分類 | 概要 |
 |---|---|---|---|
@@ -150,6 +179,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 - 追加時は [docs/guide/skill-category.md](guide/skill-category.md) を参照し、主用途に最も近い分類へ配置する。
 - 複数カテゴリにまたがる skill は、重複掲載せず主分類に置き、必要に応じて概要に複合要素を明記する。
 - `code-general` や `code-review` のようにガードレールや思想を含む skill でも、一覧では主な行動や判断の用途を優先して配置する。
-- `codex/skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用の説明も `SKILL.md` と矛盾しないように更新する。
+- `skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用の説明も `SKILL.md` と矛盾しないように更新する。
 - 他 skill への明示的な依存や利用順序を追加したら、[docs/skill-dependency-map.md](skill-dependency-map.md) も更新する。
-- deploy 前は `make deploy-dry-run` で配布対象に含まれることを確認する。
+- 配布前は `make build-plugins` と `make deploy-plugins-dry-run` で生成対象と配布予定を確認する。
