@@ -21,7 +21,7 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `design` | UI構成と変更設計 | `component-design`、`modification-design` / 2 |
 | `frontend` | CSS、React、TypeScript の実装 | `code-react`、`code-ts` / 4 |
 | `backend` | Go、Ruby/Rails の実装 | `code-go`、`code-ruby` / 2 |
-| `testing` | テスト設計と回帰テスト | `code-test` / 1 |
+| `testing` | テストの仕様保証と変更耐性を評価 | `code-test` / 1 |
 | `code-review` | 仕様、品質、保守性のレビュー | `code-review`、`code-refactor` / 4 |
 | `planning-advice` | 技術助言、実装前の計画、調査 | `role-advisor`、`role-planner`、`role-scouter` / 6 |
 | `implementation` | 実装と構造改善の委譲 | `role-implementer`、`role-refactor` / 4 |
@@ -55,7 +55,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `cmd-create-pr` | GitHub Pull Request を安全な手順で作成または更新する。 | PR 作成、PR 提出、pull request 作成を依頼されたとき。差分確認、検証、commit、role-reviewer による PR 前レビュー、High 指摘の自動対応、grape push、PR description 作成、gh pr create / edit の順序を整理する。 |
 | `cmd-dispatch-agent` | 指定された agent を起動し、結果を待たずにタスクを投げる。 | ユーザーが agent 起動、worker への委譲、投げっぱなし実行を明示したとき。明示がなくても、単純で不明瞭な点がない自己完結タスクを任せたいとき。 |
 | `code-refactor` | 挙動を変えずにコードを簡略化、リファクタリングする。 | レビュー指摘、quality report、diff、指定ファイルをもとに可読性、保守性、テスト容易性を改善するとき。 |
-| `code-test` | テスト設計、回帰テスト追加、テストコードレビュー、テスト戦略を整理する。 | 正常系、異常系、境界値、flake、モック方針を検討するとき。 |
 | `code-tracer` | 特定シンボルや関数の callers / callees / both を根拠付きで追跡する。 | 呼び出し経路、影響範囲、依存関係を Markdown や Mermaid で可視化したいとき。 |
 | `code-general` | 言語固有スキルが適用できない、または言語をまたぐ実装作業の共通原則。 | 既存構造、命名、責務境界に合わせて小さく安全な差分を作るとき。言語固有の判断では該当する言語別スキルを併用する。 |
 | `component-design` | React / Next.js / TypeScript UI の実装前に、画面構成とコンポーネント境界を設計する。 | 新規画面、大きな JSX 分割、既存 UI へのまとまった機能追加を行う前。 |
@@ -117,6 +116,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `code-next-developer-review` | 次に開発する人が困らないかという観点で差分をレビューする。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、命名、責務境界、型、テストの読みやすさ、前提知識の残し方を確認するとき。 |
 | `code-review` | 実装済み差分、PR、コミット、指定ファイルをリスク中心にレビューする。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、仕様違反、回帰、公開契約破壊、セキュリティ、データ整合性を確認するとき。 |
 | `code-test-review` | PR や差分のテストコードをケースごとに分析し、回帰を見逃す反例やテスト不足を根拠付きでレビューする。 | テスト差分が変更契約を実際に観測できているかを確認したいとき。 |
+| `code-test` | テストが仕様を保証し、正常な変更に耐えるかを評価する。 | テスト設計、回帰テスト追加、既存テストのレビューで、期待値、診断性、再現性、独立性を判断するとき。 |
 
 #### 思想・スタイル型スキル
 
