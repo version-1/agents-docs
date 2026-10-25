@@ -164,6 +164,7 @@ internal skills
 
 | 起点 | 優先先 | 条件 |
 |---|---|---|
+| `format-tracer` | `code-tracer` | 整形する経路の追加調査が必要な場合。確認済みの経路を整形するだけなら不要。 |
 | `code-general` | `code-review` | レビューのみが目的の場合。 |
 | `component-design` | `code-review` | 実装済み差分の欠陥レビューが目的の場合。 |
 | `component-design` | `code-test` | テストケース設計だけが目的の場合。 |

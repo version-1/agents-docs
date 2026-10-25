@@ -36,7 +36,8 @@
       "skills": [
         "code-general",
         "code-naming",
-        "code-tracer"
+        "code-tracer",
+        "format-tracer"
       ],
       "description": "言語共通の実装原則、命名、コード追跡に使う"
     },
