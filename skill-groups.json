@@ -71,9 +71,11 @@
     },
     "testing": {
       "skills": [
-        "code-test"
+        "code-test",
+        "format-test-cases",
+        "code-test-review"
       ],
-      "description": "テスト観点、回帰テスト、テスト戦略を設計する"
+      "description": "テスト観点、既存テストの整理、PRテストレビュー、回帰テスト、テスト戦略を設計する"
     },
     "code-review": {
       "skills": [
