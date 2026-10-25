@@ -26,8 +26,10 @@ description: レビュー、不具合調査、実装説明などで、コード�
 
 以下は架空のコードを用いた表記例。実際の出力では、確認したコード位置へリンクする。ローカルファイルは絶対パス、PR などへ保存する本文はその媒体で開けるリポジトリのリンクを使う。
 
-1. `POST /orders`（[routes.ts:12](/project/src/routes.ts:12)）→ `OrderHandler.create`（[handler.ts:24](/project/src/handler.ts:24)）→ **`OrderService.create`**（[service.ts:41](/project/src/service.ts:41)）→ `OrderRepository.save`（[repository.ts:18](/project/src/repository.ts:18)）  
+1. `POST /orders`（[routes.ts:12](/project/src/routes.ts:12)）→ `OrderHandler.create`（[handler.ts:24](/project/src/handler.ts:24)）→ **`OrderService.create`**（[service.ts:41](/project/src/service.ts:41)）→ `OrderRepository.save`（[repository.ts:18](/project/src/repository.ts:18)）
+
    注文受付から保存に至る経路。説明対象の `OrderService.create` が入力を検証して保存処理を呼び出す。
 
-2. **`OrderService.create`**（[service.ts:41](/project/src/service.ts:41)）→〔イベント経由・推定〕→ `OrderCreatedHandler.handle`（[events.ts:30](/project/src/events.ts:30)）  
+2. **`OrderService.create`**（[service.ts:41](/project/src/service.ts:41)）→〔イベント経由・推定〕→ `OrderCreatedHandler.handle`（[events.ts:30](/project/src/events.ts:30)）
+
    注文作成後の通知候補。イベント発行は確認済みだが、このハンドラーへの接続は未確定。
