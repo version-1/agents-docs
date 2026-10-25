@@ -1,0 +1,4 @@
+interface:
+  display_name: "format-test-cases"
+  short_description: "既存テストを根拠付きテストケース表に整理"
+  default_prompt: "$format-test-cases を使って、指定したテストコードをテストケース表に整理してください。"

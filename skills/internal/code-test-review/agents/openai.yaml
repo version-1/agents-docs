@@ -1,0 +1,4 @@
+interface:
+  display_name: "code-test-review"
+  short_description: "PRのテスト差分をケース単位で根拠付きレビュー"
+  default_prompt: "$code-test-review を使って、この PR のテストコードをケースごとにレビューしてください。"

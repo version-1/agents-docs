@@ -342,7 +342,7 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 			}
 		}
 	}
-	if active != 53 {
+	if active != 55 {
 		t.Fatalf("active=%d", active)
 	}
 	var ext []external.Skill
@@ -352,11 +352,11 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 	if len(ext) != 11 {
 		t.Fatalf("external=%d", len(ext))
 	}
-	if len(grouped) != 64 {
-		t.Fatalf("unique skills=%d, want 64", len(grouped))
+	if len(grouped) != 66 {
+		t.Fatalf("unique skills=%d, want 66", len(grouped))
 	}
-	if active+len(ext) != 64 {
-		t.Fatalf("active internal + external=%d, want 64", active+len(ext))
+	if active+len(ext) != 66 {
+		t.Fatalf("active internal + external=%d, want 66", active+len(ext))
 	}
 	sources := map[string]string{}
 	for _, s := range ext {
@@ -393,8 +393,8 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(plugins) != 86 {
-		t.Fatalf("plugins=%d, want 86", len(plugins))
+	if len(plugins) != 88 {
+		t.Fatalf("plugins=%d, want 88", len(plugins))
 	}
 	for _, name := range []string{"beautify-commit", "ci-fix", "cmd-rmbranch", "cmd-start-branch"} {
 		if _, err := os.Stat(filepath.Join(out, "plugins", "skill-"+name)); !os.IsNotExist(err) {
