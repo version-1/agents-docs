@@ -16,7 +16,7 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `git` | コミットと grape による Git 操作 | `cmd-commit`、`grape-usage` / 2 |
 | `delivery` | PR 作成と説明整備 | `cmd-create-pr`、`format-pr-description` / 2 |
 | `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
-| `code-foundations` | 共通実装原則、命名、コード追跡 | `code-general`、`code-naming` / 3 |
+| `code-foundations` | 共通実装原則、命名、コード追跡 | `code-general`、`code-naming`、`format-tracer` / 4 |
 | `lego-programming` | 責務分離と部品境界の設計・実装 | `lego-programming` / 1 |
 | `design` | UI構成と変更設計 | `component-design`、`modification-design` / 2 |
 | `frontend` | CSS、React、TypeScript の実装 | `code-react`、`code-ts` / 4 |
@@ -101,6 +101,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | Skill | 概要 | 使う場面 |
 |---|---|---|
 | `format-pr-description` | GitHub Pull Request の description を定義済みフォーマットで作成、更新する。 | PR 番号、diff、コミット履歴から Summary、変更点、動作確認を整理するとき。 |
+| `format-tracer` | コードポインタに添える呼び出し経路を、リンク付きの番号付きリストへ整形する。 | レビュー、不具合調査、実装説明で、対象処理へ至る経路をテキストで伝えたいとき。 |
 | `format-rich-html-diagram` | アーキテクチャ、コンポーネント構造、データフロー、状態管理、シーケンス、処理フローを単一 `index.html` でリッチに可視化する。 | 開発理解、設計整理、コードリーディング、オンボーディング用に、ブラウザで開ける図解資料を作りたいとき。 |
 | `format-test-cases` | 既存テストを、条件、入力、操作、期待結果、根拠を含む Markdown のテストケース表に整理する。 | テストコードの実際の検証内容を把握・共有したいとき。 |
 

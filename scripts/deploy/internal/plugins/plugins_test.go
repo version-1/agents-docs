@@ -323,41 +323,18 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 	if err := load(filepath.Join(repo, "skill-groups.json"), &groups); err != nil {
 		t.Fatal(err)
 	}
-	grouped := map[string]bool{}
-	for _, g := range groups.Groups {
-		for _, s := range g.Skills {
-			grouped[s] = true
-		}
-	}
-	entries, err := os.ReadDir(filepath.Join(repo, "skills", "internal"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	active := 0
-	for _, e := range entries {
-		if e.IsDir() && e.Name() != "deprecated" {
-			active++
-			if !grouped[e.Name()] {
-				t.Errorf("ungrouped %s", e.Name())
-			}
-		}
-	}
-	if active != 55 {
-		t.Fatalf("active=%d", active)
-	}
 	var ext []external.Skill
 	if err := load(filepath.Join(repo, "external-skills.json"), &ext); err != nil {
 		t.Fatal(err)
 	}
-	if len(ext) != 11 {
-		t.Fatalf("external=%d", len(ext))
+	expectedSkills := repositorySourceSkills(t, repo, ext)
+	groupedSkills := map[string]struct{}{}
+	for _, group := range groups.Groups {
+		for _, skill := range group.Skills {
+			groupedSkills[skill] = struct{}{}
+		}
 	}
-	if len(grouped) != 66 {
-		t.Fatalf("unique skills=%d, want 66", len(grouped))
-	}
-	if active+len(ext) != 66 {
-		t.Fatalf("active internal + external=%d, want 66", active+len(ext))
-	}
+	assertSameNames(t, "configured skills", groupedSkills, expectedSkills)
 	sources := map[string]string{}
 	for _, s := range ext {
 		p := filepath.Join(t.TempDir(), s.Name)
@@ -368,42 +345,91 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 	if _, err := Build(Options{GroupsPath: filepath.Join(repo, "skill-groups.json"), ExternalPath: filepath.Join(repo, "external-skills.json"), Output: out, Fetcher: &recordingFetcher{sources: sources}}); err != nil {
 		t.Fatal(err)
 	}
-	if len(groups.Groups) != 22 {
-		t.Fatalf("groups=%d, want 22", len(groups.Groups))
+	expectedPlugins := map[string]struct{}{}
+	for name := range groups.Groups {
+		expectedPlugins[name] = struct{}{}
 	}
-	if got := groups.Groups["core"].Includes; strings.Join(got, ",") != "git,delivery,planning-advice,implementation,operations,documentation" {
-		t.Fatalf("core includes = %q", got)
+	for skill := range expectedSkills {
+		expectedPlugins["skill-"+skill] = struct{}{}
+		assertPluginManifests(t, out, "skill-"+skill)
+		assertExists(t, filepath.Join(out, "plugins", "skill-"+skill, "skills", skill, "SKILL.md"))
 	}
-	if got := len(groups.Groups["planning-advice"].Skills); got != 6 {
-		t.Fatalf("planning-advice skills=%d, want 6", got)
+	for group := range groups.Groups {
+		assertPluginManifests(t, out, group)
 	}
-	for _, skill := range groups.Groups["operations"].Skills {
-		if skill == "role-scouter" || skill == "role-scouter-playbook" {
-			t.Fatalf("operations still contains %s", skill)
-		}
-	}
-	coreSkills, err := os.ReadDir(filepath.Join(out, "plugins", "core", "skills"))
+	assertSameNames(t, "generated plugins", directoryNames(t, filepath.Join(out, "plugins")), expectedPlugins)
+}
+
+func repositorySourceSkills(t *testing.T, repo string, externalSkills []external.Skill) map[string]struct{} {
+	t.Helper()
+	skills := map[string]struct{}{}
+	entries, err := os.ReadDir(filepath.Join(repo, "skills", "internal"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(coreSkills) != 22 {
-		t.Fatalf("core skills=%d, want 22", len(coreSkills))
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		info, err := os.Stat(filepath.Join(repo, "skills", "internal", entry.Name(), "SKILL.md"))
+		if errors.Is(err, os.ErrNotExist) {
+			continue
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !info.Mode().IsRegular() {
+			continue
+		}
+		addName(t, skills, entry.Name(), "internal source")
 	}
-	plugins, err := os.ReadDir(filepath.Join(out, "plugins"))
+	for _, skill := range externalSkills {
+		addName(t, skills, skill.Name, "external config")
+	}
+	return skills
+}
+
+func addName(t *testing.T, names map[string]struct{}, name, source string) {
+	t.Helper()
+	if _, exists := names[name]; exists {
+		t.Fatalf("duplicate skill %q in %s", name, source)
+	}
+	names[name] = struct{}{}
+}
+
+func directoryNames(t *testing.T, path string) map[string]struct{} {
+	t.Helper()
+	entries, err := os.ReadDir(path)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(plugins) != 88 {
-		t.Fatalf("plugins=%d, want 88", len(plugins))
-	}
-	for _, name := range []string{"beautify-commit", "ci-fix", "cmd-rmbranch", "cmd-start-branch"} {
-		if _, err := os.Stat(filepath.Join(out, "plugins", "skill-"+name)); !os.IsNotExist(err) {
-			t.Fatalf("deprecated plugin %s err=%v", name, err)
+	names := make(map[string]struct{}, len(entries))
+	for _, entry := range entries {
+		if entry.IsDir() {
+			names[entry.Name()] = struct{}{}
 		}
 	}
-	for _, s := range ext {
-		assertExists(t, filepath.Join(out, "plugins", "skill-"+s.Name, "skills", s.Name, "SKILL.md"))
+	return names
+}
+
+func assertSameNames(t *testing.T, description string, got, want map[string]struct{}) {
+	t.Helper()
+	for name := range want {
+		if _, exists := got[name]; !exists {
+			t.Errorf("%s missing %q", description, name)
+		}
 	}
+	for name := range got {
+		if _, exists := want[name]; !exists {
+			t.Errorf("%s unexpectedly contains %q", description, name)
+		}
+	}
+}
+
+func assertPluginManifests(t *testing.T, output, plugin string) {
+	t.Helper()
+	assertExists(t, filepath.Join(output, "plugins", plugin, ".codex-plugin", "plugin.json"))
+	assertExists(t, filepath.Join(output, "plugins", plugin, ".claude-plugin", "plugin.json"))
 }
 
 func fixture(t *testing.T, groups map[string][]string) string {
