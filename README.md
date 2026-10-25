@@ -1,5 +1,4 @@
-
-## Agents-docs
+# Agents-docs
 
 Codex / Claude などの AI エージェントに配布するルール、プロンプト、skill、agent 定義を管理するレポジトリです。
 
@@ -11,22 +10,50 @@ Codex / Claude などの AI エージェントに配布するルール、プロ�
 - 再利用するプロンプトとルール
 - skill plugin marketplace を生成・配布するツール
 
-## skill 一覧
+## Skill plugin のインストール
 
-- [docs/skill-library.md](docs/skill-library.md)
-- [docs/skill-dependency-map.md](docs/skill-dependency-map.md)
+Codex CLI または Claude Code がインストールされた環境で、リポジトリのルートから実行します。まず、全 group と全 skill の個別 plugin を含む marketplace を生成します。
 
-## Skill plugin の利用
-
-skill の正本は `skills/internal/` です。全 group と全 skill の個別 plugin を marketplace に生成し、Codex / Claude では必要な plugin だけを native install します。生成・配布と host への登録・有効化は別の段階です。詳細は [plugin 配布](docs/plugin-distribution.md) を参照してください。
+### 1. marketplace を生成
 
 ```bash
 make build-plugins
+```
+
+基本作業用の `core` plugin には、`git`、`delivery`、`planning-advice`、`implementation`、`operations`、`documentation` が含まれます。
+
+### 2. 利用する環境にインストール
+
+**Codex**
+
+```bash
+codex plugin marketplace add "$PWD/out/marketplace"
+codex plugin add core@agents-docs
+```
+
+**Claude Code**
+
+```bash
+claude plugin marketplace add --scope user "$PWD/out/marketplace"
+claude plugin install -s user core@agents-docs
+```
+
+marketplace を登録済みなら、必要な plugin を追加する最後のコマンドだけを実行します。利用する plugin 名は `core` から置き換えられます。`core` を install した場合は、その構成 group や同じ skill の個別 plugin を重複して install しないでください。追加後は Codex または Claude Code を再起動します。
+
+### 固定パスへ配布する場合
+
+生成した marketplace を固定パスで利用する場合は、次で配布します。
+
+```bash
 make deploy-plugins-dry-run
 make deploy-plugins
 ```
 
-## コマンド
+登録時は、上記の `"$PWD/out/marketplace"` を `"$HOME/.local/share/agents-docs/marketplace"` に置き換えます。配布コマンドは marketplace の登録や plugin のインストールを行いません。
+
+plugin の選択・依存関係・更新・移行については [plugin 配布](docs/plugin-distribution.md) を参照してください。
+
+## 配布コマンド
 
 - `make build-deploy` で非-skill 資産を配布する deploy 用バイナリを生成します。
 - `make deploy-dry-run` で非-skill 資産と plugin marketplace の配布予定を確認します。
@@ -38,20 +65,18 @@ push と rebase には、ポリシーに基づいて Git 操作を制限する `
 `safe-gh-edit` は自分が作成した PR / Issue だけを prompt なしで編集するための `gh pr edit` / `gh issue edit` wrapper です。
 `safe-local-curl` は localhost / loopback / private address 宛ての確認だけを prompt なしで行うための安全な `curl` wrapper です。
 
-## デプロイ手順
+## Skill の正本と設定ファイル
 
-1. `make build-plugins` を実行します。
-2. 必要なら `make deploy-plugins-dry-run`、`make deploy-plugins` を実行します。
-3. [plugin 配布](docs/plugin-distribution.md) に従い、Codex / Claude で marketplace を登録して必要な plugin を有効化します。
-
-## 設定ファイル
-
+- `skills/internal/`: 共通 skill の正本です。
 - `skill-groups.json`: plugin group と含める skill を定義します。
 - `external-skills.json`: 外部 skill の取得元と hash lock を定義します。
 - `deploy.json`: plugin marketplace と非-skill の agent / 設定などの配布先を定義します。
 
 ## 関連ドキュメント
 
+- skill の用途一覧: [docs/skill-library.md](docs/skill-library.md)
+- skill の依存関係: [docs/skill-dependency-map.md](docs/skill-dependency-map.md)
+- plugin の配布・更新・移行: [docs/plugin-distribution.md](docs/plugin-distribution.md)
 - deploy コマンドの詳細: [scripts/deploy/README.md](scripts/deploy/README.md)
 - レポジトリ設計: [docs/design.md](docs/design.md)
 
