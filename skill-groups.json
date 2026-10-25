@@ -14,20 +14,16 @@
     "git": {
       "skills": [
         "cmd-commit",
-        "cmd-rmbranch",
-        "cmd-start-branch",
-        "beautify-commit",
         "grape-usage"
       ],
-      "description": "ブランチ、コミット、履歴整理などのGit操作を安全に進める"
+      "description": "コミットとgrapeによるGit操作を安全に進める"
     },
     "delivery": {
       "skills": [
         "cmd-create-pr",
-        "format-pr-description",
-        "ci-fix"
+        "format-pr-description"
       ],
-      "description": "Pull Requestの作成、説明、CI修正を進める"
+      "description": "Pull Requestの作成と説明整備を進める"
     },
     "agent-orchestration": {
       "skills": [
