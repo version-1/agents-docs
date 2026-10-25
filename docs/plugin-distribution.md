@@ -69,7 +69,7 @@ skills/internal + external-skills.json + skill-groups.json
        必要な plugin を add              必要な plugin を install
 ```
 
-外部 skill は marketplace build 時に全 11 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。現在の生成数は 22 group plugin と 68 個別 plugin（internal 57、external 11）の計 90 plugin である。
+外部 skill は marketplace build 時に全 11 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。現在の生成数は 22 group plugin と 64 個別 plugin（internal 53、external 11）の計 86 plugin である。
 
 ## 生成と任意のローカル配布
 

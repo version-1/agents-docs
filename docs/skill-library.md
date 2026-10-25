@@ -10,9 +10,9 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 
 | グループ | 用途 | 代表 skill / 数 |
 |---|---|---|
-| `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`planning-advice`、`implementation`、`operations`、`documentation` を合成 / 26 |
-| `git` | ブランチ、コミット、履歴整理 | `cmd-commit`、`grape-usage` / 5 |
-| `delivery` | PR 作成、説明、CI 修正 | `cmd-create-pr`、`ci-fix` / 3 |
+| `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`planning-advice`、`implementation`、`operations`、`documentation` を合成 / 22 |
+| `git` | コミットと grape による Git 操作 | `cmd-commit`、`grape-usage` / 2 |
+| `delivery` | PR 作成と説明整備 | `cmd-create-pr`、`format-pr-description` / 2 |
 | `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
 | `code-foundations` | 共通実装原則、命名、コード追跡 | `code-general`、`code-naming` / 3 |
 | `lego-programming` | 責務分離と部品境界の設計・実装 | `lego-programming` / 1 |
@@ -52,10 +52,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `cmd-commit` | 変更内容を確認し、適切な粒度とメッセージで安全に Git commit を作成する。 | commit 作成を依頼されたとき。未確認の変更や unrelated changes を含めず、stage 対象と message を整理する。 |
 | `cmd-create-pr` | GitHub Pull Request を安全な手順で作成または更新する。 | PR 作成、PR 提出、pull request 作成を依頼されたとき。差分確認、検証、commit、role-reviewer による PR 前レビュー、High 指摘の自動対応、grape push、PR description 作成、gh pr create / edit の順序を整理する。 |
 | `cmd-dispatch-agent` | 指定された agent を起動し、結果を待たずにタスクを投げる。 | ユーザーが agent 起動、worker への委譲、投げっぱなし実行を明示したとき。明示がなくても、単純で不明瞭な点がない自己完結タスクを任せたいとき。 |
-| `cmd-rmbranch` | `main` と `develop` を残し、不要なローカルブランチを安全に削除する。 | ローカルブランチ整理を依頼されたとき。未マージブランチは確認してから扱う。 |
-| `cmd-start-branch` | 最新のデフォルトブランチから許可された prefix の作業ブランチを作り、不要ブランチ整理を非同期に依頼する。 | 新しい作業を始める前に「ブランチ切って」「作業開始用ブランチを作って」などを依頼されたとき。ブランチ名を報告してタスク詳細を待つ。 |
-| `beautify-commit` | ベースブランチまたは基準 commit との差分を、意味のある変更単位の commit へ安全に整理する。 | commit 分割、履歴整理、大きすぎる差分の再 commit、ベースブランチや commit hash を基準にした差分整理を依頼されたとき。interactive rebase が必要な整理は grape の対応まで実行しない。 |
-| `ci-fix` | GitHub Actions / CI の失敗を調査し、原因切り分けから修正、再検証まで進める。 | CI、GitHub Actions、checks、workflow、test / lint / build failure の修正を依頼されたとき。 |
 | `code-refactor` | 挙動を変えずにコードを簡略化、リファクタリングする。 | レビュー指摘、quality report、diff、指定ファイルをもとに可読性、保守性、テスト容易性を改善するとき。 |
 | `code-test` | テスト設計、回帰テスト追加、テストコードレビュー、テスト戦略を整理する。 | 正常系、異常系、境界値、flake、モック方針を検討するとき。 |
 | `code-tracer` | 特定シンボルや関数の callers / callees / both を根拠付きで追跡する。 | 呼び出し経路、影響範囲、依存関係を Markdown や Mermaid で可視化したいとき。 |
@@ -157,6 +153,10 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | Skill | 理由 |
 |---|---|
 | `cmd-agent-status` | active skill としては配布せず、履歴保持のため deprecated へ移動した。 |
+| `cmd-rmbranch` | active skill としては配布せず、履歴保持のため deprecated へ移動した。 |
+| `cmd-start-branch` | active skill としては配布せず、履歴保持のため deprecated へ移動した。 |
+| `beautify-commit` | active skill としては配布せず、履歴保持のため deprecated へ移動した。 |
+| `ci-fix` | active skill としては配布せず、履歴保持のため deprecated へ移動した。 |
 | `code-typo` | active skill としては配布しない。 |
 | `role-doc` | active skill としては配布しない。 |
 

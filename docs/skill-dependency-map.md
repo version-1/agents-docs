@@ -11,21 +11,11 @@
 ```text
 internal skills
 ├── workflow
-│   ├── cmd-create-pr
+│   └── cmd-create-pr
 │   │   ├── cmd-commit
 │   │   ├── role-reviewer
 │   │   ├── code-review
 │   │   └── format-pr-description
-│   ├── cmd-start-branch
-│   │   ├── cmd-dispatch-agent
-│   │   └── cmd-rmbranch
-│   ├── beautify-commit
-│   │   ├── cmd-commit
-│   │   └── grilling (external)
-│   └── ci-fix
-│       ├── code-general
-│       ├── code-test
-│       └── cmd-create-pr
 ├── role
 │   ├── finder roles
 │   │   ├── role-bug-finder -> issue-finder-playbook, role-bug-finder-playbook
@@ -101,13 +91,6 @@ internal skills
 | `cmd-create-pr` | `role-reviewer` | PR 作成・更新前のレビューゲートとして使う。 |
 | `cmd-create-pr` | `code-review` | PR 前レビューで必要に応じて併用する。 |
 | `cmd-create-pr` | `format-pr-description` | PR description を作るときに使う。 |
-| `cmd-start-branch` | `cmd-dispatch-agent` | 不要ブランチ整理を別 agent に投げるときに使う。 |
-| `cmd-start-branch` | `cmd-rmbranch` | 不要ブランチ整理 agent の依頼内容として使う。 |
-| `beautify-commit` | `cmd-commit` | 整理後の commit 作成で使う。 |
-| `beautify-commit` | `grilling` | 分割方針が曖昧なときに整理方針を詰めるため使う。 |
-| `ci-fix` | `code-general` | CI 失敗の修正に実装変更が必要なときに使う。 |
-| `ci-fix` | `code-test` | テスト追加、flake 対策、検証コマンド整理が必要なときに使う。 |
-| `ci-fix` | `cmd-create-pr` | CI 修正を PR 作成や PR 更新まで反映するときに使う。 |
 
 ## ロール系
 
@@ -209,16 +192,6 @@ graph TD
     cmd_create_pr --> role_reviewer["role-reviewer"]
     cmd_create_pr --> code_review["code-review"]
     cmd_create_pr --> format_pr_description["format-pr-description"]
-
-    cmd_start_branch["cmd-start-branch"] --> cmd_dispatch_agent["cmd-dispatch-agent"]
-    cmd_start_branch --> cmd_rmbranch["cmd-rmbranch"]
-
-    beautify_commit["beautify-commit"] --> cmd_commit
-    beautify_commit --> grilling["grilling (external)"]
-
-    ci_fix["ci-fix"] --> code_general
-    ci_fix --> code_test["code-test"]
-    ci_fix --> cmd_create_pr
 
     role_documenter_playbook["role-documenter-playbook"] --> documenting
     role_reviewer_playbook["role-reviewer-playbook"] --> code_review
