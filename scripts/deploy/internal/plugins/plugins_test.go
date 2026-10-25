@@ -42,6 +42,84 @@ func TestBuildGeneratesAllGroupAndIndividualPlugins(t *testing.T) {
 	assertExists(t, filepath.Join(out, ".claude-plugin", "marketplace.json"))
 }
 
+func TestBuildResolvesIncludedGroupsAndDeduplicatesDiamondMembership(t *testing.T) {
+	r := fixtureGroups(t, map[string]Group{
+		"alpha":  {Skills: []string{"a"}},
+		"beta":   {Skills: []string{"b"}},
+		"middle": {Includes: []string{"alpha", "beta", "alpha"}},
+		"top":    {Includes: []string{"middle", "beta"}},
+	})
+	for _, name := range []string{"a", "b"} {
+		writeSkill(t, filepath.Join(r, "skills", "internal", name), name)
+	}
+	out := filepath.Join(r, "out")
+	if _, err := Build(options(r, out)); err != nil {
+		t.Fatal(err)
+	}
+	for _, plugin := range []string{"alpha", "beta", "middle", "top"} {
+		assertExists(t, filepath.Join(out, "plugins", plugin, ".codex-plugin", "plugin.json"))
+	}
+	for _, name := range []string{"a", "b"} {
+		assertExists(t, filepath.Join(out, "plugins", "top", "skills", name, "SKILL.md"))
+	}
+	entries, err := os.ReadDir(filepath.Join(out, "plugins", "top", "skills"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(entries) != 2 {
+		t.Fatalf("top skill count = %d, want 2", len(entries))
+	}
+}
+
+func TestBuildRejectsInvalidIncludesWithoutReplacingOutput(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		groups map[string]Group
+		want   string
+	}{
+		{"unknown", map[string]Group{"one": {Includes: []string{"missing"}}}, "unknown included group"},
+		{"invalid name", map[string]Group{"one": {Includes: []string{"Bad"}}}, "invalid included group"},
+		{"self cycle", map[string]Group{"one": {Includes: []string{"one"}}}, "cycle"},
+		{"mutual cycle", map[string]Group{"one": {Includes: []string{"two"}}, "two": {Includes: []string{"one"}}}, "cycle"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			r := fixtureGroups(t, tc.groups)
+			out := filepath.Join(r, "out")
+			mustWrite(t, filepath.Join(out, "keep"), "keep")
+			_, err := Build(options(r, out))
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("error = %v, want %q", err, tc.want)
+			}
+			assertFile(t, filepath.Join(out, "keep"), "keep")
+		})
+	}
+}
+
+func TestBuildIncludedGroupMembershipChangesCompositeVersion(t *testing.T) {
+	r := fixtureGroups(t, map[string]Group{
+		"base": {Skills: []string{"alpha"}},
+		"core": {Includes: []string{"base"}},
+	})
+	skill := filepath.Join(r, "skills", "internal", "alpha")
+	writeSkill(t, skill, "alpha")
+	first := filepath.Join(r, "first")
+	if _, err := Build(options(r, first)); err != nil {
+		t.Fatal(err)
+	}
+	writeSkill(t, filepath.Join(r, "skills", "internal", "beta"), "beta")
+	writeJSON(t, filepath.Join(r, "skill-groups.json"), GroupsFile{Groups: map[string]Group{
+		"base": {Skills: []string{"alpha", "beta"}},
+		"core": {Includes: []string{"base"}},
+	}})
+	second := filepath.Join(r, "second")
+	if _, err := Build(options(r, second)); err != nil {
+		t.Fatal(err)
+	}
+	if version(t, first, "core") == version(t, second, "core") {
+		t.Fatal("composite version did not change with included group membership")
+	}
+}
+
 func TestBuildRejectsInvalidCatalogWithoutReplacingOutput(t *testing.T) {
 	for _, tc := range []struct {
 		name   string
@@ -284,6 +362,34 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 	if _, err := Build(Options{GroupsPath: filepath.Join(repo, "skill-groups.json"), ExternalPath: filepath.Join(repo, "external-skills.json"), Output: out, Fetcher: &recordingFetcher{sources: sources}}); err != nil {
 		t.Fatal(err)
 	}
+	if len(groups.Groups) != 22 {
+		t.Fatalf("groups=%d, want 22", len(groups.Groups))
+	}
+	if got := groups.Groups["core"].Includes; strings.Join(got, ",") != "git,delivery,planning-advice,implementation,operations,documentation" {
+		t.Fatalf("core includes = %q", got)
+	}
+	if got := len(groups.Groups["planning-advice"].Skills); got != 6 {
+		t.Fatalf("planning-advice skills=%d, want 6", got)
+	}
+	for _, skill := range groups.Groups["operations"].Skills {
+		if skill == "role-scouter" || skill == "role-scouter-playbook" {
+			t.Fatalf("operations still contains %s", skill)
+		}
+	}
+	coreSkills, err := os.ReadDir(filepath.Join(out, "plugins", "core", "skills"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(coreSkills) != 26 {
+		t.Fatalf("core skills=%d, want 26", len(coreSkills))
+	}
+	plugins, err := os.ReadDir(filepath.Join(out, "plugins"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(plugins) != 90 {
+		t.Fatalf("plugins=%d, want 90", len(plugins))
+	}
 	for _, s := range ext {
 		assertExists(t, filepath.Join(out, "plugins", "skill-"+s.Name, "skills", s.Name, "SKILL.md"))
 	}
@@ -291,12 +397,20 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 
 func fixture(t *testing.T, groups map[string][]string) string {
 	t.Helper()
-	r := t.TempDir()
 	g := GroupsFile{Groups: map[string]Group{}}
 	for n, s := range groups {
 		g.Groups[n] = Group{Skills: s}
 	}
-	writeJSON(t, filepath.Join(r, "skill-groups.json"), g)
+	return fixtureGroupsFile(t, g)
+}
+func fixtureGroups(t *testing.T, groups map[string]Group) string {
+	t.Helper()
+	return fixtureGroupsFile(t, GroupsFile{Groups: groups})
+}
+func fixtureGroupsFile(t *testing.T, groups GroupsFile) string {
+	t.Helper()
+	r := t.TempDir()
+	writeJSON(t, filepath.Join(r, "skill-groups.json"), groups)
 	writeJSON(t, filepath.Join(r, "external-skills.json"), []external.Skill{})
 	return r
 }

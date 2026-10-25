@@ -20,7 +20,27 @@
 
 - `skills/internal/<name>/SKILL.md` は internal skill の正本である。
 - `external-skills.json` は外部 skill の URL と `treeHash` lock を管理し、destination は持たない。
-- `skill-groups.json` は group と skill の membership を定義する。
+- `skill-groups.json` は group と skill の membership を定義する。`includes` には他の group 名を指定でき、参照先の skill を合成した group plugin を作る。`includes` は host に別 plugin の install を指示するものではなく、合成 plugin 内へ skill を同梱する指定である。
+
+既存の `groups` に追加する `core` 定義の抜粋です。参照先 group の定義は省略しています。
+
+```json
+{
+  "groups": {
+    "core": {
+      "includes": [
+        "git",
+        "delivery",
+        "planning-advice",
+        "implementation",
+        "operations",
+        "documentation"
+      ],
+      "description": "基本作業をまとめて進める"
+    }
+  }
+}
+```
 
 `make build-plugins` は全 group plugin と、全 skill の個別 plugin `skill-<name>` を `out/marketplace` に生成する。group plugin の skill は `plugins/<group>/skills/<name>` に、個別 plugin は `plugins/skill-<name>/skills/<name>` に置かれる。各 plugin は Codex 用 `.codex-plugin/plugin.json` と Claude 用 `.claude-plugin/plugin.json` を持つ。
 
@@ -49,7 +69,7 @@ skills/internal + external-skills.json + skill-groups.json
        必要な plugin を add              必要な plugin を install
 ```
 
-外部 skill は marketplace build 時に全 11 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。現在の生成数は 20 group plugin と 68 個別 plugin（internal 57、external 11）の計 88 plugin である。
+外部 skill は marketplace build 時に全 11 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。現在の生成数は 22 group plugin と 68 個別 plugin（internal 57、external 11）の計 90 plugin である。
 
 ## 生成と任意のローカル配布
 
@@ -80,8 +100,7 @@ backup は deploy config と同じ場所の `.deploy-backups/<time>/<absolute de
 
 ```bash
 codex plugin marketplace add <repo>/out/marketplace
-codex plugin add delivery@agents-docs
-codex plugin add backend@agents-docs
+codex plugin add core@agents-docs
 ```
 
 確認には `codex plugin list --marketplace agents-docs` または `codex plugin list --available --json` を使う。ローカル path の marketplace は `upgrade` の対象ではない。再生成後の反映方法は利用中の CLI の help で確認し、Codex を再起動して反映を確認する。
@@ -92,19 +111,18 @@ Claude Code では marketplace と install scope を明示する。
 
 ```bash
 claude plugin marketplace add --scope user <repo>/out/marketplace
-claude plugin install -s user delivery@agents-docs
-claude plugin install -s user backend@agents-docs
+claude plugin install -s user core@agents-docs
 ```
 
 scope は `user`、`project`、`local` から利用場所に合わせて選ぶ。更新は `claude plugin marketplace update agents-docs`、`claude plugin update -s <scope> <plugin>` で行い、restart が必要である。有効化は `claude plugin enable -s <scope> <plugin>` を使う。無効化は利用中の host help を確認して操作する。
 
 ## 選択例と依存の注意
 
-`delivery` は PR 作成、説明、CI 修正に、`backend` は Go または Ruby/Rails の実装に向く。たとえば Codex で Go の実装から PR 作成まで行うなら、`backend@agents-docs`、`code-foundations@agents-docs`、`delivery@agents-docs` を追加する。Claude でも同じ plugin 名を install できる。
+`core` は `git`、`delivery`、`planning-advice`、`implementation`、`operations`、`documentation` をまとめて利用したい場合に向く。Claude でも同じ plugin 名を install できる。`backend` や `code-foundations` など、`core` に含まれない専門 group は必要に応じて追加する。
 
-group をまたぐ行動上の依存は host が自動 install しない。たとえば `delivery` の `cmd-create-pr` を使って PR 作成まで行うには、Git 操作の `git@agents-docs`、レビューの `review-roles@agents-docs` と `code-review@agents-docs` も追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。必要な group / skill plugin は明示する。
+group をまたぐ行動上の依存は host が自動 install しない。`includes` で skill を同梱することも、参照先 group plugin の host install を自動化するものではない。`delivery` を単独で install して `cmd-create-pr` を使う場合は、Git 操作の `git@agents-docs` とレビューの `review-roles@agents-docs`、`code-review@agents-docs` も追加する。`core` を install する場合は `git` がすでに同梱されるため、必要に応じて `review-roles@agents-docs` と `code-review@agents-docs` を追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。
 
-group plugin と、その group に含まれる `skill-<name>` を重複 install しない。同じ skill が二重に読み込まれるおそれがあるためである。異なる group にまたがる依存がある場合は、依存先の group plugin または依存先 skill plugin も install する。個別 plugin の必須相対 resource は closure に含まれるが、別 plugin に属する行動上の依存までは自動 install しない。
+group plugin と、その group に含まれる `skill-<name>` を重複 install しない。同じ skill が二重に読み込まれるおそれがあるためである。`core` とその構成 group も重複 install しない。異なる group にまたがる依存がある場合は、依存先の group plugin または依存先 skill plugin も install する。個別 plugin の必須相対 resource は closure に含まれるが、別 plugin に属する行動上の依存までは自動 install しない。
 
 ## 旧 skill 配布からの移行と rollback
 

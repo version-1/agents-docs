@@ -6,23 +6,25 @@
 
 ## Plugin groups と個別選択
 
-group の正本は `skill-groups.json` です。build は group plugin と各 skill の個別 `skill-<name>` plugin をすべて生成します。相対 resource を参照する個別 plugin には必須の closure が同梱されます。具体的な生成・登録・移行手順は [plugin 配布](plugin-distribution.md) を参照してください。
+group の正本は `skill-groups.json` です。build は group plugin と各 skill の個別 `skill-<name>` plugin をすべて生成します。`includes` を持つ group は参照先 group の skill を合成して同梱します。相対 resource を参照する個別 plugin には必須の closure が同梱されます。具体的な生成・登録・移行手順は [plugin 配布](plugin-distribution.md) を参照してください。
 
 | グループ | 用途 | 代表 skill / 数 |
 |---|---|---|
+| `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`planning-advice`、`implementation`、`operations`、`documentation` を合成 / 26 |
 | `git` | ブランチ、コミット、履歴整理 | `cmd-commit`、`grape-usage` / 5 |
 | `delivery` | PR 作成、説明、CI 修正 | `cmd-create-pr`、`ci-fix` / 3 |
 | `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
-| `code-foundations` | 共通実装原則、命名、設計分割、追跡 | `code-general`、`code-naming` / 4 |
+| `code-foundations` | 共通実装原則、命名、コード追跡 | `code-general`、`code-naming` / 3 |
+| `lego-programming` | 責務分離と部品境界の設計・実装 | `lego-programming` / 1 |
 | `design` | UI構成と変更設計 | `component-design`、`modification-design` / 2 |
 | `frontend` | CSS、React、TypeScript の実装 | `code-react`、`code-ts` / 4 |
 | `backend` | Go、Ruby/Rails の実装 | `code-go`、`code-ruby` / 2 |
 | `testing` | テスト設計と回帰テスト | `code-test` / 1 |
 | `code-review` | 仕様、品質、保守性のレビュー | `code-review`、`code-refactor` / 4 |
-| `planning-advice` | 技術助言と実装前の計画 | `role-advisor`、`role-planner` / 4 |
+| `planning-advice` | 技術助言、実装前の計画、調査 | `role-advisor`、`role-planner`、`role-scouter` / 6 |
 | `implementation` | 実装と構造改善の委譲 | `role-implementer`、`role-refactor` / 4 |
 | `review-roles` | agent による実装レビュー | `role-reviewer`、`role-reviewer-playbook` / 2 |
-| `operations` | Git/GitHub、機械作業、調査の委譲 | `role-gardener`、`role-scouter` / 6 |
+| `operations` | Git/GitHub、機械作業の委譲 | `role-gardener`、`role-worker` / 4 |
 | `documentation` | 文書、図解、文書化の委譲 | `documenting`、`role-documenter` / 4 |
 | `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder / 11 |
 | `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |

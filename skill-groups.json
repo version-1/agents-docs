@@ -1,5 +1,16 @@
 {
   "groups": {
+    "core": {
+      "includes": [
+        "git",
+        "delivery",
+        "planning-advice",
+        "implementation",
+        "operations",
+        "documentation"
+      ],
+      "description": "Git操作から計画、実装、調査、文書化までの基本的なagent作業をまとめて進める"
+    },
     "git": {
       "skills": [
         "cmd-commit",
@@ -29,10 +40,15 @@
       "skills": [
         "code-general",
         "code-naming",
-        "lego-programming",
         "code-tracer"
       ],
-      "description": "言語共通の実装原則、命名、設計分割、コード追跡に使う"
+      "description": "言語共通の実装原則、命名、コード追跡に使う"
+    },
+    "lego-programming": {
+      "skills": [
+        "lego-programming"
+      ],
+      "description": "責務分離と再利用可能な部品境界を設計・実装・見直しする"
     },
     "design": {
       "skills": [
@@ -77,9 +93,11 @@
         "role-advisor",
         "role-advisor-playbook",
         "role-planner",
-        "role-planner-playbook"
+        "role-planner-playbook",
+        "role-scouter",
+        "role-scouter-playbook"
       ],
-      "description": "技術助言と実装前の計画作成をagentへ委譲する"
+      "description": "技術助言、実装前の計画作成、コードベース調査をagentへ委譲する"
     },
     "implementation": {
       "skills": [
@@ -102,11 +120,9 @@
         "role-gardener",
         "role-gardener-playbook",
         "role-worker",
-        "role-worker-playbook",
-        "role-scouter",
-        "role-scouter-playbook"
+        "role-worker-playbook"
       ],
-      "description": "Git/GitHub操作、機械作業、コードベース調査をagentへ委譲する"
+      "description": "Git/GitHub操作と機械作業をagentへ委譲する"
     },
     "documentation": {
       "skills": [

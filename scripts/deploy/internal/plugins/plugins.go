@@ -42,7 +42,7 @@ func Build(o Options) (Summary, error) {
 	if err := load(o.GroupsPath, &gs); err != nil {
 		return zero, fmt.Errorf("load groups: %w", err)
 	}
-	selected, individual, groups, err := allSkills(gs, o.ExternalPath)
+	loadedCatalog, err := catalog(gs, o.ExternalPath)
 	if err != nil {
 		return zero, err
 	}
@@ -50,10 +50,10 @@ func Build(o Options) (Summary, error) {
 	if o.ExternalPath == "" {
 		return zero, fmt.Errorf("external skills is required")
 	}
-	if len(selected) == 0 && len(individual) == 0 {
+	if len(loadedCatalog.Selected) == 0 && len(loadedCatalog.Individual) == 0 {
 		return zero, fmt.Errorf("selection is empty")
 	}
-	sources, cleanup, err := sources(filepath.Join(filepath.Dir(o.GroupsPath), "skills", "internal"), o.ExternalPath, selected, individual, o.Fetcher)
+	sources, cleanup, err := sources(filepath.Join(filepath.Dir(o.GroupsPath), "skills", "internal"), o.ExternalPath, loadedCatalog.Selected, loadedCatalog.Individual, o.Fetcher)
 	if err != nil {
 		return zero, err
 	}
@@ -74,12 +74,14 @@ func Build(o Options) (Summary, error) {
 	}
 	defer os.RemoveAll(stage)
 	packs := map[string][]string{}
-	for skill, g := range selected {
-		packs[g] = append(packs[g], skill)
+	for _, group := range loadedCatalog.Groups {
+		packs[group] = append([]string(nil), loadedCatalog.Resolved[group]...)
+	}
+	for skill := range loadedCatalog.Selected {
 		packs["skill-"+skill] = []string{skill}
 	}
-	if len(individual) > 0 {
-		for _, skill := range individual {
+	if len(loadedCatalog.Individual) > 0 {
+		for _, skill := range loadedCatalog.Individual {
 			packs["skill-"+skill] = []string{skill}
 		}
 	}
@@ -89,11 +91,11 @@ func Build(o Options) (Summary, error) {
 			return zero, e
 		}
 	}
-	sum := Summary{Groups: groups, Targets: targets}
-	for skill := range selected {
+	sum := Summary{Groups: loadedCatalog.Groups, Targets: targets}
+	for skill := range loadedCatalog.Selected {
 		sum.Skills = append(sum.Skills, skill)
 	}
-	sum.Skills = append(sum.Skills, individual...)
+	sum.Skills = append(sum.Skills, loadedCatalog.Individual...)
 	sort.Strings(sum.Skills)
 	sum.Skills = uniqueSorted(sum.Skills)
 	if has(targets, "codex") {
