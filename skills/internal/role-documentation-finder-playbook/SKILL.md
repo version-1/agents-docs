@@ -9,12 +9,9 @@ description: Issue Finder agent がドキュメントの欠落、重複、矛盾
 
 ## 探索観点
 
-- code、設定、CLI、API と文書化された手順・contract の不一致
-- 同じ事実の重複管理、版の違い、相互に矛盾する指示
-- README、guide、reference、runbook 間の導線不足や孤立文書
-- 初学者向け概要への詳細混入、reference に必要な完全性の欠落
-- 読み手、目的、前提知識、情報粒度が一文書内で混在する構成
-- 最初から過剰な情報を読ませる、必要な詳細へ到達できないなど progressive disclosure の破綻
+- code・設定・CLI・API と手順・contract の不一致、重複管理、版違い、矛盾する指示
+- README、guide、reference、runbook 間の導線不足、孤立文書、概要への詳細混入、reference の完全性不足
+- 読み手、目的、前提、粒度の混在、過剰な初期情報や詳細への到達不能による progressive disclosure の破綻
 - 古い名称、壊れた link、未記載の前提、実行不能な example
 
 ## 課題判定

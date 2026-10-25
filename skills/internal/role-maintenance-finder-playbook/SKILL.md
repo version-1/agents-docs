@@ -9,12 +9,9 @@ description: Issue Finder agent がコードベースの保守性、責務境界
 
 ## 探索観点
 
-- 異なる変更理由を持つ責務の混在、層や module 境界の侵食
-- 条件分岐の増殖、深い nest、暗黙の状態、時間的結合
-- 重複した判断、変換、validation、設定、contract
-- 下位実装への過剰依存、循環依存、置換困難な外部 I/O
-- 大量の無関係な setup を要するテスト、観測不能な振る舞い
-- dead code、非推奨 API、所有者不明の compatibility layer
+- 変更理由の異なる責務の混在、層・module 境界の侵食、条件分岐の増殖、深い nest、暗黙の状態、時間的結合
+- 判断・変換・validation・設定・contract の重複、下位実装への過剰依存、循環依存、置換困難な外部 I/O
+- 無関係な setup を要するテスト、観測不能な振る舞い、dead code、非推奨 API、所有者不明の compatibility layer
 - 小さな変更が多数のファイルや利用者へ波及する構造
 
 ## 課題判定

@@ -75,6 +75,7 @@ plugin の利用には配布後、Codex / Claude での marketplace 登録と pl
 ## 変更時の注意
 
 - `skills/internal/<name>/SKILL.md` が共通 skill の本体です。
+- 内部 skill の `SKILL.md` は、frontmatter を含む UTF-8 のファイルサイズで 5 KB（5,000 bytes）以下に収めます。
 - `skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも内容に合わせます。
 - skill の設計・命名時は [`docs/design-skill.md`](docs/design-skill.md) の方針も確認します。
 - skill の追加・更新時は [`docs/skill-library.md`](docs/skill-library.md) の一覧も更新します。

@@ -9,12 +9,9 @@ description: Issue Finder agent がコードベースの実際の不具合、仕
 
 ## 探索観点
 
-- 公開仕様、型、validation と実装の不一致
-- 境界値、空値、欠損値、重複、順序、時刻、並行処理
-- error の握りつぶし、誤変換、不完全な cleanup、部分成功
-- 状態遷移、永続化、cache、再試行、冪等性の破綻
-- caller と callee、producer と consumer の contract 不整合
-- 正常系テストだけでは見逃される異常系と回帰経路
+- 公開仕様、型、validation と実装の不一致、境界値、空値、欠損、重複、順序、時刻、並行処理
+- error の握りつぶし、誤変換、不完全な cleanup、部分成功、状態遷移・永続化・cache・再試行・冪等性の破綻
+- caller / callee、producer / consumer の contract 不整合と、正常系テストが見逃す異常系・回帰経路
 
 ## 課題判定
 

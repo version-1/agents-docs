@@ -2,6 +2,8 @@
 
 このドキュメントは、`skills/internal` で管理している skill の用途を素早く把握するための一覧です。
 
+現在の active internal skill の `SKILL.md` 本文は、必須契約と発火条件を維持したまま、frontmatter を含む UTF-8 で 5,000B 以下に整理済みです。
+
 各 skill の実体は `skills/internal/<skill-name>/SKILL.md` にあります。配布時は plugin 内の `skills/<skill-name>` へ配置されるため、skill 本文の相対 resource 参照も plugin 内で解決されます。外部 skill は `external-skills.json` の URL と hash lock に従い、marketplace build 時に取得・検証されます。
 
 ## Plugin groups と個別選択
