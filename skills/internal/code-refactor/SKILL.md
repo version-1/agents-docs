@@ -5,89 +5,21 @@ description: コードレビュー結果、code quality report、git diff、PR �
 
 # Code Refactor
 
-## 目的
+レビュー指摘や既存差分を起点に、公開契約と挙動を維持して、読み・変更・テストしやすくする。quality report があれば findings と quality gate を優先順位にし、なければ対象から改善候補を抽出する。必要以上の設計変更は避ける。
 
-レビュー指摘や既存差分を起点に、挙動を維持したままコードを簡略化する。
-読みやすさ、変更しやすさ、テストしやすさを上げることを優先し、必要以上に大きな設計変更は避ける。
-code quality report がある場合は、品質上の findings と quality gate をリファクタリング対象の優先順位として扱う。
-レビュー指摘がない場合は、可読性、保守性、テスト容易性、複雑度、効率性の観点で指摘を抽出し、反映する。
+## 入力と手順
 
-## 入力
+対象はレビュー結果、quality report、差分、ファイル・関数、制約・検証方法。安全な範囲を決められないときだけ質問する。
 
+1. 現状の挙動、公開契約、関連テストを把握する。
+2. 指摘を可読性、保守性、テスト容易性、複雑度、効率性、検証不足に整理し、`code-next-developer-review` と `code-quality-review` ごとに subagent を起動して、観点を分けたレビューを集める。
+3. 変更ごとに分類を選び、対応する reference を読んで、小さく戻しやすい単位で実施する。
+4. 既存テストまたは適切な検証を実行し、できなければ理由と残リスクを報告する。
 
-- レビュー対象
-- ループ回数(default: 3)
+## 分類
 
-次のいずれかを受け取る。
+`Simplify`、`Split`、`Extract`、`Inline`、`Rename`、`Move`、`Encapsulate`、`Generalize`、`Specialize`、`Replace`、`Remove`、`Reorganize` のいずれかを各変更に選ぶ。主目的を一つにし、実際に使う分類の `references/<分類小文字>.md` だけを読む。迷えば局所的で挙動変更リスクの低い分類を優先し、reference の例は既存設計・命名・テスト構造に合わせる。
 
-- コードレビュー結果
-- code quality report、quality gate、scorecard
-- `git diff`、`gh pr diff`、コミットハッシュなどの差分
-- 対象ファイル、ディレクトリ、関数名
-- 期待する制約、検証コマンド、避けたい変更
+## 報告
 
-入力が曖昧で変更範囲を安全に決められない場合だけ、最小限の質問をする。
-
-## 進め方
-
-1. 対象差分と関連コードを読み、現状の挙動、公開契約、テストを把握する。
-2. 既存のレビュー指摘や quality report があれば、可読性、保守性、テスト容易性、複雑度、効率性、検証不足に分類する。
-3. サブエージェントを起動し、観点を分けてレビューさせる。
-   - `code-next-developer-review` , `code-quality-review` のスキルごとにサブエージェントを起動して、レビューを集める
-4. 変更ごとに「リファクタ分類」から少なくとも 1 つのカテゴリを選び、必要な reference を読む。
-5. 挙動維持を前提に、選んだ分類の目的に合う小さく戻しやすい単位からリファクタリングする。
-6. 既存テストまたは適切な検証コマンドを実行する。実行できない場合は理由と残リスクを明記する。
-7. 変更したファイル、分類ごとの要約、検証結果、残るリスクを報告する。
-
-## リファクタ分類
-
-リファクタでは、次の分類のいずれかを必ず使う。1 つの変更に複数カテゴリが当てはまる場合は、主目的のカテゴリを 1 つ選び、補助的なカテゴリを必要に応じて併記する。
-
-| カテゴリ | 内容 | 詳細 |
-|---|---|---|
-| `Simplify` | 複雑さを減らす | [references/simplify.md](references/simplify.md) |
-| `Split` | 責務を分割する | [references/split.md](references/split.md) |
-| `Extract` | 共通化・切り出し | [references/extract.md](references/extract.md) |
-| `Inline` | 過剰な抽象化を戻す | [references/inline.md](references/inline.md) |
-| `Rename` | 名前を改善する | [references/rename.md](references/rename.md) |
-| `Move` | 適切な場所へ移動する | [references/move.md](references/move.md) |
-| `Encapsulate` | 隠蔽する | [references/encapsulate.md](references/encapsulate.md) |
-| `Generalize` | 共通化・抽象化する | [references/generalize.md](references/generalize.md) |
-| `Specialize` | 抽象化をやめる | [references/specialize.md](references/specialize.md) |
-| `Replace` | より良い実装へ置き換える | [references/replace.md](references/replace.md) |
-| `Remove` | 不要なものを削除する | [references/remove.md](references/remove.md) |
-| `Reorganize` | 構造を整理する | [references/reorganize.md](references/reorganize.md) |
-
-### Reference の読み方
-
-- 変更前に、採用するカテゴリの reference を読む。
-- 迷った場合は、より局所的で挙動変更リスクが低いカテゴリを優先する。
-- 複数カテゴリを使う場合は、実際に編集するカテゴリの reference だけ読む。
-- reference の例をそのまま当てはめず、既存コードの設計、命名、テスト構造に合わせる。
-
-## 出力
-
-最終報告は次の順で簡潔に書く。実施したリファクタは分類ごとにまとめ、未使用カテゴリは書かない。
-
-1. 変更した内容
-2. リファクタ分類ごとにやったこと
-3. 変更ファイルと主要な行
-4. 検証結果
-5. 改善された点、Benefit
-6. quality report / quality gate に対する対応状況
-7. 残るリスク、または未実行の検証
-
-### 出力例
-
-```text
-変更した内容:
-...
-
-リファクタ分類:
-- Simplify: 早期 return に変更し、ネストを 1 段減らした。
-- Extract: 重複していた日付変換を小さな関数に切り出した。
-- Rename: 責務が伝わるように一時変数名を変更した。
-
-検証:
-...
-```
+変更内容、分類ごとの実施内容、変更ファイルと主要行、検証結果、改善点、quality report/gate への対応、残リスクまたは未実行検証を簡潔に示す。未使用の分類は書かない。
