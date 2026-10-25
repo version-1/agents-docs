@@ -9,11 +9,9 @@ description: Issue Finder agent がコードベース内の利用者課題、未
 
 ## 探索観点
 
-- README、仕様、roadmap、TODO に明示された未完了の利用者価値
-- UI、API、CLI の途中で途切れる workflow や手作業による迂回
-- 類似機能間の不自然な非対称性、公開 contract の利用不能な余地
-- tests、examples、support notes が示す反復的な利用者負担
-- 既存 domain model で表現済みだが利用者へ提供されていない能力
+- README、仕様、roadmap、TODO の未完了の利用者価値、UI・API・CLI の途切れた workflow や手作業の迂回
+- 類似機能の不自然な非対称性、公開 contract の利用不能な余地、tests・examples・support notes が示す反復負担
+- domain model で表現済みだが利用者へ提供されていない能力
 
 ## 提案判定
 
