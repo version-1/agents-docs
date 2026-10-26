@@ -20,7 +20,7 @@ Codex CLI または Claude Code がインストールされた環境で、リポ
 make build-plugins
 ```
 
-基本作業用の `core` plugin には、`git`、`delivery`、`planning-advice`、`implementation`、`operations`、`documentation` が含まれます。
+基本作業用の `core` plugin には、`git`、`delivery`、finder 以外の role をまとめた `roles`、`documentation` が含まれます。
 
 ### 2. 利用する環境にインストール
 

@@ -4,9 +4,7 @@
       "includes": [
         "git",
         "delivery",
-        "planning-advice",
-        "implementation",
-        "operations",
+        "roles",
         "documentation"
       ],
       "description": "Git操作から計画、実装、調査、文書化までの基本的なagent作業をまとめて進める"
@@ -88,50 +86,35 @@
       ],
       "description": "仕様・品質・保守性をレビューし、必要なリファクタリングを行う"
     },
-    "planning-advice": {
+    "roles": {
       "skills": [
         "role-advisor",
         "role-advisor-playbook",
-        "role-planner",
-        "role-planner-playbook",
-        "role-scouter",
-        "role-scouter-playbook"
-      ],
-      "description": "技術助言、実装前の計画作成、コードベース調査をagentへ委譲する"
-    },
-    "implementation": {
-      "skills": [
-        "role-implementer",
-        "role-implementer-playbook",
-        "role-refactor",
-        "role-refactor-playbook"
-      ],
-      "description": "実装または挙動を保つ構造改善をagentへ委譲する"
-    },
-    "review-roles": {
-      "skills": [
-        "role-reviewer",
-        "role-reviewer-playbook"
-      ],
-      "description": "実装済み変更の仕様適合と回帰をagentにレビューさせる"
-    },
-    "operations": {
-      "skills": [
+        "role-documenter",
+        "role-documenter-playbook",
         "role-gardener",
         "role-gardener-playbook",
+        "role-implementer",
+        "role-implementer-playbook",
+        "role-planner",
+        "role-planner-playbook",
+        "role-refactor",
+        "role-refactor-playbook",
+        "role-reviewer",
+        "role-reviewer-playbook",
+        "role-scouter",
+        "role-scouter-playbook",
         "role-worker",
         "role-worker-playbook"
       ],
-      "description": "Git/GitHub操作と機械作業をagentへ委譲する"
+      "description": "finder 以外の専門 agent への委譲と実行方針をまとめる"
     },
     "documentation": {
       "skills": [
         "documenting",
-        "format-rich-html-diagram",
-        "role-documenter",
-        "role-documenter-playbook"
+        "format-rich-html-diagram"
       ],
-      "description": "技術文書、図解、文書作成agentへの委譲に使う"
+      "description": "技術文書と図解を作成する"
     },
     "finder": {
       "skills": [

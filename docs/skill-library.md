@@ -12,7 +12,7 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 
 | グループ | 用途 | 代表 skill / 数 |
 |---|---|---|
-| `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`planning-advice`、`implementation`、`operations`、`documentation` を合成 / 22 |
+| `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`roles`、`documentation` を合成 / 24 |
 | `git` | コミットと grape による Git 操作 | `cmd-commit`、`grape-usage` / 2 |
 | `delivery` | PR 作成と説明整備 | `cmd-create-pr`、`format-pr-description` / 2 |
 | `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
@@ -23,11 +23,8 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `backend` | Go、Ruby/Rails の実装 | `code-go`、`code-ruby` / 2 |
 | `testing` | テスト戦略と、仕様保証・変更耐性を評価 | `code-test` / 1 |
 | `code-review` | 仕様、品質、保守性のレビュー | `code-review`、`code-refactor` / 4 |
-| `planning-advice` | 技術助言、実装前の計画、調査 | `role-advisor`、`role-planner`、`role-scouter` / 6 |
-| `implementation` | 実装と構造改善の委譲 | `role-implementer`、`role-refactor` / 4 |
-| `review-roles` | agent による実装レビュー | `role-reviewer`、`role-reviewer-playbook` / 2 |
-| `operations` | Git/GitHub、機械作業の委譲 | `role-gardener`、`role-worker` / 4 |
-| `documentation` | 文書、図解、文書化の委譲 | `documenting`、`role-documenter` / 4 |
+| `roles` | finder 以外の専門 agent への委譲 | `role-advisor`、`role-documenter`、`role-gardener`、`role-implementer`、`role-planner`、`role-refactor`、`role-reviewer`、`role-scouter`、`role-worker` と各 playbook / 18 |
+| `documentation` | 文書と図解の作成 | `documenting`、`format-rich-html-diagram` / 2 |
 | `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder / 11 |
 | `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
 | `office` | PDF、プレゼン、スプレッドシート | `pdf`、`pptx`、`xlsx` / 3 |
