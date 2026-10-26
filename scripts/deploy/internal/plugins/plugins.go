@@ -20,9 +20,10 @@ type Options struct {
 	DryRun                           bool
 }
 type Summary struct {
-	Groups  []string `json:"groups"`
-	Skills  []string `json:"skills"`
-	Targets []string `json:"targets"`
+	Groups         []string `json:"groups"`
+	Skills         []string `json:"skills"`
+	ManagedPlugins []string `json:"managed_plugins"`
+	Targets        []string `json:"targets"`
 }
 
 var siblingReference = regexp.MustCompile(`\.\./([a-z0-9][a-z0-9-]*)/[^\s)"']+`)
@@ -53,7 +54,12 @@ func Build(o Options) (Summary, error) {
 	if len(loadedCatalog.Selected) == 0 && len(loadedCatalog.Individual) == 0 {
 		return zero, fmt.Errorf("selection is empty")
 	}
-	sources, cleanup, err := sources(filepath.Join(filepath.Dir(o.GroupsPath), "skills", "internal"), o.ExternalPath, loadedCatalog.Selected, loadedCatalog.Individual, o.Fetcher)
+	repoRoot := filepath.Dir(o.GroupsPath)
+	managed, err := managedPlugins(filepath.Join(repoRoot, "plugins"))
+	if err != nil {
+		return zero, err
+	}
+	sources, cleanup, err := sources(filepath.Join(repoRoot, "skills", "internal"), o.ExternalPath, loadedCatalog.Selected, loadedCatalog.Individual, o.Fetcher)
 	if err != nil {
 		return zero, err
 	}
@@ -91,7 +97,19 @@ func Build(o Options) (Summary, error) {
 			return zero, e
 		}
 	}
+	for _, plugin := range managed {
+		if _, exists := packs[plugin.Name]; exists {
+			return zero, fmt.Errorf("managed plugin %q conflicts with generated plugin", plugin.Name)
+		}
+		if e = writeManagedPlugin(stage, plugin); e != nil {
+			return zero, e
+		}
+		packs[plugin.Name] = nil
+	}
 	sum := Summary{Groups: loadedCatalog.Groups, Targets: targets}
+	for _, plugin := range managed {
+		sum.ManagedPlugins = append(sum.ManagedPlugins, plugin.Name)
+	}
 	for skill := range loadedCatalog.Selected {
 		sum.Skills = append(sum.Skills, skill)
 	}

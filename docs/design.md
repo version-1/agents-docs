@@ -2,13 +2,13 @@
 
 ## ディレクトリ構成
 
-このレポジトリでは、agent や設定などの環境固有資産を `codex/` と `claude/` 配下に配置します。skill の正本は環境共通の `skills/internal/` に置き、plugin marketplace へ生成します。
+このレポジトリでは、agent や設定などの環境固有資産を `codex/` と `claude/` 配下に配置します。group と個別 skill plugin の正本は環境共通の `skills/internal/`、手管理 plugin の正本は `plugins/` に置き、plugin marketplace へ生成します。
 
 `docs/` 配下は設計や運用方針など、レポジトリ自体の補助ドキュメントを置く場所です。
 
 ## Skill plugin の構成
 
-`skill-groups.json` が plugin group の membership を定義します。`out/marketplace` には全 group と全 skill の個別 plugin を生成し、Codex / Claude が必要な plugin を明示的に登録・install します。詳細は [plugin 配布](plugin-distribution.md) を正本とします。
+`skill-groups.json` が plugin group の membership を定義します。`out/marketplace` には全 group、`skills/internal/` と外部 skill の個別 plugin、`plugins/` の手管理 plugin を生成し、Codex / Claude が必要な plugin を明示的に登録・install します。詳細は [plugin 配布](plugin-distribution.md) を正本とします。
 
 既存の `~/.codex/skills` と `~/.claude/skills` は自動で削除しません。`.system` と他者管理の skill を含むため、移行・退避・rollback の手順は plugin 配布文書に従います。
 

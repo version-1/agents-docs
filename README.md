@@ -12,7 +12,7 @@ Codex / Claude などの AI エージェントに配布するルール、プロ�
 
 ## Skill plugin のインストール
 
-Codex CLI または Claude Code がインストールされた環境で、リポジトリのルートから実行します。まず、全 group と全 skill の個別 plugin を含む marketplace を生成します。
+Codex CLI または Claude Code がインストールされた環境で、リポジトリのルートから実行します。まず、全 group、`skills/internal/` と外部 skill の個別 plugin、手管理 plugin を含む marketplace を生成します。
 
 ### 1. marketplace を生成
 
@@ -20,7 +20,7 @@ Codex CLI または Claude Code がインストールされた環境で、リポ
 make build-plugins
 ```
 
-基本作業用の `core` plugin には、`git`、`delivery`、`planning-advice`、`implementation`、`operations`、`documentation` が含まれます。
+基本作業用の `core` plugin には、`git`、`delivery`、`documentation` が含まれます。finder 以外の role を使う場合は、`roles` plugin を別途 install します。
 
 ### 2. 利用する環境にインストール
 
@@ -29,6 +29,7 @@ make build-plugins
 ```bash
 codex plugin marketplace add "$PWD/out/marketplace"
 codex plugin add core@agents-docs
+codex plugin add roles@agents-docs
 ```
 
 **Claude Code**
@@ -36,9 +37,10 @@ codex plugin add core@agents-docs
 ```bash
 claude plugin marketplace add --scope user "$PWD/out/marketplace"
 claude plugin install -s user core@agents-docs
+claude plugin install -s user roles@agents-docs
 ```
 
-marketplace を登録済みなら、必要な plugin を追加する最後のコマンドだけを実行します。利用する plugin 名は `core` から置き換えられます。`core` を install した場合は、その構成 group や同じ skill の個別 plugin を重複して install しないでください。追加後は Codex または Claude Code を再起動します。
+marketplace を登録済みなら、必要な plugin を追加するコマンドだけを実行します。利用する plugin 名は `core` から置き換えられます。`core` を install した場合は、その構成 group や同じ skill の個別 plugin を重複して install しないでください。追加後は Codex または Claude Code を再起動します。
 
 ### 固定パスへ配布する場合
 
@@ -68,6 +70,7 @@ push と rebase には、ポリシーに基づいて Git 操作を制限する `
 ## Skill の正本と設定ファイル
 
 - `skills/internal/`: 共通 skill の正本です。
+- `plugins/`: group に含めない手管理 plugin の正本です。`plugins/roles/skills/` には finder 以外の role skill を置きます。
 - `skill-groups.json`: plugin group と含める skill を定義します。
 - `external-skills.json`: 外部 skill の取得元と hash lock を定義します。
 - `deploy.json`: plugin marketplace と非-skill の agent / 設定などの配布先を定義します。

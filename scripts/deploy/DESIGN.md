@@ -1,6 +1,6 @@
 # deploy Design
 
-このディレクトリは二つの配布責務を持つ。`deploy` は plugin marketplace と、agent、設定、rule、補助コマンドなどの非-skill 資産を `deploy.json` に従って配布する。`plugins` は全 skill から plugin marketplace を生成する。
+このディレクトリは二つの配布責務を持つ。`deploy` は plugin marketplace と、agent、設定、rule、補助コマンドなどの非-skill 資産を `deploy.json` に従って配布する。`plugins` は group・個別 skill と手管理 plugin から marketplace を生成する。
 
 利用者向けの手順は [README.md](README.md)、skill plugin の選択・host 登録・移行は [docs/plugin-distribution.md](../../docs/plugin-distribution.md) を正本とする。
 
@@ -19,13 +19,13 @@ host の marketplace 登録、plugin install / enable、host cache の更新、h
 ## Plugin build flow
 
 ```text
-skills/internal + skill-groups.json + external-skills.json
+skills/internal + skill-groups.json + external-skills.json + plugins/
                        |
                        v
-       全 internal skills + verified external skills
+ group / individual skill sources + verified external skills + managed plugins
                        |
                        v
- out/marketplace/plugins/<group>/skills/<name>
+ out/marketplace/plugins/<plugin>
                        |
                        v
  marketplace manifests and summary.json
@@ -34,7 +34,7 @@ skills/internal + skill-groups.json + external-skills.json
  backup + replace ~/.local/share/agents-docs/marketplace
 ```
 
-group の各 skill は group plugin に含め、各 skill は `skill-<name>` 個別 plugin にも含める。個別 plugin は必須相対 resource の closure も含める。Codex manifest の local source は marketplace root から見た `./plugins/<plugin>` である。
+group の各 skill と外部 skill は `skill-<name>` 個別 plugin にも含める。個別 plugin は必須相対 resource の closure も含める。`plugins/<name>` の手管理 plugin は source manifest、skill frontmatter、symlink を検証して取り込み、個別 `skill-<name>` plugin は生成しない。Codex manifest の local source は marketplace root から見た `./plugins/<plugin>` である。
 
 外部 skill は `external-skills.json` の URL と hash lock を使い、全件を一時領域へ取得して検証する。外部 skill の destination は lock に保存しない。
 

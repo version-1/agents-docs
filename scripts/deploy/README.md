@@ -4,6 +4,8 @@
 
 skill plugin の生成、配布、Codex / Claude への登録は [plugin 配布](../../docs/plugin-distribution.md) を参照してください。
 
+group と個別 skill plugin は `skills/internal/` と `skill-groups.json` から生成します。`plugins/` 配下の手管理 plugin は、source manifest と skill を検証したうえで marketplace に取り込みます。
+
 ## 利用方法
 
 通常はリポジトリ root で次を実行します。
