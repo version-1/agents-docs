@@ -5,6 +5,21 @@
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
+    "filesystem": {
+      "denyRead": [
+        "~/.aws",
+        "~/.ssh",
+        "~/.gnupg",
+        "~/.kube",
+        "~/.config/gcloud",
+        "~/.config/gh/hosts.yml",
+        "~/.docker/config.json",
+        "~/.npmrc",
+        "~/.netrc",
+        "~/.git-credentials",
+        "~/.gem/credentials"
+      ]
+    },
     "network": {
       "allowedDomains": [
         "github.com",
@@ -90,7 +105,18 @@
       "Read(*.env*)",
       "Read(**/*.env*)",
       "Read(~/**/*.env*)",
-      "Read(./secrets/**)"
+      "Read(./secrets/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.ssh/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.kube/**)",
+      "Read(~/.config/gcloud/**)",
+      "Read(~/.config/gh/hosts.yml)",
+      "Read(~/.docker/config.json)",
+      "Read(~/.npmrc)",
+      "Read(~/.netrc)",
+      "Read(~/.git-credentials)",
+      "Read(~/.gem/credentials)"
     ]
   },
   "env": {
