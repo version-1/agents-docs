@@ -67,7 +67,7 @@ skills/internal + external-skills.json + skill-groups.json
        必要な plugin を add              必要な plugin を install
 ```
 
-外部 skill は marketplace build 時に全 11 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。現在の生成数は 19 group plugin と 64 個別 plugin（internal 53、external 11）の計 83 plugin である。
+外部 skill は marketplace build 時に全 11 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。生成される group と個別 plugin の一覧は `make build-plugins` の出力で確認する。
 
 ## 生成と任意のローカル配布
 
@@ -120,7 +120,7 @@ scope は `user`、`project`、`local` から利用場所に合わせて選ぶ�
 
 group をまたぐ行動上の依存は host が自動 install しない。`includes` で skill を同梱することも、参照先 group plugin の host install を自動化するものではない。`delivery` を単独で install して `cmd-create-pr` を使う場合は、Git 操作の `git@agents-docs` とレビューの `roles@agents-docs`、`code-review@agents-docs` も追加する。`core` には `git` と `roles` がすでに同梱されるため、必要に応じて `code-review@agents-docs` を追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。
 
-従来の `planning-advice`、`implementation`、`review-roles`、`operations` plugin を利用している場合は、それらを `roles@agents-docs` に置き換える。finder の role は `finder@agents-docs` に残る。
+従来の `planning-advice`、`implementation`、`review-roles`、`operations` plugin を利用している場合は、それらを `roles@agents-docs` に置き換える。旧 `documentation` plugin で Documenter agent への委譲を利用している場合も `roles@agents-docs` を追加する。`core@agents-docs` には `roles` が同梱されるため、追加は不要である。finder の role は `finder@agents-docs` に残る。
 
 group plugin と、その group に含まれる `skill-<name>` を重複 install しない。同じ skill が二重に読み込まれるおそれがあるためである。`core` とその構成 group も重複 install しない。異なる group にまたがる依存がある場合は、依存先の group plugin または依存先 skill plugin も install する。個別 plugin の必須相対 resource は closure に含まれるが、別 plugin に属する行動上の依存までは自動 install しない。
 
