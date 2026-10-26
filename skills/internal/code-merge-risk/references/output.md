@@ -48,7 +48,7 @@ Markdown レポートの後に、同一の結果を JSON コードブロック�
 ## 整合性確認
 
 - complete では SHA と6項目点が揃い、総合点は項目点の最大値。リスクなしで調査完了した項目は0点。
-- 各完了項目点は関連リスク点の最大値。risk_ids は存在する ID だけを参照する。
+- 各完了項目点は category がその項目と一致するリスク点の最大値。所属リスクがなければ0点。risk_ids は存在する ID だけを参照し、他項目のリスクへの関連参照は項目点に含めない。
 - hold では assessment_status と decision をともに hold、総合点を null にする。確認済みリスクは残す。
 - blocks_assessment が true の情報不足を残したまま complete にしない。
 - auto_merge_candidate は complete、総合点50以下、全必須条件が pass/not_applicable の場合だけ。
