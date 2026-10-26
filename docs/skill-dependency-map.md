@@ -1,6 +1,6 @@
 # Skill Dependency Map
 
-このドキュメントは、internal skill 同士の明示的な依存関係を整理するためのマップです。
+このドキュメントは、`skills/internal/` と手管理 plugin の skill 同士にある明示的な依存関係を整理するためのマップです。
 
 ここでの依存は、`SKILL.md` の本文や description に「併用する」「使う」「参照する」と明記されている関係を対象にします。似た目的を持つだけの関係や、エージェントロール上の暗黙の関係は含めません。
 
@@ -9,7 +9,7 @@
 ## 全体図
 
 ```text
-internal skills
+skills
 ├── workflow
 │   └── cmd-create-pr
 │   │   ├── cmd-commit
@@ -17,7 +17,7 @@ internal skills
 │   │   ├── code-review
 │   │   └── format-pr-description
 ├── role
-│   ├── finder roles
+│   ├── finder roles (`skills/internal/`)
 │   │   ├── role-bug-finder -> issue-finder-playbook, role-bug-finder-playbook
 │   │   ├── role-maintenance-finder -> issue-finder-playbook, role-maintenance-finder-playbook
 │   │   ├── role-feature-finder -> issue-finder-playbook, role-feature-finder-playbook
@@ -26,20 +26,11 @@ internal skills
 │   ├── issue-finder-playbook
 │   │   ├── modification-design
 │   │   └── lego-programming
-│   ├── role-documenter-playbook
-│   │   └── documenting
-│   ├── role-reviewer-playbook
-│   │   └── code-review
-│   ├── role-refactor-playbook
-│   │   ├── code-refactor
-│   │   ├── modification-design
-│   │   ├── role-planner
-│   │   ├── role-implementer
-│   │   ├── role-reviewer
-│   │   └── role-advisor
-│   └── role-implementer-playbook
-│       ├── code-general
-│       └── role-advisor
+│   ├── roles plugin (`plugins/roles/skills/`)
+│   │   ├── role-documenter-playbook -> documenting
+│   │   ├── role-reviewer-playbook -> code-review
+│   │   ├── role-refactor-playbook -> code-refactor, modification-design, role-planner, role-implementer, role-reviewer, role-advisor
+│   │   └── role-implementer-playbook -> code-general, role-advisor
 └── code work
     ├── code-general
     │   ├── code-naming

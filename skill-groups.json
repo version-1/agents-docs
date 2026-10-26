@@ -4,7 +4,6 @@
       "includes": [
         "git",
         "delivery",
-        "roles",
         "documentation"
       ],
       "description": "Git操作から計画、実装、調査、文書化までの基本的なagent作業をまとめて進める"
@@ -85,29 +84,6 @@
         "code-refactor"
       ],
       "description": "仕様・品質・保守性をレビューし、必要なリファクタリングを行う"
-    },
-    "roles": {
-      "skills": [
-        "role-advisor",
-        "role-advisor-playbook",
-        "role-documenter",
-        "role-documenter-playbook",
-        "role-gardener",
-        "role-gardener-playbook",
-        "role-implementer",
-        "role-implementer-playbook",
-        "role-planner",
-        "role-planner-playbook",
-        "role-refactor",
-        "role-refactor-playbook",
-        "role-reviewer",
-        "role-reviewer-playbook",
-        "role-scouter",
-        "role-scouter-playbook",
-        "role-worker",
-        "role-worker-playbook"
-      ],
-      "description": "finder 以外の専門 agent への委譲と実行方針をまとめる"
     },
     "documentation": {
       "skills": [

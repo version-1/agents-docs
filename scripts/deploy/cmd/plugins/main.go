@@ -18,5 +18,5 @@ func main() {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
 	}
-	fmt.Printf("groups=%v skills=%v targets=%v\n", sum.Groups, sum.Skills, sum.Targets)
+	fmt.Printf("groups=%v skills=%v managed_plugins=%v targets=%v\n", sum.Groups, sum.Skills, sum.ManagedPlugins, sum.Targets)
 }

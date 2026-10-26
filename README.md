@@ -12,7 +12,7 @@ Codex / Claude などの AI エージェントに配布するルール、プロ�
 
 ## Skill plugin のインストール
 
-Codex CLI または Claude Code がインストールされた環境で、リポジトリのルートから実行します。まず、全 group と全 skill の個別 plugin を含む marketplace を生成します。
+Codex CLI または Claude Code がインストールされた環境で、リポジトリのルートから実行します。まず、全 group、`skills/internal/` と外部 skill の個別 plugin、手管理 plugin を含む marketplace を生成します。
 
 ### 1. marketplace を生成
 
@@ -20,7 +20,7 @@ Codex CLI または Claude Code がインストールされた環境で、リポ
 make build-plugins
 ```
 
-基本作業用の `core` plugin には、`git`、`delivery`、finder 以外の role をまとめた `roles`、`documentation` が含まれます。
+基本作業用の `core` plugin には、`git`、`delivery`、`documentation` が含まれます。finder 以外の role を使う場合は、`roles` plugin を別途 install します。
 
 ### 2. 利用する環境にインストール
 
@@ -68,6 +68,7 @@ push と rebase には、ポリシーに基づいて Git 操作を制限する `
 ## Skill の正本と設定ファイル
 
 - `skills/internal/`: 共通 skill の正本です。
+- `plugins/`: group に含めない手管理 plugin の正本です。`plugins/roles/skills/` には finder 以外の role skill を置きます。
 - `skill-groups.json`: plugin group と含める skill を定義します。
 - `external-skills.json`: 外部 skill の取得元と hash lock を定義します。
 - `deploy.json`: plugin marketplace と非-skill の agent / 設定などの配布先を定義します。

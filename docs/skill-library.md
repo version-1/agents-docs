@@ -1,18 +1,18 @@
 # Skill Library
 
-このドキュメントは、`skills/internal` で管理している skill の用途を素早く把握するための一覧です。
+このドキュメントは、`skills/internal` と手管理 plugin で管理している skill の用途を素早く把握するための一覧です。
 
 現在の active internal skill の `SKILL.md` 本文は、必須契約と発火条件を維持したまま、frontmatter を含む UTF-8 で 5,000B 以下に整理済みです。
 
-各 skill の実体は `skills/internal/<skill-name>/SKILL.md` にあります。配布時は plugin 内の `skills/<skill-name>` へ配置されるため、skill 本文の相対 resource 参照も plugin 内で解決されます。外部 skill は `external-skills.json` の URL と hash lock に従い、marketplace build 時に取得・検証されます。
+group と個別 plugin の skill 実体は `skills/internal/<skill-name>/SKILL.md` にあります。手管理 plugin の skill 実体は `plugins/<plugin>/skills/<skill-name>/SKILL.md` にあります。配布時は plugin 内の `skills/<skill-name>` へ配置されるため、skill 本文の相対 resource 参照も plugin 内で解決されます。外部 skill は `external-skills.json` の URL と hash lock に従い、marketplace build 時に取得・検証されます。
 
 ## Plugin groups と個別選択
 
-group の正本は `skill-groups.json` です。build は group plugin と各 skill の個別 `skill-<name>` plugin をすべて生成します。`includes` を持つ group は参照先 group の skill を合成して同梱します。相対 resource を参照する個別 plugin には必須の closure が同梱されます。具体的な生成・登録・移行手順は [plugin 配布](plugin-distribution.md) を参照してください。
+group の正本は `skill-groups.json` です。build は group plugin と各 skill の個別 `skill-<name>` plugin を生成し、`plugins/` の手管理 plugin も検証して取り込みます。`includes` を持つ group は参照先 group の skill を合成して同梱します。相対 resource を参照する個別 plugin には必須の closure が同梱されます。具体的な生成・登録・移行手順は [plugin 配布](plugin-distribution.md) を参照してください。
 
 | グループ | 用途 | 代表 skill / 数 |
 |---|---|---|
-| `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`roles`、`documentation` を合成 / 24 |
+| `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`documentation` を合成 / 6 |
 | `git` | コミットと grape による Git 操作 | `cmd-commit`、`grape-usage` / 2 |
 | `delivery` | PR 作成と説明整備 | `cmd-create-pr`、`format-pr-description` / 2 |
 | `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
@@ -23,7 +23,6 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `backend` | Go、Ruby/Rails の実装 | `code-go`、`code-ruby` / 2 |
 | `testing` | テスト戦略と、仕様保証・変更耐性を評価 | `code-test` / 1 |
 | `code-review` | 仕様、品質、保守性のレビュー | `code-review`、`code-refactor` / 4 |
-| `roles` | finder 以外の専門 agent への委譲 | `role-advisor`、`role-documenter`、`role-gardener`、`role-implementer`、`role-planner`、`role-refactor`、`role-reviewer`、`role-scouter`、`role-worker` と各 playbook / 18 |
 | `documentation` | 文書と図解の作成 | `documenting`、`format-rich-html-diagram` / 2 |
 | `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder / 11 |
 | `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
@@ -31,6 +30,12 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `tracking` | tasq の課題管理とオーケストレーション | `tasq-cli`、`tq-orchestrator` / 2 |
 | `thinking` | 計画・判断の問い直し | `grilling` / 1 |
 | `technical-writing` | 日本語技術文書の執筆・推敲 | `japanese-tech-writing` / 1 |
+
+## 手管理 plugin
+
+| Plugin | 用途 | skill / 数 |
+|---|---|---|
+| `roles` | finder 以外の専門 agent への委譲 | `role-advisor`、`role-documenter`、`role-gardener`、`role-implementer`、`role-planner`、`role-refactor`、`role-reviewer`、`role-scouter`、`role-worker` と各 playbook / 18 |
 
 分類は [docs/guide/skill-category.md](guide/skill-category.md) の考え方に合わせています。複数の性質を持つ skill は、主な用途で分類しています。
 

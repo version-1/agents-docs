@@ -317,6 +317,91 @@ func TestBuildMarketplaceIsByteDeterministic(t *testing.T) {
 	}
 }
 
+func TestBuildCopiesManagedPluginRegistersItAndUpdatesVersion(t *testing.T) {
+	r := fixture(t, map[string][]string{"code": {"alpha"}})
+	writeSkill(t, filepath.Join(r, "skills", "internal", "alpha"), "alpha")
+	writeManagedPluginFixture(t, r, "roles", "role-a")
+	mustWrite(t, filepath.Join(r, "plugins", "roles", "skills", "role-a", "plugin.json"), `{"version":"initial"}`)
+	first := filepath.Join(r, "first")
+	if _, err := Build(options(r, first)); err != nil {
+		t.Fatal(err)
+	}
+	assertPluginManifests(t, first, "roles")
+	assertExists(t, filepath.Join(first, "plugins", "roles", "skills", "role-a", "SKILL.md"))
+	assertMarketplacePlugin(t, first, ".agents/plugins/marketplace.json", "roles")
+	assertMarketplacePlugin(t, first, ".claude-plugin/marketplace.json", "roles")
+	firstVersion := version(t, first, "roles")
+	mustWrite(t, filepath.Join(r, "plugins", "roles", "skills", "role-a", "SKILL.md"), "---\nname: role-a\n---\nchanged\n")
+	second := filepath.Join(r, "second")
+	if _, err := Build(options(r, second)); err != nil {
+		t.Fatal(err)
+	}
+	if firstVersion == version(t, second, "roles") {
+		t.Fatal("managed plugin version did not change with content")
+	}
+	mustWrite(t, filepath.Join(r, "plugins", "roles", "skills", "role-a", "plugin.json"), `{"version":"changed"}`)
+	third := filepath.Join(r, "third")
+	if _, err := Build(options(r, third)); err != nil {
+		t.Fatal(err)
+	}
+	if version(t, second, "roles") == version(t, third, "roles") {
+		t.Fatal("managed plugin version did not change with skill plugin.json")
+	}
+	mustWrite(t, filepath.Join(r, "plugins", "roles", ".codex-plugin", "plugin.json"), `{"name":"roles","version":"source-only-change","skills":"./skills/"}`)
+	fourth := filepath.Join(r, "fourth")
+	if _, err := Build(options(r, fourth)); err != nil {
+		t.Fatal(err)
+	}
+	if version(t, third, "roles") != version(t, fourth, "roles") {
+		t.Fatal("managed plugin version changed with source manifest version only")
+	}
+}
+
+func TestBuildRejectsInvalidManagedPlugins(t *testing.T) {
+	for _, tc := range []struct {
+		name  string
+		setup func(t *testing.T, root string)
+		want  string
+	}{
+		{
+			name: "name collision", want: "conflicts with generated plugin",
+			setup: func(t *testing.T, root string) { writeManagedPluginFixture(t, root, "code", "role-a") },
+		},
+		{
+			name: "invalid manifest", want: "invalid Codex manifest",
+			setup: func(t *testing.T, root string) {
+				writeManagedPluginFixture(t, root, "roles", "role-a")
+				mustWrite(t, filepath.Join(root, "plugins", "roles", ".codex-plugin", "plugin.json"), `{"name":"other","version":"0.0.0","skills":"./skills/"}`)
+			},
+		},
+		{
+			name: "invalid skill frontmatter", want: "external skill name mismatch",
+			setup: func(t *testing.T, root string) {
+				writeManagedPluginFixture(t, root, "roles", "role-a")
+				mustWrite(t, filepath.Join(root, "plugins", "roles", "skills", "role-a", "SKILL.md"), "---\nname: wrong\n---\nbody\n")
+			},
+		},
+		{
+			name: "symlink", want: "symlink",
+			setup: func(t *testing.T, root string) {
+				writeManagedPluginFixture(t, root, "roles", "role-a")
+				if err := os.Symlink(filepath.Join(root, "plugins", "roles", "skills", "role-a", "SKILL.md"), filepath.Join(root, "plugins", "roles", "skills", "role-a", "linked.md")); err != nil {
+					t.Fatal(err)
+				}
+			},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			r := fixture(t, map[string][]string{"code": {"alpha"}})
+			writeSkill(t, filepath.Join(r, "skills", "internal", "alpha"), "alpha")
+			tc.setup(t, r)
+			if _, err := Build(options(r, filepath.Join(r, "out"))); err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("error = %v, want %q", err, tc.want)
+			}
+		})
+	}
+}
+
 func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 	repo := filepath.Clean(filepath.Join("..", "..", "..", ".."))
 	var groups GroupsFile
@@ -356,6 +441,14 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 	}
 	for group := range groups.Groups {
 		assertPluginManifests(t, out, group)
+	}
+	managed, err := managedPlugins(filepath.Join(repo, "plugins"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, plugin := range managed {
+		expectedPlugins[plugin.Name] = struct{}{}
+		assertPluginManifests(t, out, plugin.Name)
 	}
 	assertSameNames(t, "generated plugins", directoryNames(t, filepath.Join(out, "plugins")), expectedPlugins)
 }
@@ -458,6 +551,12 @@ func writeSkill(t *testing.T, d, n string) {
 	t.Helper()
 	mustWrite(t, filepath.Join(d, "SKILL.md"), "---\nname: "+n+"\n---\nbody\n")
 }
+func writeManagedPluginFixture(t *testing.T, root, plugin, skill string) {
+	t.Helper()
+	mustWrite(t, filepath.Join(root, "plugins", plugin, ".codex-plugin", "plugin.json"), `{"name":"`+plugin+`","version":"0.0.0","skills":"./skills/"}`)
+	mustWrite(t, filepath.Join(root, "plugins", plugin, ".claude-plugin", "plugin.json"), `{"name":"`+plugin+`","version":"0.0.0","description":"`+plugin+`"}`)
+	writeSkill(t, filepath.Join(root, "plugins", plugin, "skills", skill), skill)
+}
 func writeExternal(t *testing.T, r, n string) {
 	t.Helper()
 	writeJSON(t, filepath.Join(r, "external-skills.json"), []external.Skill{{Name: n, URL: "https://github.com/owner/repo/tree/main/" + n, Type: "git", TreeHash: "0123456789abcdef0123456789abcdef01234567"}})
@@ -505,4 +604,14 @@ func version(t *testing.T, root, plugin string) string {
 		t.Fatal(e)
 	}
 	return m.Version
+}
+func assertMarketplacePlugin(t *testing.T, root, file, plugin string) {
+	t.Helper()
+	b, err := os.ReadFile(filepath.Join(root, file))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(b), `"name": "`+plugin+`"`) {
+		t.Fatalf("%s does not register %q", file, plugin)
+	}
 }

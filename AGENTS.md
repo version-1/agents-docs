@@ -14,6 +14,8 @@ Codex / Claude 向けの agent、skill、設定、プロンプトを管理しま
 ├── deploy.json                    plugin marketplace と非-skill 資産の配布設定
 ├── skill-groups.json              plugin group の skill 構成
 ├── external-skills.json           外部 skill の取得元と hash lock
+├── plugins                         手管理 plugin の正本
+│   └── <name>/skills               group に含めない skill
 ├── bin                            生成されたバイナリ置き場
 │   └── deploy                     deploy 用バイナリ
 ├── codex                          Codex CLI 用の配布元
@@ -74,13 +76,14 @@ plugin の利用には配布後、Codex / Claude での marketplace 登録と pl
 
 ## 変更時の注意
 
-- `skills/internal/<name>/SKILL.md` が共通 skill の本体です。
+- `skills/internal/<name>/SKILL.md` は group と個別 skill plugin に生成する共通 skill の本体です。
+- `plugins/<name>/` は手管理 plugin の本体です。`.codex-plugin/plugin.json` と `.claude-plugin/plugin.json`、`skills/<skill-name>/SKILL.md` を持たせます。
 - 内部 skill の `SKILL.md` は、frontmatter を含む UTF-8 のファイルサイズで 5 KB（5,000 bytes）以下に収めます。
 - `skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用メタデータも内容に合わせます。
 - skill の設計・命名時は [`docs/design-skill.md`](docs/design-skill.md) の方針も確認します。
 - skill の追加・更新時は [`docs/skill-library.md`](docs/skill-library.md) の一覧も更新します。
 - `codex/config.toml` の `[agents.<role>]` にある `nickname_candidates` は、覚えやすい英語の人名を 3 件ずつ設定します。
-- `skill-groups.json` は plugin group の membership、`external-skills.json` は外部 skill の取得元と hash lock を管理します。
+- `skill-groups.json` は group plugin の membership、`plugins/` は手管理 plugin、`external-skills.json` は外部 skill の取得元と hash lock を管理します。
 - `deploy.json` は plugin marketplace と非-skill 資産の配布先を管理します。
 - `claude/agents/implemnter.md` は現状のファイル名です。リネームする場合は配布設定や参照も合わせて確認します。
 

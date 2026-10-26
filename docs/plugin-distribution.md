@@ -10,7 +10,8 @@
 
 | 項目 | 旧方式 | 移行後 |
 |---|---|---|
-| skill 原本 | `codex/skills` | `skills/internal` |
+| group / 個別 skill 原本 | `codex/skills` | `skills/internal` |
+| 手管理 plugin 原本 | なし | `plugins/<name>` |
 | 外部 skill | URL、hash、配布先を設定 | URL と `treeHash` lock のみ |
 | 選択単位 | 一括コピー | group plugin または skill plugin を host ごとに install |
 | host への反映 | skill directory を直接置換 | marketplace を登録して native install |
@@ -18,7 +19,8 @@
 
 ## 入力と生成物
 
-- `skills/internal/<name>/SKILL.md` は internal skill の正本である。
+- `skills/internal/<name>/SKILL.md` は group と個別 skill plugin に生成する internal skill の正本である。
+- `plugins/<name>/` は group に属さない手管理 plugin の正本である。`.codex-plugin/plugin.json`、`.claude-plugin/plugin.json`、`skills/<skill-name>/SKILL.md` を持たせる。build は manifest、skill frontmatter、symlink を検証し、source 内容から生成した version を出力 manifest に設定する。source manifest の `version` は hash から除外され、build 時に置き換わる。
 - `external-skills.json` は外部 skill の URL と `treeHash` lock を管理し、destination は持たない。
 - `skill-groups.json` は group と skill の membership を定義する。`includes` には他の group 名を指定でき、参照先の skill を合成した group plugin を作る。`includes` は host に別 plugin の install を指示するものではなく、合成 plugin 内へ skill を同梱する指定である。
 
@@ -31,7 +33,6 @@
       "includes": [
         "git",
         "delivery",
-        "roles",
         "documentation"
       ],
       "description": "基本作業をまとめて進める"
@@ -40,7 +41,7 @@
 }
 ```
 
-`make build-plugins` は全 group plugin と、全 skill の個別 plugin `skill-<name>` を `out/marketplace` に生成する。group plugin の skill は `plugins/<group>/skills/<name>` に、個別 plugin は `plugins/skill-<name>/skills/<name>` に置かれる。各 plugin は Codex 用 `.codex-plugin/plugin.json` と Claude 用 `.claude-plugin/plugin.json` を持つ。
+`make build-plugins` は全 group plugin と、`skills/internal/` と外部 skill の個別 plugin `skill-<name>` を `out/marketplace` に生成し、repo の `plugins/` にある手管理 plugin をそのまま取り込む。group plugin の skill は `plugins/<group>/skills/<name>` に、個別 plugin は `plugins/skill-<name>/skills/<name>` に置かれる。手管理 plugin は group と `skill-*` plugin の名前空間と衝突できない。各 plugin は Codex 用 `.codex-plugin/plugin.json` と Claude 用 `.claude-plugin/plugin.json` を持つ。
 
 plugin の相対 resource 参照は必要な closure を同梱して解決する。特定 skill の個別 plugin だけを install しても、必須の相対参照で失敗しないことが契約である。group 間の依存は install 時に別 group / skill plugin を追加する。
 
@@ -51,7 +52,7 @@ manifest version は plugin 内容の SHA 由来で `0.0.0-<12hex>` とする。
 ## 処理の流れ
 
 ```text
-skills/internal + external-skills.json + skill-groups.json
+skills/internal + external-skills.json + skill-groups.json + plugins/
                               |
                               v
          build-plugins (全外部 skill を fetch / hash 検証)
@@ -116,11 +117,11 @@ scope は `user`、`project`、`local` から利用場所に合わせて選ぶ�
 
 ## 選択例と依存の注意
 
-`roles` は finder 以外の `role-*` と対応する playbook をまとめる plugin である。`core` は `git`、`delivery`、`roles`、`documentation` をまとめて利用したい場合に向く。Claude でも同じ plugin 名を install できる。`backend` や `code-foundations` など、`core` に含まれない専門 group は必要に応じて追加する。
+`roles` は `plugins/roles` で管理する、finder 以外の `role-*` と対応する playbook をまとめる plugin である。`core` は `git`、`delivery`、`documentation` をまとめて利用したい場合に向く。role を利用する場合は `roles@agents-docs` も install する。Claude でも同じ plugin 名を install できる。`backend` や `code-foundations` など、`core` に含まれない専門 group は必要に応じて追加する。
 
-group をまたぐ行動上の依存は host が自動 install しない。`includes` で skill を同梱することも、参照先 group plugin の host install を自動化するものではない。`delivery` を単独で install して `cmd-create-pr` を使う場合は、Git 操作の `git@agents-docs` とレビューの `roles@agents-docs`、`code-review@agents-docs` も追加する。`core` には `git` と `roles` がすでに同梱されるため、必要に応じて `code-review@agents-docs` を追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。
+group をまたぐ行動上の依存は host が自動 install しない。`includes` で skill を同梱することも、参照先 group plugin の host install を自動化するものではない。`delivery` を単独で install して `cmd-create-pr` を使う場合は、Git 操作の `git@agents-docs` とレビューの `roles@agents-docs`、`code-review@agents-docs` も追加する。`core` を install する場合も role を使うには `roles@agents-docs` を追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。
 
-従来の `planning-advice`、`implementation`、`review-roles`、`operations` plugin を利用している場合は、それらを `roles@agents-docs` に置き換える。旧 `documentation` plugin で Documenter agent への委譲を利用している場合も `roles@agents-docs` を追加する。`core@agents-docs` には `roles` が同梱されるため、追加は不要である。finder の role は `finder@agents-docs` に残る。
+従来の `planning-advice`、`implementation`、`review-roles`、`operations` plugin を利用している場合は、それらを `roles@agents-docs` に置き換える。旧 `documentation` plugin で Documenter agent への委譲を利用している場合も `roles@agents-docs` を追加する。`core@agents-docs` は `roles` を同梱しないため、role を使う場合は追加する。finder の role は `finder@agents-docs` に残る。
 
 group plugin と、その group に含まれる `skill-<name>` を重複 install しない。同じ skill が二重に読み込まれるおそれがあるためである。`core` とその構成 group も重複 install しない。異なる group にまたがる依存がある場合は、依存先の group plugin または依存先 skill plugin も install する。個別 plugin の必須相対 resource は closure に含まれるが、別 plugin に属する行動上の依存までは自動 install しない。
 
