@@ -80,6 +80,7 @@
     },
     "code-review": {
       "skills": [
+        "code-merge-risk",
         "code-review",
         "code-quality-review",
         "code-next-developer-review",

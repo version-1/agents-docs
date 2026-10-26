@@ -128,6 +128,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | Skill | 概要 | 使う場面 |
 |---|---|---|
 | `code-quality-review` | code quality report として、定量シグナル、品質スコア、scorecard、quality gate を整理する。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、complexity、coverage、重複率、lint などを補助証拠にしつつ、merge 前対応と follow-up の判断材料にしたいとき。 |
+| `code-merge-risk` | PR のマージ後の悪影響を0〜100点で採点し、根拠付き Markdown と JSON を出力する。 | 採点基準と評価手順を揃え、情報不足や必須条件を分離して将来の自動マージ候補を判定したいとき。マージは実行しない。 |
 
 ### C. 制約定義型
 
