@@ -29,6 +29,7 @@ make build-plugins
 ```bash
 codex plugin marketplace add "$PWD/out/marketplace"
 codex plugin add core@agents-docs
+codex plugin add roles@agents-docs
 ```
 
 **Claude Code**
@@ -36,9 +37,10 @@ codex plugin add core@agents-docs
 ```bash
 claude plugin marketplace add --scope user "$PWD/out/marketplace"
 claude plugin install -s user core@agents-docs
+claude plugin install -s user roles@agents-docs
 ```
 
-marketplace を登録済みなら、必要な plugin を追加する最後のコマンドだけを実行します。利用する plugin 名は `core` から置き換えられます。`core` を install した場合は、その構成 group や同じ skill の個別 plugin を重複して install しないでください。追加後は Codex または Claude Code を再起動します。
+marketplace を登録済みなら、必要な plugin を追加するコマンドだけを実行します。利用する plugin 名は `core` から置き換えられます。`core` を install した場合は、その構成 group や同じ skill の個別 plugin を重複して install しないでください。追加後は Codex または Claude Code を再起動します。
 
 ### 固定パスへ配布する場合
 
