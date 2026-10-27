@@ -20,7 +20,7 @@ Codex CLI または Claude Code がインストールされた環境で、リポ
 make build-plugins
 ```
 
-基本作業用の `core` plugin には、`git`、`delivery`、`documentation` が含まれます。finder 以外の role を使う場合は、`roles` plugin を別途 install します。
+基本作業用の `core` plugin には、`git`、`delivery`、`documentation` が含まれます。role を使う場合は、`roles` または `finder` plugin を別途 install します。
 
 ### 2. 利用する環境にインストール
 
@@ -70,7 +70,7 @@ push と rebase には、ポリシーに基づいて Git 操作を制限する `
 ## Skill の正本と設定ファイル
 
 - `skills/internal/`: 共通 skill の正本です。
-- `plugins/`: group に含めない手管理 plugin の正本です。`plugins/roles/skills/` には finder 以外の role skill を置きます。
+- `plugins/`: group に含めない手管理 plugin の正本です。`plugins/roles/skills/` には finder 以外の role skill を、`plugins/finder/skills/` には課題発見用の finder skill を置きます。
 - `skill-groups.json`: plugin group と含める skill を定義します。
 - `external-skills.json`: 外部 skill の取得元と hash lock を定義します。
 - `deploy.json`: plugin marketplace と非-skill の agent / 設定などの配布先を定義します。

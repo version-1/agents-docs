@@ -92,22 +92,6 @@
       ],
       "description": "技術文書と図解を作成する"
     },
-    "finder": {
-      "skills": [
-        "issue-finder-playbook",
-        "role-bug-finder",
-        "role-bug-finder-playbook",
-        "role-documentation-finder",
-        "role-documentation-finder-playbook",
-        "role-feature-finder",
-        "role-feature-finder-playbook",
-        "role-maintenance-finder",
-        "role-maintenance-finder-playbook",
-        "role-vulnerability-finder",
-        "role-vulnerability-finder-playbook"
-      ],
-      "description": "不具合、文書、機能、保守性、脆弱性の課題をコード変更なしで発見する"
-    },
     "authoring": {
       "skills": [
         "agent-retro",

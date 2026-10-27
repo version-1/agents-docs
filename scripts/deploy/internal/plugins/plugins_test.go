@@ -357,6 +357,51 @@ func TestBuildCopiesManagedPluginRegistersItAndUpdatesVersion(t *testing.T) {
 	}
 }
 
+func TestRepositoryFinderPluginContainsAllFinderSkills(t *testing.T) {
+	repo := filepath.Clean(filepath.Join("..", "..", "..", ".."))
+	want := map[string]struct{}{
+		"issue-finder-playbook":              {},
+		"role-bug-finder":                    {},
+		"role-bug-finder-playbook":           {},
+		"role-documentation-finder":          {},
+		"role-documentation-finder-playbook": {},
+		"role-feature-finder":                {},
+		"role-feature-finder-playbook":       {},
+		"role-maintenance-finder":            {},
+		"role-maintenance-finder-playbook":   {},
+		"role-vulnerability-finder":          {},
+		"role-vulnerability-finder-playbook": {},
+	}
+	assertSameNames(t, "finder source skills", directoryNames(t, filepath.Join(repo, "plugins", "finder", "skills")), want)
+
+	var groups GroupsFile
+	if err := load(filepath.Join(repo, "skill-groups.json"), &groups); err != nil {
+		t.Fatal(err)
+	}
+	if _, exists := groups.Groups["finder"]; exists {
+		t.Fatal("finder must be a managed plugin, not a generated group")
+	}
+
+	var externalSkills []external.Skill
+	if err := load(filepath.Join(repo, "external-skills.json"), &externalSkills); err != nil {
+		t.Fatal(err)
+	}
+	sources := map[string]string{}
+	for _, skill := range externalSkills {
+		path := filepath.Join(t.TempDir(), skill.Name)
+		writeSkill(t, path, skill.Name)
+		sources[skill.Name] = path
+	}
+	out := filepath.Join(t.TempDir(), "out")
+	if _, err := Build(Options{GroupsPath: filepath.Join(repo, "skill-groups.json"), ExternalPath: filepath.Join(repo, "external-skills.json"), Output: out, Fetcher: &recordingFetcher{sources: sources}}); err != nil {
+		t.Fatal(err)
+	}
+	assertPluginManifests(t, out, "finder")
+	assertSameNames(t, "finder output skills", directoryNames(t, filepath.Join(out, "plugins", "finder", "skills")), want)
+	assertMarketplacePlugin(t, out, ".agents/plugins/marketplace.json", "finder")
+	assertMarketplacePlugin(t, out, ".claude-plugin/marketplace.json", "finder")
+}
+
 func TestBuildRejectsInvalidManagedPlugins(t *testing.T) {
 	for _, tc := range []struct {
 		name  string
