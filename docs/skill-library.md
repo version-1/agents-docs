@@ -28,7 +28,7 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `documentation` | 文書と図解の作成 | `documenting`、`format-rich-html-diagram` / 2 |
 | `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
 | `office` | PDF、プレゼン、スプレッドシート | `pdf`、`pptx`、`xlsx` / 3 |
-| `thinking` | 計画・判断の問い直し | `grilling` / 1 |
+| `pocock-skills` | 問い直しから設計文書・仕様・チケットへ整理 | `grilling`、`grill-with-docs`、`to-spec`、`to-tickets` / 4 |
 | `technical-writing` | 日本語技術文書の執筆・推敲 | `japanese-tech-writing` / 1 |
 
 ## 手管理 plugin
@@ -178,6 +178,9 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `skill-creator` | `anthropics/skills` | 行動定義型 / ワークフロー型 | 新しい skill の作成、既存 skill の更新、メタデータや検証手順の整備に使う。 |
 | `frontend-design` | `anthropics/skills` | 行動定義型 / ワークフロー型 | Web UI、ページ、コンポーネント、HTML/CSS/React などを高品質な frontend design として実装するときに使う。 |
 | `grilling` | `mattpocock/skills` | 判断定義型 / 判断基準・評価型 | 計画や設計を厳しく質問し、曖昧さや判断漏れを潰すために使う。 |
+| `grill-with-docs` | `mattpocock/skills` | 行動定義型 / ワークフロー型 | 問い直しとともに ADR や用語集を作り、設計判断を文書化する。 |
+| `to-spec` | `mattpocock/skills` | 行動定義型 / ワークフロー型 | 会話とコードの理解から仕様をまとめ、課題トラッカーへ公開する。 |
+| `to-tickets` | `mattpocock/skills` | 行動定義型 / ワークフロー型 | 計画や仕様を検証可能な縦断チケットへ分割し、依存関係とともに公開する。 |
 | `empirical-prompt-tuning` | `mizchi/skills` | 判断定義型 / スコアリング・査定型 | skill やプロンプトを実験的に改善し、評価と反復で性能を詰めるために使う。 |
 | `grape-usage` | `version-1/grape` | 行動定義型 / リファレンス型 | 安全な push、ポリシーで制限された rebase、worktree 操作など、grape コマンドの正確な利用方法を確認するときに使う。 |
 | `japanese-tech-writing` | `k16shikano/fd287c3133457c4fd8f5601d34aa817d` | 判断定義型 / 判断基準・評価型 | 日本語の技術文書・書籍原稿を執筆・推敲するときに、段落構成、論証、読者の負荷、語り、表現の規範を適用する。 |

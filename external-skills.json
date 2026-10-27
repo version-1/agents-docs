@@ -12,6 +12,24 @@
     "treeHash": "10b0db61f9b3869243db8a1a0ee84f862139b94e"
   },
   {
+    "name": "grill-with-docs",
+    "url": "https://github.com/mattpocock/skills/tree/697d4ce9742da558fd1ba6697c8e9775e2e302dd/skills/engineering/grill-with-docs",
+    "type": "git",
+    "treeHash": "5fdcdeedf2d0c73b3ecb1da0a464dd885590f8d6"
+  },
+  {
+    "name": "to-spec",
+    "url": "https://github.com/mattpocock/skills/tree/697d4ce9742da558fd1ba6697c8e9775e2e302dd/skills/engineering/to-spec",
+    "type": "git",
+    "treeHash": "bf698b96b5d8798d110d9872e32b9310728555b0"
+  },
+  {
+    "name": "to-tickets",
+    "url": "https://github.com/mattpocock/skills/tree/697d4ce9742da558fd1ba6697c8e9775e2e302dd/skills/engineering/to-tickets",
+    "type": "git",
+    "treeHash": "5467d7a37ef365ed43ebe6eb466d6e952be881b8"
+  },
+  {
     "name": "empirical-prompt-tuning",
     "url": "https://github.com/mizchi/skills/tree/aa223d8c85ba4313e2ec6fb9251cc65d46ed3291/empirical-prompt-tuning",
     "type": "git",

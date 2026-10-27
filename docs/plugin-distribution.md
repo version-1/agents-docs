@@ -68,7 +68,7 @@ skills/internal + external-skills.json + skill-groups.json + plugins/
        必要な plugin を add              必要な plugin を install
 ```
 
-外部 skill は marketplace build 時に全 11 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。生成される group と個別 plugin の一覧は `make build-plugins` の出力で確認する。
+外部 skill は marketplace build 時に全 14 件を取得し、hash を検証して取り込む。install 時の選択は host に移管するため、profile や selection による取得対象の絞り込みは行わない。生成される group と個別 plugin の一覧は `make build-plugins` の出力で確認する。
 
 ## 生成と任意のローカル配布
 
@@ -124,6 +124,21 @@ group をまたぐ行動上の依存は host が自動 install しない。`incl
 従来の `planning-advice`、`implementation`、`review-roles`、`operations` plugin を利用している場合は、それらを `roles@agents-docs` に置き換える。旧 `documentation` plugin で Documenter agent への委譲を利用している場合も `roles@agents-docs` を追加する。`core@agents-docs` は `roles` を同梱しないため、role を使う場合は追加する。finder の role は `finder@agents-docs` に残る。
 
 group plugin と、その group に含まれる `skill-<name>` を重複 install しない。同じ skill が二重に読み込まれるおそれがあるためである。`core` とその構成 group も重複 install しない。異なる group にまたがる依存がある場合は、依存先の group plugin または依存先 skill plugin も install する。個別 plugin の必須相対 resource は closure に含まれるが、別 plugin に属する行動上の依存までは自動 install しない。
+
+### thinking から pocock-skills への移行
+
+`thinking` group は削除し、既存の `grilling` を `pocock-skills` へ移した。`pocock-skills` は `grilling`、`grill-with-docs`、`to-spec`、`to-tickets` の4件を同梱する。marketplace を再生成・更新後、各 host で次の plugin を追加し、旧 `thinking@agents-docs` を削除または無効化して重複読み込みを避ける。host の設定や cache は deploy で自動変更されない。
+
+```bash
+codex plugin add pocock-skills@agents-docs
+claude plugin install -s user pocock-skills@agents-docs
+```
+
+`skill-grilling@agents-docs` などの個別 plugin を利用している場合は、そのまま利用できる。group に切り替える場合は同じ skill の個別 plugin も削除または無効化する。
+
+上流の `grill-with-docs` は `domain-modeling` を参照するが、この group には同梱しない。利用時は上流から別途用意する。`to-spec` と `to-tickets` はトラッカーとラベルの設定を前提とし、未設定時には上流の `setup-matt-pocock-skills` を案内する。これらの補助 skill は今回の登録対象外であり、host が自動 install するものではない。
+
+補助 skill の取得元は、登録済み4件と同じ固定コミットの [domain-modeling](https://github.com/mattpocock/skills/tree/697d4ce9742da558fd1ba6697c8e9775e2e302dd/skills/engineering/domain-modeling) と [setup-matt-pocock-skills](https://github.com/mattpocock/skills/tree/697d4ce9742da558fd1ba6697c8e9775e2e302dd/skills/engineering/setup-matt-pocock-skills) で確認できる。[上流の Quickstart](https://github.com/mattpocock/skills/blob/697d4ce9742da558fd1ba6697c8e9775e2e302dd/README.md#quickstart-30-second-setup) の installer では、この2件と利用 host を選択し、導入後に `/setup-matt-pocock-skills` を実行する。installer は上流の最新版を取得するため、固定版が必要ならリンク先の skill ディレクトリ全体を取得して host の skill 配置先へ導入する。`pocock-skills` の4件は installer で重複選択しない。
 
 ## 旧 skill 配布からの移行と rollback
 

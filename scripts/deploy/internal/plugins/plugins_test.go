@@ -518,6 +518,37 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 		assertPluginManifests(t, out, plugin.Name)
 	}
 	assertSameNames(t, "generated plugins", directoryNames(t, filepath.Join(out, "plugins")), expectedPlugins)
+	wantPocockSkills := map[string]struct{}{
+		"grilling": {}, "grill-with-docs": {}, "to-spec": {}, "to-tickets": {},
+	}
+	assertSameNames(t, "pocock-skills contents", directoryNames(t, filepath.Join(out, "plugins", "pocock-skills", "skills")), wantPocockSkills)
+	for skill := range wantPocockSkills {
+		assertExists(t, filepath.Join(out, "plugins", "pocock-skills", "skills", skill, "SKILL.md"))
+		owners := 0
+		for _, group := range groups.Groups {
+			for _, name := range group.Skills {
+				if name == skill {
+					owners++
+				}
+			}
+		}
+		if owners != 1 {
+			t.Errorf("%s belongs to %d groups, want 1", skill, owners)
+		}
+	}
+	if _, exists := groups.Groups["thinking"]; exists {
+		t.Error("retired thinking group is still configured")
+	}
+	for _, file := range []string{".agents/plugins/marketplace.json", ".claude-plugin/marketplace.json"} {
+		assertMarketplacePlugin(t, out, file, "pocock-skills")
+		b, err := os.ReadFile(filepath.Join(out, file))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if strings.Contains(string(b), `"name": "thinking"`) {
+			t.Errorf("%s still registers retired thinking plugin", file)
+		}
+	}
 }
 
 func repositorySourceSkills(t *testing.T, repo string, externalSkills []external.Skill) map[string]struct{} {
