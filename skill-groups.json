@@ -108,11 +108,14 @@
       ],
       "description": "PDF、プレゼンテーション、スプレッドシートを扱う"
     },
-    "thinking": {
+    "pocock-skills": {
       "skills": [
-        "grilling"
+        "grilling",
+        "grill-with-docs",
+        "to-spec",
+        "to-tickets"
       ],
-      "description": "計画や意思決定を厳密に問い、見落としを減らす"
+      "description": "Pocock系の問い直し、設計文書化、仕様化、チケット分割を進める"
     },
     "technical-writing": {
       "skills": [
