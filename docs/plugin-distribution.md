@@ -155,3 +155,5 @@ plugin の登録と必要な install を確認した後に限り、旧方式で�
 ### review グループへの移行
 
 旧 `code-review` グループは `review` に改名しました。host では旧 group plugin を無効化し、`review@agents-docs` を登録・有効化してください。`code-review` スキル名は維持します。旧 `code-test-review` は `review-test-code` に改名し、testing から review グループへ移動しました。個別 plugin を使う場合は `skill-code-test-review` から `skill-review-test-code` へ切り替えてください。
+
+`review-test-code` のケース整理には `format-test-cases` が必須です。`review` グループまたは `skill-review-test-code` を導入するときは、`testing@agents-docs` か個別の `skill-format-test-cases@agents-docs` も登録・有効化してください。必要に応じて併用する `code-test` も `testing` に含まれます。
