@@ -1,5 +1,5 @@
 ---
-name: code-test-review
+name: review-test-code
 description: PR や差分のテストコードをケースごとに分析し、実際の検証内容、回帰を見逃す反例、テスト不足を根拠付きでレビューするときに使う。テストの実装・修正、PR へのコメント投稿や承認には使わない。
 ---
 

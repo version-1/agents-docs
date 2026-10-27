@@ -1,0 +1,26 @@
+{
+  "skill_name": "review-test-code",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "この PR のテスト差分をケースごとにレビューして。mock変更と削除ケースも含めて。",
+      "expected_output": "review-test-code が発火し、実際のアサーション、通過する誤実装の反例、削除された保証を確認し、指摘 ID とケース ID を対応づける。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 2,
+      "prompt": "このテストコードをケース表へ整理して。評価や指摘は不要。",
+      "expected_output": "format-test-cases を優先し、レビューは開始しない。",
+      "files": [],
+      "should_fire": false
+    },
+    {
+      "id": 3,
+      "prompt": "不足しているテストを実装して。",
+      "expected_output": "code-test と実装 skill を優先し、テストレビューだけで代替しない。",
+      "files": [],
+      "should_fire": false
+    }
+  ]
+}

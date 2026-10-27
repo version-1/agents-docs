@@ -68,9 +68,10 @@ skills
     ├── code-quality-review
     ├── code-next-developer-review
     │   └── code-review
-    ├── code-review
-    │   ├── format-test-cases (利用可能な場合)
-    │   └── code-test (必要かつ利用可能な場合)
+    ├── review-test-code
+    │   ├── format-test-cases
+    │   ├── code-review
+    │   └── code-test
     └── code-refactor
         ├── code-quality-review
         ├── code-review
@@ -141,8 +142,9 @@ skills
 | `modification-design` | `lego-programming` | 変更対象を高凝集・疎結合なレゴとして整理し、責務と依存方向を定義するために併用する。 |
 | `code-naming` | `code-next-developer-review` | 次に開発する人の理解しやすさ全体を見る場合に併用する。 |
 | `code-next-developer-review` | `code-review` | 欠陥や重大リスクを見つけた場合に通常レビュー観点として分ける。 |
-| `code-review` | `format-test-cases` | テスト差分モードのケース整理に、利用可能なら使う。未導入時は同梱 reference の表を使う。 |
-| `code-review` | `code-test` | テスト差分モードの観測範囲、mock、flake、境界値の判断に必要に応じて併用する。 |
+| `review-test-code` | `format-test-cases` | PR のテストケースを、条件、入力、操作、実際のアサーション、根拠として整理するために使う。 |
+| `review-test-code` | `code-review` | PR 差分の一般的なリスクと重要度を評価するときに必要に応じて併用する。 |
+| `review-test-code` | `code-test` | テストの観測範囲、mock、flake、境界値の観点を必要に応じて併用する。 |
 | `code-refactor` | `code-quality-review` | 品質レポートや quality gate の観点から改善候補を拾う。 |
 | `code-refactor` | `code-review` | 可読性、効率性、テスト容易性などのレビュー観点として使う。 |
 | `code-refactor` | `code-next-developer-review` | 保守性や次の開発者の理解しやすさの観点として使う。 |
@@ -236,8 +238,9 @@ graph TD
 
     code_next_dev --> code_review
 
-    code_review -. 利用可能な場合 .-> format_test_cases["format-test-cases"]
-    code_review -. 必要かつ利用可能な場合 .-> code_test
+    review_test_code["review-test-code"] --> format_test_cases["format-test-cases"]
+    review_test_code --> code_review
+    review_test_code --> code_test
 
     code_refactor["code-refactor"] --> code_quality["code-quality-review"]
     code_refactor --> code_review
