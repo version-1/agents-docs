@@ -413,13 +413,23 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 		t.Fatal(err)
 	}
 	expectedSkills := repositorySourceSkills(t, repo, ext)
+	ungroupedSkills := map[string]struct{}{
+		"tasq-cli":        {},
+		"tq-orchestrator": {},
+	}
 	groupedSkills := map[string]struct{}{}
 	for _, group := range groups.Groups {
 		for _, skill := range group.Skills {
 			groupedSkills[skill] = struct{}{}
 		}
 	}
-	assertSameNames(t, "configured skills", groupedSkills, expectedSkills)
+	expectedGroupedSkills := map[string]struct{}{}
+	for skill := range expectedSkills {
+		if _, ungrouped := ungroupedSkills[skill]; !ungrouped {
+			expectedGroupedSkills[skill] = struct{}{}
+		}
+	}
+	assertSameNames(t, "configured group skills", groupedSkills, expectedGroupedSkills)
 	sources := map[string]string{}
 	for _, s := range ext {
 		p := filepath.Join(t.TempDir(), s.Name)
@@ -441,6 +451,18 @@ func TestRepositoryCatalogBuildsOffline(t *testing.T) {
 	}
 	for group := range groups.Groups {
 		assertPluginManifests(t, out, group)
+	}
+	for skill := range ungroupedSkills {
+		assertPluginManifests(t, out, "skill-"+skill)
+	}
+	for _, marketplace := range []string{
+		filepath.Join(".agents", "plugins", "marketplace.json"),
+		filepath.Join(".claude-plugin", "marketplace.json"),
+	} {
+		for skill := range ungroupedSkills {
+			assertMarketplacePlugin(t, out, marketplace, "skill-"+skill)
+		}
+		assertMarketplacePluginAbsent(t, out, marketplace, "tracking")
 	}
 	managed, err := managedPlugins(filepath.Join(repo, "plugins"))
 	if err != nil {
@@ -613,5 +635,16 @@ func assertMarketplacePlugin(t *testing.T, root, file, plugin string) {
 	}
 	if !strings.Contains(string(b), `"name": "`+plugin+`"`) {
 		t.Fatalf("%s does not register %q", file, plugin)
+	}
+}
+
+func assertMarketplacePluginAbsent(t *testing.T, root, file, plugin string) {
+	t.Helper()
+	b, err := os.ReadFile(filepath.Join(root, file))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(b), `"name": "`+plugin+`"`) {
+		t.Fatalf("%s registers removed plugin %q", file, plugin)
 	}
 }
