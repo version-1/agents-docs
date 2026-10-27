@@ -1,0 +1,4 @@
+interface:
+  display_name: "code-review"
+  short_description: "実装差分のリスクとテストケースの検証不足を根拠付きでレビュー"
+  default_prompt: "$code-review を使って、この PR のリスクとテスト差分のケースをレビューしてください。"

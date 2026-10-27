@@ -21,6 +21,34 @@
       "expected_output": "code-review が発火し、敵対的検証を行う基本姿勢で、diff を起点に入力、順序、権限、時刻、並行実行、外部依存失敗、古いクライアントや既存データの失敗条件を想定して High / Medium / Low の指摘と不足検証を出すこと。",
       "files": [],
       "should_fire": true
+    },
+    {
+      "id": 4,
+      "prompt": "テスト差分をケースごとにレビューして。helper と mock の変更、削除されたテストも含めて。",
+      "expected_output": "テストレビュー手順を読み、影響する既存ケース・削除された保証、実際のアサーション、具体的に通過する誤実装を確認する。統合した指摘一覧とケース ID・指摘 ID を結ぶ表、未確認範囲を出す。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 5,
+      "prompt": "本体コードだけの差分をレビューして。テスト差分はありません。",
+      "expected_output": "通常レビューとして findings first で出力する。ケース表を強制せず、変更契約に対するテスト不足は確認する。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 6,
+      "prompt": "本体とテストで同じ認可漏れがある PR をレビューして。テストは成功しています。",
+      "expected_output": "成功だけで保証を断定せず反例と既存テストを照合し、同じ認可漏れを重複指摘しない。ケース表から統合した指摘 ID を参照する。",
+      "files": [],
+      "should_fire": true
+    },
+    {
+      "id": 7,
+      "prompt": "code-review 単独でこの PR のテストをレビューして。testing plugin は未導入です。",
+      "expected_output": "同梱 references/test-review.md の手順と表を使い、format-test-cases や code-test がなくてもケース評価・不足・削除保証を確認する。",
+      "files": [],
+      "should_fire": true
     }
   ]
 }
