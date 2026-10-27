@@ -119,7 +119,7 @@ scope は `user`、`project`、`local` から利用場所に合わせて選ぶ�
 
 `roles` は `plugins/roles` で管理する、finder 以外の `role-*` と対応する playbook をまとめる plugin である。`finder` は `plugins/finder` で管理する、課題発見用の `role-*-finder` と対応する playbook をまとめる plugin である。`core` は `git`、`delivery`、`documentation` をまとめて利用したい場合に向く。role を利用する場合は `roles@agents-docs` または `finder@agents-docs` を install する。Claude でも同じ plugin 名を install できる。`backend` や `code-foundations` など、`core` に含まれない専門 group は必要に応じて追加する。
 
-group をまたぐ行動上の依存は host が自動 install しない。`includes` で skill を同梱することも、参照先 group plugin の host install を自動化するものではない。`delivery` を単独で install して `cmd-create-pr` を使う場合は、Git 操作の `git@agents-docs` とレビューの `roles@agents-docs`、`code-review@agents-docs` も追加する。`core` を install する場合も role を使うには `roles@agents-docs` を追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。
+group をまたぐ行動上の依存は host が自動 install しない。`includes` で skill を同梱することも、参照先 group plugin の host install を自動化するものではない。`delivery` を単独で install して `cmd-create-pr` を使う場合は、Git 操作の `git@agents-docs` とレビューの `roles@agents-docs`、`review@agents-docs` も追加する。`core` を install する場合も role を使うには `roles@agents-docs` を追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。
 
 従来の `planning-advice`、`implementation`、`review-roles`、`operations` plugin を利用している場合は、それらを `roles@agents-docs` に置き換える。旧 `documentation` plugin で Documenter agent への委譲を利用している場合も `roles@agents-docs` を追加する。`core@agents-docs` は `roles` を同梱しないため、role を使う場合は追加する。finder の role は `finder@agents-docs` に残る。
 
@@ -151,3 +151,9 @@ plugin の登録と必要な install を確認した後に限り、旧方式で�
 - [OpenAI: Building plugins](https://developers.openai.com/plugins/build/plugins)
 - [Claude Code: Plugin reference](https://code.claude.com/docs/en/plugins-reference)
 - [Claude Code: Plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
+
+### review グループへの移行
+
+旧 `code-review` グループは `review` に改名しました。host では旧 group plugin を無効化し、`review@agents-docs` を登録・有効化してください。`code-review` スキル名は維持します。旧 `code-test-review` は `review-test-code` に改名し、testing から review グループへ移動しました。個別 plugin を使う場合は `skill-code-test-review` から `skill-review-test-code` へ切り替えてください。
+
+`review-test-code` のケース整理には `format-test-cases` が必須です。`review` グループまたは `skill-review-test-code` を導入するときは、`testing@agents-docs` か個別の `skill-format-test-cases@agents-docs` も登録・有効化してください。必要に応じて併用する `code-test` も `testing` に含まれます。

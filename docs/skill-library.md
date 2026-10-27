@@ -23,8 +23,8 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `design` | UI構成と変更設計 | `component-design`、`modification-design` / 2 |
 | `frontend` | CSS、React、TypeScript の実装 | `code-react`、`code-ts` / 4 |
 | `backend` | Go、Ruby/Rails の実装 | `code-go`、`code-ruby` / 2 |
-| `testing` | テスト戦略と、仕様保証・変更耐性を評価 | `code-test` / 1 |
-| `code-review` | 仕様、品質、保守性のレビュー | `code-review`、`code-refactor` / 4 |
+| `testing` | テスト戦略、仕様保証・変更耐性の評価、既存ケースの整理 | `code-test`、`format-test-cases` / 2 |
+| `review` | 仕様、品質、保守性、テスト差分のレビュー | `code-review`、`review-test-code`、`code-refactor` / 6 |
 | `documentation` | 文書と図解の作成 | `documenting`、`format-rich-html-diagram` / 2 |
 | `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
 | `office` | PDF、プレゼン、スプレッドシート | `pdf`、`pptx`、`xlsx` / 3 |
@@ -120,7 +120,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `code-next-developer-review` | 次に開発する人が困らないかという観点で差分をレビューする。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、命名、責務境界、型、テストの読みやすさ、前提知識の残し方を確認するとき。 |
 | `code-review` | 実装済み差分、PR、コミット、指定ファイルをリスク中心にレビューする。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、仕様違反、回帰、公開契約破壊、セキュリティ、データ整合性を確認するとき。 |
 | `code-test` | テスト戦略を選び、テストが仕様を保証し、正常な変更に耐えるかを評価する。 | テスト設計、回帰テスト追加、既存テストのレビューで、期待値、診断性、再現性、独立性、性能を判断するとき。 |
-| `code-test-review` | PR や差分のテストコードをケースごとに分析し、回帰を見逃す反例やテスト不足を根拠付きでレビューする。 | テスト差分が変更契約を実際に観測できているかを確認したいとき。 |
+| `review-test-code` | PR や差分のテストコードをケースごとに分析し、回帰を見逃す反例やテスト不足を根拠付きでレビューする。 | テスト差分が変更契約を実際に観測できているかを確認したいとき。 |
 
 #### 思想・スタイル型スキル
 
