@@ -70,10 +70,9 @@
     "testing": {
       "skills": [
         "code-test",
-        "format-test-cases",
-        "code-test-review"
+        "format-test-cases"
       ],
-      "description": "テスト観点、既存テストの整理、PRテストレビュー、回帰テスト、テスト戦略を設計する"
+      "description": "テスト観点、既存テストの整理、回帰テスト、テスト戦略を設計する"
     },
     "code-review": {
       "skills": [
@@ -83,7 +82,7 @@
         "code-next-developer-review",
         "code-refactor"
       ],
-      "description": "仕様・品質・保守性をレビューし、必要なリファクタリングを行う"
+      "description": "仕様・品質・保守性とテスト差分をレビューし、必要なリファクタリングを行う"
     },
     "documentation": {
       "skills": [
