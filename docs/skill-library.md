@@ -26,7 +26,6 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `testing` | テスト戦略と、仕様保証・変更耐性を評価 | `code-test` / 1 |
 | `code-review` | 仕様、品質、保守性のレビュー | `code-review`、`code-refactor` / 4 |
 | `documentation` | 文書と図解の作成 | `documenting`、`format-rich-html-diagram` / 2 |
-| `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder / 11 |
 | `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
 | `office` | PDF、プレゼン、スプレッドシート | `pdf`、`pptx`、`xlsx` / 3 |
 | `thinking` | 計画・判断の問い直し | `grilling` / 1 |
@@ -36,6 +35,7 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 
 | Plugin | 用途 | skill / 数 |
 |---|---|---|
+| `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder と各 playbook / 11 |
 | `roles` | finder 以外の専門 agent への委譲 | `role-advisor`、`role-documenter`、`role-gardener`、`role-implementer`、`role-planner`、`role-refactor`、`role-reviewer`、`role-scouter`、`role-worker` と各 playbook / 18 |
 
 分類は [docs/guide/skill-category.md](guide/skill-category.md) の考え方に合わせています。複数の性質を持つ skill は、主な用途で分類しています。

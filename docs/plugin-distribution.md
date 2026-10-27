@@ -117,7 +117,7 @@ scope は `user`、`project`、`local` から利用場所に合わせて選ぶ�
 
 ## 選択例と依存の注意
 
-`roles` は `plugins/roles` で管理する、finder 以外の `role-*` と対応する playbook をまとめる plugin である。`core` は `git`、`delivery`、`documentation` をまとめて利用したい場合に向く。role を利用する場合は `roles@agents-docs` も install する。Claude でも同じ plugin 名を install できる。`backend` や `code-foundations` など、`core` に含まれない専門 group は必要に応じて追加する。
+`roles` は `plugins/roles` で管理する、finder 以外の `role-*` と対応する playbook をまとめる plugin である。`finder` は `plugins/finder` で管理する、課題発見用の `role-*-finder` と対応する playbook をまとめる plugin である。`core` は `git`、`delivery`、`documentation` をまとめて利用したい場合に向く。role を利用する場合は `roles@agents-docs` または `finder@agents-docs` を install する。Claude でも同じ plugin 名を install できる。`backend` や `code-foundations` など、`core` に含まれない専門 group は必要に応じて追加する。
 
 group をまたぐ行動上の依存は host が自動 install しない。`includes` で skill を同梱することも、参照先 group plugin の host install を自動化するものではない。`delivery` を単独で install して `cmd-create-pr` を使う場合は、Git 操作の `git@agents-docs` とレビューの `roles@agents-docs`、`code-review@agents-docs` も追加する。`core` を install する場合も role を使うには `roles@agents-docs` を追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。
 

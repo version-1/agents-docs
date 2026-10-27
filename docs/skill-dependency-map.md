@@ -17,7 +17,7 @@ skills
 │   │   ├── code-review
 │   │   └── format-pr-description
 ├── role
-│   ├── finder roles (`skills/internal/`)
+│   ├── finder plugin (`plugins/finder/skills/`)
 │   │   ├── role-bug-finder -> issue-finder-playbook, role-bug-finder-playbook
 │   │   ├── role-maintenance-finder -> issue-finder-playbook, role-maintenance-finder-playbook
 │   │   ├── role-feature-finder -> issue-finder-playbook, role-feature-finder-playbook
