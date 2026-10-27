@@ -138,6 +138,8 @@ claude plugin install -s user pocock-skills@agents-docs
 
 上流の `grill-with-docs` は `domain-modeling` を参照するが、この group には同梱しない。利用時は上流から別途用意する。`to-spec` と `to-tickets` はトラッカーとラベルの設定を前提とし、未設定時には上流の `setup-matt-pocock-skills` を案内する。これらの補助 skill は今回の登録対象外であり、host が自動 install するものではない。
 
+補助 skill の取得元は、登録済み4件と同じ固定コミットの [domain-modeling](https://github.com/mattpocock/skills/tree/697d4ce9742da558fd1ba6697c8e9775e2e302dd/skills/engineering/domain-modeling) と [setup-matt-pocock-skills](https://github.com/mattpocock/skills/tree/697d4ce9742da558fd1ba6697c8e9775e2e302dd/skills/engineering/setup-matt-pocock-skills) で確認できる。[上流の Quickstart](https://github.com/mattpocock/skills/blob/697d4ce9742da558fd1ba6697c8e9775e2e302dd/README.md#quickstart-30-second-setup) の installer では、この2件と利用 host を選択し、導入後に `/setup-matt-pocock-skills` を実行する。installer は上流の最新版を取得するため、固定版が必要ならリンク先の skill ディレクトリ全体を取得して host の skill 配置先へ導入する。`pocock-skills` の4件は installer で重複選択しない。
+
 ## 旧 skill 配布からの移行と rollback
 
 この変更は `~/.codex/skills` と `~/.claude/skills` を自動で削除・置換しない。Codex の `.system` や、利用者自身・他の配布元が管理する skill を保護するためである。
