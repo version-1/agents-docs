@@ -124,13 +124,6 @@
       ],
       "description": "PDF、プレゼンテーション、スプレッドシートを扱う"
     },
-    "tracking": {
-      "skills": [
-        "tasq-cli",
-        "tq-orchestrator"
-      ],
-      "description": "tasqの課題を取得し、作業をオーケストレーションする"
-    },
     "thinking": {
       "skills": [
         "grilling"

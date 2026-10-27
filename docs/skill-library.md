@@ -10,6 +10,8 @@ group と個別 plugin の skill 実体は `skills/internal/<skill-name>/SKILL.m
 
 group の正本は `skill-groups.json` です。build は group plugin と各 skill の個別 `skill-<name>` plugin を生成し、`plugins/` の手管理 plugin も検証して取り込みます。`includes` を持つ group は参照先 group の skill を合成して同梱します。相対 resource を参照する個別 plugin には必須の closure が同梱されます。具体的な生成・登録・移行手順は [plugin 配布](plugin-distribution.md) を参照してください。
 
+`tasq-cli` と `tq-orchestrator` は group に含めず、各 `skill-tasq-cli` と `skill-tq-orchestrator` plugin として利用します。
+
 | グループ | 用途 | 代表 skill / 数 |
 |---|---|---|
 | `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`documentation` を合成 / 6 |
@@ -27,7 +29,6 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder / 11 |
 | `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
 | `office` | PDF、プレゼン、スプレッドシート | `pdf`、`pptx`、`xlsx` / 3 |
-| `tracking` | tasq の課題管理とオーケストレーション | `tasq-cli`、`tq-orchestrator` / 2 |
 | `thinking` | 計画・判断の問い直し | `grilling` / 1 |
 | `technical-writing` | 日本語技術文書の執筆・推敲 | `japanese-tech-writing` / 1 |
 
@@ -180,6 +181,8 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `empirical-prompt-tuning` | `mizchi/skills` | 判断定義型 / スコアリング・査定型 | skill やプロンプトを実験的に改善し、評価と反復で性能を詰めるために使う。 |
 | `grape-usage` | `version-1/grape` | 行動定義型 / リファレンス型 | 安全な push、ポリシーで制限された rebase、worktree 操作など、grape コマンドの正確な利用方法を確認するときに使う。 |
 | `japanese-tech-writing` | `k16shikano/fd287c3133457c4fd8f5601d34aa817d` | 判断定義型 / 判断基準・評価型 | 日本語の技術文書・書籍原稿を執筆・推敲するときに、段落構成、論証、読者の負荷、語り、表現の規範を適用する。 |
+| `tasq-cli` | `version-1/tasq` | リファレンス型 | Tasq の typed CLI を使った課題、コメント、artifact の操作を確認するときに使う。個別 plugin `skill-tasq-cli` として利用する。 |
+| `tq-orchestrator` | `version-1/tasq` | ワークフロー型 | Tasq の ready issue を監視し、subagent への委譲をオーケストレーションするときに使う。個別 plugin `skill-tq-orchestrator` として利用する。 |
 
 ## 運用メモ
 
