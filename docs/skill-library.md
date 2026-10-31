@@ -36,6 +36,7 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | Plugin | 用途 | skill / 数 |
 |---|---|---|
 | `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder と各 playbook / 11 |
+| `quiz-code-base` | 定期的に設計・レビュー時の認識と実コードの振る舞いのズレを発見・修正する | `quiz-code-base`（複数問の入口）、`quiz-code-base-single`（1問の対話）、`quiz-code-base-manager`（問題・履歴管理）、`quiz-code-base-analyzer`（解析・作問）、`quiz-code-base-recorder`（SQLite記録・スキーマ管理） / 5 |
 | `roles` | finder 以外の専門 agent への委譲 | `role-advisor`、`role-documenter`、`role-gardener`、`role-implementer`、`role-planner`、`role-refactor`、`role-reviewer`、`role-scouter`、`role-worker` と各 playbook / 18 |
 
 分類は [docs/guide/skill-category.md](guide/skill-category.md) の考え方に合わせています。複数の性質を持つ skill は、主な用途で分類しています。
