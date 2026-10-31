@@ -2,16 +2,16 @@
 
 大目標: 定期的に、設計・レビュー時の認識と実コードの振る舞いのズレを見つけ、認識を修正する。その変化を再確認できるよう、問題の版と当時の回答を保持する。
 
-## Version 1
+## Version 2
 
-SQLの正本は [001.sql](../scripts/migrations/001.sql)。`PRAGMA user_version` を適用済み番号とし、ランタイムの `VERSION` と対応する。以下の列はSQLの制約・型と併せて参照する。
+SQLの正本は [001.sql](../scripts/migrations/001.sql) と [002.sql](../scripts/migrations/002.sql)。`PRAGMA user_version` を適用済み番号とし、ランタイムの `VERSION` と対応する。v2は履歴を含むfingerprint一意制約を外し、同じ実装への回帰や根拠移動後の新版登録を可能にする。以下の列はSQLの制約・型と併せて参照する。
 
 | テーブル | 列 | 意味 |
 |---|---|---|
 | repositories | id, identity | git common directoryの実パス。同一repoのworktreeで共有 |
 | questions | id, repository_id | 問題ID、所有repoへのFK |
 | questions | content | 問題JSON。選択肢・単一正解・解説・scope・根拠ファイルのSHA-256を含む |
-| questions | fingerprint | 根拠以外の内容のSHA-256。同一repoで一意 |
+| questions | fingerprint | 根拠以外の内容のSHA-256。非superseded版の重複はCLIがトランザクション内で防止。旧版と新版の一致は許可 |
 | questions | replaces | 置き換え元questions.idへのFK。新版の初期進捗は独立 |
 | questions | status, created_at | active／deleted／superseded、UTC作成時刻 |
 | progress | question_id | questions.idへのFK、1対1 |

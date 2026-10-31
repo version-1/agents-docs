@@ -13,7 +13,7 @@ Python 3.10以上の標準ライブラリのみを使用する。`python3 <こ�
 
 - [CLI・入力契約](references/cli.md): 実行時に読む。コマンド・問題JSON・出題／回答の手順。
 - [DB定義](references/schema.md): スキーマの確認・変更時に読む。
-- [バージョン管理されたSQL](scripts/migrations/001.sql): スキーマの正本。定義変更時は既存SQLを書き換えず次の連番migrationを追加し、対応バージョンとテストも更新する。
+- [初期SQL](scripts/migrations/001.sql) と [v2移行](scripts/migrations/002.sql): スキーマの正本。定義変更時は既存SQLを書き換えず次の連番migrationを追加し、対応バージョンとテストも更新する。
 
 既定DBは `~/.local/share/quiz-code-base/quiz.sqlite3`。`--db PATH` で検証用DBを指定できる。git common directory の実パスでリポジトリを識別し、ブランチ・worktree間で履歴を共有する。単独cloneやリポジトリ移動は別の学習対象になる。単一ローカルユーザー向け。
 

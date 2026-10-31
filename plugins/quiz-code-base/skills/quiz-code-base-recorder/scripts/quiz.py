@@ -12,7 +12,7 @@ from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-VERSION = 1
+VERSION = 2
 DEFAULT_DB = Path.home() / '.local/share/quiz-code-base/quiz.sqlite3'
 
 
@@ -189,7 +189,7 @@ class Store:
     def add(self, data, replaces=None):
         fp = fingerprint(data)
         rid = self.repo_id()
-        existing = self.db.execute('SELECT id FROM questions WHERE repository_id=? AND fingerprint=?',
+        existing = self.db.execute("SELECT id FROM questions WHERE repository_id=? AND fingerprint=? AND status!='superseded' ORDER BY id LIMIT 1",
                                    (rid, fp)).fetchone()
         if existing:
             if replaces is not None:
@@ -378,8 +378,10 @@ def run(store, args):
         if row['status'] == 'superseded':
             raise ValueError('superseded revision is immutable')
         if cmd == 'revise':
-            result = store.add(data, replaces=args.id)
+            if data == json.loads(row['content']):
+                raise ValueError('revision is unchanged; use refresh for evidence revalidation')
             store.db.execute("UPDATE questions SET status='superseded' WHERE id=?", (args.id,))
+            result = store.add(data, replaces=args.id)
             return result
         if cmd == 'delete':
             store.db.execute("UPDATE questions SET status='deleted' WHERE id=?", (args.id,))

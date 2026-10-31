@@ -188,21 +188,21 @@ class QuizTests(unittest.TestCase):
     def test_migration_backup_success_and_rollback(self):
         migration_dir = self.root / 'migrations'
         migration_dir.mkdir()
-        sql = migration_dir / '002.sql'
-        sql.write_text('CREATE TABLE extra(id INTEGER); PRAGMA user_version=2;')
-        with patch.object(quiz, 'VERSION', 2), patch.object(quiz, '__file__', str(self.root / 'quiz.py')):
+        sql = migration_dir / '003.sql'
+        sql.write_text('CREATE TABLE extra(id INTEGER); PRAGMA user_version=3;')
+        with patch.object(quiz, 'VERSION', 3), patch.object(quiz, '__file__', str(self.root / 'quiz.py')):
             quiz.migrate(self.db, self.path)
-        self.assertEqual(self.db.execute('PRAGMA user_version').fetchone()[0], 2)
+        self.assertEqual(self.db.execute('PRAGMA user_version').fetchone()[0], 3)
         backups = list(self.root.glob('*.backup-*'))
         self.assertEqual(len(backups), 1)
         with sqlite3.connect(backups[0]) as backup:
             self.assertEqual(backup.execute('SELECT count(*) FROM questions').fetchone()[0], 1)
-            self.assertEqual(backup.execute('PRAGMA user_version').fetchone()[0], 1)
-        (migration_dir / '003.sql').write_text('CREATE TABLE partial(id); INVALID SQL; PRAGMA user_version=3;')
-        with patch.object(quiz, 'VERSION', 3), patch.object(quiz, '__file__', str(self.root / 'quiz.py')):
+            self.assertEqual(backup.execute('PRAGMA user_version').fetchone()[0], 2)
+        (migration_dir / '004.sql').write_text('CREATE TABLE partial(id); INVALID SQL; PRAGMA user_version=4;')
+        with patch.object(quiz, 'VERSION', 4), patch.object(quiz, '__file__', str(self.root / 'quiz.py')):
             with self.assertRaises(sqlite3.Error):
                 quiz.migrate(self.db, self.path)
-        self.assertEqual(self.db.execute('PRAGMA user_version').fetchone()[0], 2)
+        self.assertEqual(self.db.execute('PRAGMA user_version').fetchone()[0], 3)
         self.assertIsNone(self.db.execute("SELECT name FROM sqlite_master WHERE name='partial'").fetchone())
 
     def test_cli_end_to_end(self):
@@ -234,12 +234,71 @@ class QuizTests(unittest.TestCase):
     def test_missing_migration_version_rolls_back(self):
         migration_dir = self.root / 'migrations'
         migration_dir.mkdir()
-        (migration_dir / '002.sql').write_text('CREATE TABLE incomplete(id);')
-        with patch.object(quiz, 'VERSION', 2), patch.object(quiz, '__file__', str(self.root / 'quiz.py')):
+        (migration_dir / '003.sql').write_text('CREATE TABLE incomplete(id);')
+        with patch.object(quiz, 'VERSION', 3), patch.object(quiz, '__file__', str(self.root / 'quiz.py')):
             with self.assertRaisesRegex(ValueError, 'expected schema version'):
                 quiz.migrate(self.db, self.path)
-        self.assertEqual(self.db.execute('PRAGMA user_version').fetchone()[0], 1)
+        self.assertEqual(self.db.execute('PRAGMA user_version').fetchone()[0], 2)
         self.assertIsNone(self.db.execute("SELECT name FROM sqlite_master WHERE name='incomplete'").fetchone())
+
+    def revise(self, qid, raw):
+        path = self.root / 'revision.json'
+        path.write_text(json.dumps(raw))
+        return self.command('revise', id=qid, input=str(path))['id']
+
+    def test_revision_can_return_to_historical_content(self):
+        self.answer(self.store.present(self.qid, False))
+        changed = {**self.raw, 'prompt': 'Changed behavior'}
+        second = self.revise(self.qid, changed)
+        third = self.revise(second, self.raw)
+        self.assertNotEqual(third, self.qid)
+        self.assertEqual(self.store.get(third)['streak'], 0)
+        self.assertEqual(self.store.get(third)['presentations'], 0)
+        self.assertEqual(len(self.command('history', id=self.qid, limit=20)), 1)
+        self.assertEqual(self.store.get(second)['status'], 'superseded')
+
+    def test_revision_allows_evidence_only_move_and_rejects_active_duplicate(self):
+        self.store.present(self.qid, False)
+        (self.root / 'model.py').rename(self.root / 'moved.py')
+        changed = {**self.raw, 'evidence': [{'path': 'moved.py', 'locator': 'required'}]}
+        second = self.revise(self.qid, changed)
+        self.assertEqual(self.store.get(second)['presentations'], 0)
+        self.assertEqual(len(self.command('history', id=self.qid, limit=20)), 1)
+        other = {**changed, 'prompt': 'A different problem'}
+        third = self.add(other)
+        with self.assertRaisesRegex(ValueError, 'duplicates'):
+            self.revise(third, changed)
+        self.assertEqual(self.store.get(third)['status'], 'active')
+
+    def test_v1_to_v2_preserves_history_and_foreign_keys(self):
+        path = self.root / 'legacy.sqlite3'
+        with patch.object(quiz, 'VERSION', 1):
+            old = quiz.connect(path)
+        try:
+            store = quiz.Store(old, self.root, 'legacy-repo')
+            with store.transaction():
+                first = store.add(quiz.question_input(self.root, self.raw))['id']
+            presentation = store.present(first, False)
+            store.answer(presentation, 'ABCD'[presentation['presentation']['order'].index('2')])
+            with store.transaction():
+                second = store.add(quiz.question_input(self.root, {**self.raw, 'prompt': 'New'}), replaces=first)['id']
+                old.execute("UPDATE questions SET status='superseded' WHERE id=?", (first,))
+            before_attempt = dict(old.execute('SELECT * FROM attempts').fetchone())
+        finally:
+            old.close()
+        upgraded = quiz.connect(path)
+        try:
+            self.assertEqual(upgraded.execute('PRAGMA user_version').fetchone()[0], 2)
+            self.assertEqual(upgraded.execute('PRAGMA foreign_key_check').fetchall(), [])
+            self.assertEqual(dict(upgraded.execute('SELECT * FROM attempts').fetchone()), before_attempt)
+            self.assertEqual(upgraded.execute('SELECT replaces FROM questions WHERE id=?', (second,)).fetchone()[0], first)
+            self.assertEqual(upgraded.execute('SELECT streak FROM progress WHERE question_id=?', (first,)).fetchone()[0], 1)
+            legacy = quiz.Store(upgraded, self.root, 'legacy-repo')
+            with legacy.transaction():
+                again = legacy.add(quiz.question_input(self.root, self.raw))
+            self.assertTrue(again['created'])
+        finally:
+            upgraded.close()
 
 
 if __name__ == '__main__':
