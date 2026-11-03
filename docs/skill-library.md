@@ -17,7 +17,7 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `core` | 基本的な agent 作業をまとめて利用 | `git`、`delivery`、`documentation` を合成 / 6 |
 | `git` | コミットと grape による Git 操作 | `cmd-commit`、`grape-usage` / 2 |
 | `delivery` | PR 作成と説明整備 | `cmd-create-pr`、`format-pr-description` / 2 |
-| `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
+| `agent-orchestration` | ゴールの自律遂行と agent への分割・委譲 | `factory`、`cmd-batch`、`cmd-dispatch-agent` / 3 |
 | `code-foundations` | 共通実装原則、命名、コード追跡 | `code-general`、`code-naming`、`format-tracer` / 4 |
 | `lego-programming` | 責務分離と部品境界の設計・実装 | `lego-programming` / 1 |
 | `design` | UI構成と変更設計 | `component-design`、`modification-design` / 2 |
@@ -54,6 +54,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | Skill | 概要 | 使う場面 |
 |---|---|---|
 | `agent-retro` | 直近のエージェント作業を振り返り、再利用可能なルールへ反映する。 | 遠回りした知見を skill、AGENTS.md、CLAUDE.md などに残したいとき。 |
+| `factory` | ゴールを GitHub Issues に分解し、最大5件の並行実装・検証・品質改善・QA・条件付き自動マージまで進める。 | `/factory <goal>` で自律実行し、`/factory approve` で特定の承認待ち項目を承認するとき。既存方針内の仕様具体化を任せ、方針変更は人間に戻す。 |
 | `cmd-batch` | 広範囲の調査、編集、検証を複数エージェントや並列作業へ分割する。 | 大規模変更、横断調査、複数担当への分担、統合手順の整理が必要なとき。 |
 | `cmd-commit` | 変更内容を確認し、適切な粒度とメッセージで安全に Git commit を作成する。 | commit 作成を依頼されたとき。未確認の変更や unrelated changes を含めず、stage 対象と message を整理する。 |
 | `cmd-create-pr` | GitHub Pull Request を安全な手順で作成または更新する。 | PR 作成、PR 提出、pull request 作成を依頼されたとき。差分確認、検証、commit、role-reviewer による PR 前レビュー、High 指摘の自動対応、grape push、PR description 作成、gh pr create / edit の順序を整理する。 |
