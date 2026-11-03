@@ -10,12 +10,15 @@
 - 優先度と理由、依存 issue、変更範囲、担当。
 - 状態、専用 worktree の絶対パス、branch、PR またはレポートへのリンク。
 - base/head SHA、検証コマンドと結果、reviewer の選択・省略理由、指摘と対応。
+- 各工程の [handoff](handoff.md)：次担当、受入条件、raw log、残件、merge / 配布公開別の承認要否、開始確認と次の確認時点。
 - 同じ原因に対する改善なしの連続回数、保留理由、解除条件。
 - 承認待ちの場合は次節の承認記録。
 
 状態は `ready → implementing → verifying → refining → reverifying → qa → done` を基本とし、修正時は `implementing` に戻す。`awaiting-approval` と `blocked` には元の工程と解除条件を残す。保留は完了ではなく、依存する issue も実行対象から外す。
 
 再開時は管理 issue と子 issue、open/closed PR、マージ状況、worktree・branch・SHA を照合する。記録だけを信じて再実行せず、既存 PR や担当を再利用する。他の実行が同じゴールを処理中なら新たな統括を起動しない。
+
+工程の完了通知だけで次工程を開始済みにしない。Pdm は [開始確認と停滞検知](handoff.md) に従って記録を更新する。QA 完了後は判定に応じて Draft 維持・Ready 化・承認待ち・直列統合へ進め、owner と次アクションがない待機を残さない。
 
 ## 承認記録
 

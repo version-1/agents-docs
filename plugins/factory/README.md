@@ -86,6 +86,10 @@ factory を停止して、途中の状態を記録して
 
 通常は、実装 → 必要なレビューと修正 → 挙動を維持した品質改善 → 再検証 → QA と進みます。同じ原因で連続3回改善しない issue は保留し、試した対応と解除条件を記録します。調査レポートなど PR を作らない issue も、独立した検証と QA を通れば完了にできます。
 
+各工程の引き継ぎには、次担当・固定 SHA・受入条件・検証ログ・残件・承認要否を残します。依頼の送信だけで開始済みとせず、idle の担当は明示的に起動して開始を確認します。レビュー枠を確保し、新規 PR より既存成果物の検証・QA・Ready 化を優先します。
+
+QA は品質、Ready 化、merge の人間承認、配布公開の人間承認、自動統合可否を別々に判定します。完成した Draft は Ready 化へ進めますが、未完了の実装や必須 native 検証が残れば Draft を維持します。保護不足は別の blocker として記録し、強制マージしません。
+
 達成条件をすべて満たすと停止し、成果物と検証根拠を報告します。全件が承認待ち・保留の場合は、必要な入力と再開点を報告します。セッション終了後の自動監視や継続実行は行いません。
 
 ## 振り返りを次の実行に反映する
@@ -110,3 +114,5 @@ feedback は改善提案の Issue 作成、recap はローカル skill の作成
 - [進捗・承認・マージの契約](skills/factory/references/state.md)
 - [外部 issue の取り込み手順](skills/factory/references/intake.md)
 - [Issue の分類と関連付け](skills/factory/references/issue-classification.md)
+- [工程の引き継ぎ・停滞検知・QA 判定](skills/factory/references/handoff.md)
+- [引き継ぎと QA の検証シナリオ](skills/factory/evals/handoff-scenarios.md)
