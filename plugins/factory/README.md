@@ -88,9 +88,24 @@ factory を停止して、途中の状態を記録して
 
 達成条件をすべて満たすと停止し、成果物と検証根拠を報告します。全件が承認待ち・保留の場合は、必要な入力と再開点を報告します。セッション終了後の自動監視や継続実行は行いません。
 
+## 振り返りを次の実行に反映する
+
+`factory-feedback` は共通 factory スキルの問題・改善案を整理し、`version-1/agents-docs` に GitHub Issue を作成します。期待と実際の違い、根拠、改善案、受け入れ条件をまとめ、既存 Issue との重複を確認します。利用先プロジェクトの非公開情報は送信内容に含めません。
+
+`factory-recap` は利用先プロジェクト固有の判断基準・検証方法・運用上の知見を、project スコープのガイドライン skill に保存します。既存 skill があれば更新し、新規は `.agents/skills/factory-project-guidelines/SKILL.md` を既定とします。既存の配置規約に従う場合は AGENTS.md / CLAUDE.md に入口を用意します。factory は開始・再開時にガイドラインを読みます。
+
+```text
+/factory-feedback レビューで同じ指摘が繰り返された原因を factory の改善 Issue にして
+/factory-recap 今回の振り返りから、このプロジェクトの factory 運用ガイドラインを更新して
+```
+
+feedback は改善提案の Issue 作成、recap はローカル skill の作成・更新までを行います。実装や factory の再開は別途指示してください。
+
 ## エージェント向けの詳細
 
 - [factory の入口と実行条件](skills/factory/SKILL.md)
+- [共通 factory への改善 feedback](skills/factory-feedback/SKILL.md)
+- [プロジェクトの運用ガイドラインの作成・更新](skills/factory-recap/SKILL.md)
 - [役割ごとの責務](skills/factory/references/roles.md)
 - [進捗・承認・マージの契約](skills/factory/references/state.md)
 - [外部 issue の取り込み手順](skills/factory/references/intake.md)
