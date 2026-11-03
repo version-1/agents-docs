@@ -48,6 +48,14 @@ Pdm は開始・再開時と、新しい issue の割り当て前に候補を確
 
 ラベルとリンクは取り込み候補の指定です。ゴール外の依頼は提案として残し、方針変更が必要ならその判断だけを人間に戻します。重複した仕事は二重実行せず、既存 issue に関連付けます。停止中は即時に取り込まず、再開時に確認します。完了したゴールを追加依頼だけで再開・拡張することもありません。
 
+## Issue の分類
+
+管理 issue・作業 issue には `factory` ラベルが必須です。種類は `type:` を原則1つ、領域は `area:` を必要に応じて付け、同義の既存ラベルを再利用します。ラベルなしの既存 issue は自動で処理対象にせず、ユーザーが指定した場合に取り込みます。
+
+Projects は状態・優先度・GitHub 上の担当、Milestone はリリースや期限のある達成目標に使います。どちらも既存設定またはユーザー指定がある場合に使用し、未設定なら構成を提案して作成前に確認します。Projects 未使用時は状態・優先度・担当を本文で管理します。
+
+Relations で管理 issue と作業 issue の親子関係、blocked by / blocking で依存関係を設定します。必須ラベルや Relations を設定できなければ実装開始を保留します。`factory` が解除された場合は対象の処理と自動マージを止め、途中状態を保存します。詳細は [Issue の分類と関連付け](skills/factory/references/issue-classification.md) を参照してください。
+
 ## 承認する
 
 ```text
@@ -86,3 +94,4 @@ factory を停止して、途中の状態を記録して
 - [役割ごとの責務](skills/factory/references/roles.md)
 - [進捗・承認・マージの契約](skills/factory/references/state.md)
 - [外部 issue の取り込み手順](skills/factory/references/intake.md)
+- [Issue の分類と関連付け](skills/factory/references/issue-classification.md)

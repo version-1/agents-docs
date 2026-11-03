@@ -18,7 +18,7 @@ description: ゴールから GitHub Issues を計画し、最大5件の並行実
 ## 開始と権限
 
 1. 実行先の AGENTS.md、プロダクト方針、既存 issue・PR、検証方法、GitHub の接続先、agent・モデル・並行数制限を確認する。
-2. [進捗と承認](references/state.md) を読み、ゴールの管理 issue を作成または再利用する。達成条件・対象外・根拠を明文化する。曖昧さが達成条件やプロダクト判断を左右する場合だけ、推奨案を添えて一問ずつ確認する。
+2. [進捗と承認](references/state.md) と [Issue の分類](references/issue-classification.md) を読み、`factory` ラベル付きのゴールの管理 issue を作成または再利用する。達成条件・対象外・根拠を明文化する。曖昧さが達成条件やプロダクト判断を左右する場合だけ、推奨案を添えて一問ずつ確認する。
 3. 各担当へ [役割契約](references/roles.md) の該当箇所と issue・受け入れ条件・作業場所・現在の SHA を渡す。
 
 factory の実行依頼は、ゴール内の issue 作成・更新、PR 作成、検証、以下の条件付きマージを進める意図として扱う。ただしツール権限や上位の承認規則を拡張しない。必要な操作が拒否されたら理由を記録し、その操作だけを保留する。GitHub や委譲ツールが利用できなければ、実行したと装わず不足条件を報告する。
@@ -27,7 +27,7 @@ factory の実行依頼は、ゴール内の issue 作成・更新、PR 作成�
 
 Pdm → issue-runner → implementer → verifier → refinener → verifier による再検証 → QA の順に進める。
 
-開始・再開時と issue の割り当て前に、Pdm は [外部 issue の取り込み](references/intake.md) に従って候補を確認する。
+開始・再開時と割り当て前に、Pdm は [外部 issue の取り込み](references/intake.md) に従って候補を確認する。分類・関連付けとラベル解除時の停止は [Issue の分類](references/issue-classification.md) に従う。
 
 - Pdm は現状分析・必要タスク・依存関係・優先度を管理する。達成条件内の issue は随時追加し、既存方針内で必要な仕様を具体化する。ターゲット・料金・初期スコープ・期限などの方針変更や達成条件の拡張は人間へ戻す。
 - issue-runner は最大5件を並行実行する。各 issue に専用 worktree とブランチを用意し、依存関係や共有ファイルの衝突がある仕事は直列化する。
