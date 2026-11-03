@@ -10,6 +10,52 @@
 
 factory はエージェント向けの手順を提供します。常駐サービスや webhook は同梱していません。並行する issue-runner は最大5件であり、レビュー担当も含む実環境の agent 上限が小さい場合は空きを待ちます。
 
+## ロールの関係全体図
+
+以下は責務と引き継ぎの関係です。同時に全ロールを起動する意味ではなく、実環境の枠に合わせて担当を起動します。QA からの修正依頼も issue-runner が受けて、必要な工程へ戻します。
+
+```mermaid
+flowchart TD
+    Owner["人間: プロダクト判断・必要な承認・公開判断"]
+    Pdm["Pdm: ゴール・優先度・担当・停滞を管理"]
+    Runner["issue-runner: issue ごとの成果物と引き継ぎを管理"]
+    Impl["implementer: 実装・調査・文書"]
+    Verify["verifier: 必要なレビューを選択・結果集約"]
+    Reviews["reviewer 群: code / UI / UX / security"]
+    Refine["refinener: 品質改善を1巡"]
+    Refactor["refactor: 挙動を保った構造改善"]
+    Documentor["documentor: 文書の整合・導線"]
+    Reverify["verifier: 変更後の再検証"]
+    QA["QA: 品質・Ready・承認・自動統合を判定"]
+    Integrate["Pdm / QA: 保護確認・直列統合・完了確認"]
+
+    Owner -->|ゴール・方針| Pdm
+    Pdm -->|実行可能な issue を割り当て| Runner
+    Runner -->|工程を手配| Impl
+    Impl -->|固定 SHA・成果物・検証ログ| Verify
+    Verify -->|必要な観点を委譲| Reviews
+    Reviews -->|指摘と根拠| Verify
+    Verify -->|修正が必要| Impl
+    Verify -->|合格| Refine
+    Refine -->|必要時| Refactor
+    Refine -->|必要時| Documentor
+    Refactor -->|改善差分| Refine
+    Documentor -->|文書差分| Refine
+    Refine -->|改善結果・省略理由| Reverify
+    Reverify -->|必要な再レビュー| Reviews
+    Reviews -->|再レビュー結果| Reverify
+    Reverify -->|修正が必要| Impl
+    Reverify -->|合格| QA
+    QA -->|不備を返却| Runner
+    QA -->|判定・次担当・解除条件| Pdm
+    Pdm -->|承認が必要な具体的成果物| Owner
+    Owner -->|対象を限定した承認・判断| Pdm
+    Pdm -->|Ready 化・統合条件を満たす成果物| Integrate
+    Integrate -->|実際の統合結果・残件| Pdm
+```
+
+PR の merge 承認と配布公開の承認は別に扱います。品質不合格や保護不足は承認で免除しません。詳しい責務は [役割契約](skills/factory/references/roles.md)、工程間の記録と判定は [引き継ぎと QA](skills/factory/references/handoff.md) を参照してください。
+
 ## ゴールを渡す
 
 対象リポジトリで、plugin を有効にしたエージェントに指示します。
