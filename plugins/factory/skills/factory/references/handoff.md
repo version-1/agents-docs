@@ -2,6 +2,8 @@
 
 ## 実行前の確認
 
+実行先の AGENTS.md、プロダクト方針、既存 issue・PR、検証方法、GitHub の接続先、agent・モデル・並行数制限を確認する。開始・再開時はプロジェクトの `.agents/skills/factory-project-guidelines/SKILL.md` があれば読み、AGENTS.md / CLAUDE.md が案内する factory 運用ガイドラインも適用する。ローカルガイドラインで品質条件・承認・ツール権限を免除しない。
+
 Pdm は開始時に実行先の branch 命名規則、worktree 制約、`grape rebase` / `grape push` の policy、利用可能な agent と起動手段を調べる。branch 作成前に候補名が既知の許可条件に適合することを確認する。安全な確認方法がなければ未確認項目と必要な確認者を記録し、未確認の操作を実行可能と扱わない。確認のために rebase や push を試行しない。
 
 拒否されたら Git へのフォールバック、policy の書き換え、拒否を逃れる rename は行わない。対象 branch・操作を限定して必要な例外承認を求め、承認内容と実行結果を記録する。以後の履歴変更は [進捗と承認](state.md) に従う。

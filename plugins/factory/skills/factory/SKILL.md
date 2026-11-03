@@ -17,7 +17,7 @@ description: ゴールから GitHub Issues を計画し、最大5件の並行実
 
 ## 開始と権限
 
-1. 実行先の AGENTS.md、プロダクト方針、既存 issue・PR、検証方法、GitHub の接続先、agent・モデル・並行数制限を確認する。開始・再開時はプロジェクトの `.agents/skills/factory-project-guidelines/SKILL.md` があれば読み、AGENTS.md / CLAUDE.md が案内する factory 運用ガイドラインも適用する。ローカルガイドラインで品質条件・承認・ツール権限を免除しない。
+1. [実行前確認](references/handoff.md) に従い、実行先・ローカル方針・検証方法・権限・agent 制限を確認する。
 2. [進捗と承認](references/state.md) と [Issue の分類](references/issue-classification.md) を読み、`factory` ラベル付きのゴールの管理 issue を作成または再利用する。達成条件・対象外・根拠を明文化する。曖昧さが達成条件やプロダクト判断を左右する場合だけ、推奨案を添えて一問ずつ確認する。
 3. [実行前確認](references/handoff.md) を行い、各担当へ [役割契約](references/roles.md) と固定 SHA・受け入れ条件を渡す。
 
