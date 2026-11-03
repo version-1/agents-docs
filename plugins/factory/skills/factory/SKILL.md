@@ -30,8 +30,9 @@ Pdm → issue-runner → implementer → verifier → refinener → verifier に
 開始・再開時と割り当て前に、Pdm は [外部 issue の取り込み](references/intake.md) に従って候補を確認する。分類・関連付けとラベル解除時の停止は [Issue の分類](references/issue-classification.md) に従う。
 
 - Pdm は現状分析・必要タスク・依存関係・優先度を管理する。達成条件内の issue は随時追加し、既存方針内で必要な仕様を具体化する。ターゲット・料金・初期スコープ・期限などの方針変更や達成条件の拡張は人間へ戻す。
-- issue-runner は最大5件を並行実行する。各 issue に専用 worktree とブランチを用意し、依存関係や共有ファイルの衝突がある仕事は直列化する。
-- agent 上限を守り、レビュー枠と既存成果物の完了を優先する。未対応の agent・モデルを起動したと装わない。開始確認・handoff・停滞検知は [引き継ぎと QA](references/handoff.md) に従う。
+- issue-runner は最大5件を並行実行する。1 issue に1人の issue-runner を割り当て、その issue の完了まで責任と状態を維持させる。各 issue に専用 worktree とブランチを用意し、依存関係や共有ファイルの衝突がある仕事は直列化する。
+- verifier、refinener、QA は issue ごと・工程ごとに専任担当を起動する。複数 issue の成果物や判断を同じ担当の文脈に混在させない。同一 issue 内は実装、検証、品質改善、再検証、QA の順に進めるが、verifier が依頼する独立した reviewer は並行できる。
+- 実環境の agent 上限は reviewer 等も含めて守り、レビュー枠と既存成果物の完了を優先する。全役割を常駐させず、工程完了後は引き継ぎを記録して担当を終了し、空きを作る。再開時は [役割契約](references/roles.md) と [引き継ぎと QA](references/handoff.md) の情報を確認する。必要なら統括役を親 agent が担い、レビューの独立性を保つ。未対応の agent 名やモデルを指定して起動したと装わない。
 - verifier は必要な reviewer を選び、全結果を集約する。Medium 以上を修正し、対応必須の指摘がなくなるまで再検証する。
 - 同じ原因で連続3回改善できなければ、試した対応と未解決点を記録して保留する。issue の作り直しや担当交代で回数をリセットしない。改善中なら続行する。
 - refinener の品質改善は1巡とし、挙動を維持する。変更後は必ず再検証し、以後は指摘への修正だけを行う。
