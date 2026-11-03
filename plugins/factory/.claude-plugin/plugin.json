@@ -1,0 +1,5 @@
+{
+  "name": "factory",
+  "version": "0.0.0",
+  "description": "ゴールから issue の計画・並行実装・検証・QA・条件付きマージまで自律で進める"
+}

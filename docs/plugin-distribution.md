@@ -117,6 +117,15 @@ scope は `user`、`project`、`local` から利用場所に合わせて選ぶ�
 
 ## 選択例と依存の注意
 
+`factory` は `plugins/factory` で管理する、自律的な issue 遂行の手管理 plugin である。`factory@agents-docs` を単独で導入すると、ゴールの計画、最大5件の issue-runner、選択的レビュー、品質改善、QA、条件付き自動マージの手順を利用できる。入口は同梱の `factory` skill で、`/factory <goal>` と `/factory approve` を受け付ける。停止・再開・方針変更は自然言語で指示する。`agent-orchestration` には含めず、個別 `skill-factory` も生成しない。
+
+```bash
+codex plugin add factory@agents-docs
+claude plugin install -s user factory@agents-docs
+```
+
+factory 内の役割はタスク別の委譲契約であり、同名の登録済み agent や常駐実行基盤を追加するものではない。実行先の AGENTS.md、利用可能なモデル、agent 上限、GitHub と Git 操作の権限に従う。導入だけで実行権限やマージ権限が付与されることはない。
+
 `roles` は `plugins/roles` で管理する、finder 以外の `role-*` と対応する playbook をまとめる plugin である。`finder` は `plugins/finder` で管理する、課題発見用の `role-*-finder` と対応する playbook をまとめる plugin である。`core` は `git`、`delivery`、`documentation` をまとめて利用したい場合に向く。role を利用する場合は `roles@agents-docs` または `finder@agents-docs` を install する。Claude でも同じ plugin 名を install できる。`backend` や `code-foundations` など、`core` に含まれない専門 group は必要に応じて追加する。
 
 group をまたぐ行動上の依存は host が自動 install しない。`includes` で skill を同梱することも、参照先 group plugin の host install を自動化するものではない。`delivery` を単独で install して `cmd-create-pr` を使う場合は、Git 操作の `git@agents-docs` とレビューの `roles@agents-docs`、`review@agents-docs` も追加する。`core` を install する場合も role を使うには `roles@agents-docs` を追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。
