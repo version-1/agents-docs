@@ -24,7 +24,6 @@
     },
     "agent-orchestration": {
       "skills": [
-        "factory",
         "cmd-batch",
         "cmd-dispatch-agent"
       ],
