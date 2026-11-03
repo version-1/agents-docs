@@ -26,6 +26,7 @@ flowchart TD
     Refactor["refactor: 挙動を保った構造改善"]
     Documentor["documentor: 文書の整合・導線"]
     Reverify["verifier: 変更後の再検証"]
+    Repair["implementer: 再検証後の指摘修正"]
     QA["QA: 品質・Ready・承認・自動統合を判定"]
     Integrate["Pdm / QA: 保護確認・直列統合・完了確認"]
 
@@ -44,7 +45,8 @@ flowchart TD
     Refine -->|改善結果・省略理由| Reverify
     Reverify -->|必要な再レビュー| Reviews
     Reviews -->|再レビュー結果| Reverify
-    Reverify -->|修正が必要| Impl
+    Reverify -->|修正が必要| Repair
+    Repair -->|修正差分・検証ログ| Reverify
     Reverify -->|合格| QA
     QA -->|不備を返却| Runner
     QA -->|判定・次担当・解除条件| Pdm
