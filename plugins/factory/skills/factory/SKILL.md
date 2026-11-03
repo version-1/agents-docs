@@ -27,6 +27,8 @@ factory の実行依頼は、ゴール内の issue 作成・更新、PR 作成�
 
 Pdm → issue-runner → implementer → verifier → refinener → verifier による再検証 → QA の順に進める。
 
+開始・再開時と issue の割り当て前に、Pdm は [外部 issue の取り込み](references/intake.md) に従って候補を確認する。
+
 - Pdm は現状分析・必要タスク・依存関係・優先度を管理する。達成条件内の issue は随時追加し、既存方針内で必要な仕様を具体化する。ターゲット・料金・初期スコープ・期限などの方針変更や達成条件の拡張は人間へ戻す。
 - issue-runner は最大5件を並行実行する。各 issue に専用 worktree とブランチを用意し、依存関係や共有ファイルの衝突がある仕事は直列化する。
 - 実環境の agent 上限は reviewer 等も含めて守る。5枠を予約できるとは仮定せず、担当を待機・終了して空きを作る。必要なら統括役を親 agent が担い、レビューの独立性を保つ。未対応の agent 名やモデルを指定して起動したと装わない。

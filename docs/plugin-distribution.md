@@ -126,6 +126,8 @@ claude plugin install -s user factory@agents-docs
 
 factory 内の役割はタスク別の委譲契約であり、同名の登録済み agent や常駐実行基盤を追加するものではない。実行先の AGENTS.md、利用可能なモデル、agent 上限、GitHub と Git 操作の権限に従う。導入だけで実行権限やマージ権限が付与されることはない。
 
+開始・承認・停止／再開と、外部から issue を追加する手順は [factory の使い方](../plugins/factory/README.md) を参照する。
+
 `roles` は `plugins/roles` で管理する、finder 以外の `role-*` と対応する playbook をまとめる plugin である。`finder` は `plugins/finder` で管理する、課題発見用の `role-*-finder` と対応する playbook をまとめる plugin である。`core` は `git`、`delivery`、`documentation` をまとめて利用したい場合に向く。role を利用する場合は `roles@agents-docs` または `finder@agents-docs` を install する。Claude でも同じ plugin 名を install できる。`backend` や `code-foundations` など、`core` に含まれない専門 group は必要に応じて追加する。
 
 group をまたぐ行動上の依存は host が自動 install しない。`includes` で skill を同梱することも、参照先 group plugin の host install を自動化するものではない。`delivery` を単独で install して `cmd-create-pr` を使う場合は、Git 操作の `git@agents-docs` とレビューの `roles@agents-docs`、`review@agents-docs` も追加する。`core` を install する場合も role を使うには `roles@agents-docs` を追加する。フロントエンドまたはバックエンドの実装では、共通原則の `code-foundations@agents-docs` も追加する。
