@@ -56,7 +56,7 @@ flowchart TD
     Integrate -->|実際の統合結果・残件| Pdm
 ```
 
-PR の merge 承認と配布公開の承認は別に扱います。品質不合格や保護不足は承認で免除しません。詳しい責務は [役割契約](skills/factory/references/roles.md)、工程間の記録と判定は [引き継ぎと QA](skills/factory/references/handoff.md) を参照してください。
+PR の merge 承認と配布公開の承認は別に扱います。品質不合格や保護不足は承認で免除しません。追加指示は Pdm が取り込み、実行中の担当へ反映します。常駐監視は行わず、ユーザー入力・担当イベント・新規割り当て前・定めた確認時点に確認します。詳しい責務と役割ごとの通信は [役割契約](skills/factory/references/roles.md)、工程間の記録と判定は [引き継ぎと QA](skills/factory/references/handoff.md) を参照してください。
 
 ## ゴールを渡す
 
