@@ -1,4 +1,4 @@
-model = "gpt-5.6-sol"
+model = "gpt-6.2-sol"
 personality = "pragmatic"
 web_search = "live"
 default_permissions = "project-edit"

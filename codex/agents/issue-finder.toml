@@ -1,6 +1,6 @@
 name = "issue-finder"
 description = "コードベースを変更せず、根拠に基づく課題を発見して Markdown に出力するエージェントです。"
-model = "gpt-6-astra"
+model = "gpt-6.2-astra"
 default_permissions = "issue-finder"
 developer_instructions = """
 `issue-finder-playbook` と、依頼で指定された `role-*-finder-playbook` の両方を使ってください。
