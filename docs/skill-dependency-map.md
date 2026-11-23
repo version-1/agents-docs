@@ -75,7 +75,6 @@ skills
 | `lego-programming` | `component-design` | React / Next.js / TypeScript UI の大きな分割で、先に画面構成やコンポーネント境界を整理するときに併用する。 |
 | `modification-design` | `lego-programming` | 変更対象を高凝集・疎結合なレゴとして整理し、責務と依存方向を定義するために併用する。 |
 | `review-test-code` | `format-test-cases` | PR のテストケースを、条件、入力、操作、実際のアサーション、根拠として整理するために使う。 |
-
 | `review-test-code` | `code-test` | テストの観測範囲、モック、再現性、境界値を評価するときに併用する。 |
 
 ## 優先・ルーティング関係
