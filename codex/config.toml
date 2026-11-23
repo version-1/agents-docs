@@ -8,6 +8,11 @@ description = "技術的な助言を担当するエージェントです。"
 config_file = "./agents/advisor.toml"
 nickname_candidates = ["James", "Henry", "Arthur"]
 
+[agents.contributor]
+description = "変更指示を受けて実装、構造改善、レビュー、PR 作成まで進めるエージェントです。"
+config_file = "./agents/contributor.toml"
+nickname_candidates = ["Sophie", "Nora", "Theo"]
+
 [agents.documenter]
 description = "設計・構成・仕様・進捗に関する情報を整理し、読者に応じてわかりやすく伝えるドキュメント作成担当エージェントです。"
 config_file = "./agents/documenter.toml"

@@ -26,8 +26,9 @@ skills
 │   │   ├── modification-design
 │   │   └── lego-programming
 │   ├── roles plugin (`plugins/roles/skills/`)
+│   │   ├── role-contributor-playbook -> role-refactor-playbook, cmd-create-pr
 │   │   ├── role-documenter-playbook -> documenting
-│   │   ├── role-refactor-playbook -> modification-design, role-planner, role-implementer, role-reviewer, role-advisor
+│   │   ├── role-refactor-playbook -> modification-design
 │   │   └── role-implementer-playbook -> role-advisor
 └── code work
     ├── lego-programming
@@ -60,11 +61,9 @@ skills
 | `issue-finder-playbook` | `modification-design` | 変更方針を確定できる課題へ変更後設計を埋め込むときに使う。 |
 | `issue-finder-playbook` | `lego-programming` | Modification Design の責務境界を判断するときに併用する。 |
 | `role-documenter-playbook` | `documenting` | Documenter agent が文書の配置、優先順位、構成、記述スタイルを判断するときに使う。 |
+| `role-contributor-playbook` | `role-refactor-playbook` | 実装後の差分に構造改善の完了条件を適用する。 |
+| `role-contributor-playbook` | `cmd-create-pr` | PR 前のレビューと修正を経て PR を作成または更新する。 |
 | `role-refactor-playbook` | `modification-design` | Refactor agent が変更後の責務、境界、依存方向を設計するときに併用する。 |
-| `role-refactor-playbook` | `role-planner` | Modification Design を実装可能なゴール、スコープ、DoD、検証条件へ整理する。 |
-| `role-refactor-playbook` | `role-implementer` | Modification Design を実装へ引き継ぐ。 |
-| `role-refactor-playbook` | `role-reviewer` | 実装結果が設計と既存の振る舞いを満たすか確認する。 |
-| `role-refactor-playbook` | `role-advisor` | 挙動維持を保証できない設計判断が必要なときに指示を仰ぐ。 |
 | `role-implementer-playbook` | `role-advisor` | 実装方針や技術選定で判断が必要なときに指示を仰ぐ。 |
 
 ## コード作業系
@@ -110,11 +109,9 @@ graph TD
 
     role_documenter_playbook["role-documenter-playbook"] --> documenting
     role_refactor_playbook["role-refactor-playbook"] --> modification_design["modification-design"]
-    role_refactor_playbook --> role_planner["role-planner"]
-    role_refactor_playbook --> role_implementer["role-implementer"]
-    role_refactor_playbook --> role_reviewer
-    role_refactor_playbook --> role_advisor["role-advisor"]
-    role_implementer_playbook["role-implementer-playbook"] --> role_advisor
+    role_contributor_playbook["role-contributor-playbook"] --> role_refactor_playbook
+    role_contributor_playbook --> cmd_create_pr
+    role_implementer_playbook["role-implementer-playbook"] --> role_advisor["role-advisor"]
 
     lego_programming --> code_css["code-css"]
     lego_programming --> component_design["component-design"]
