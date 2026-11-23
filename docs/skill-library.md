@@ -18,11 +18,11 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `git` | コミットと grape による Git 操作 | `cmd-commit`、`grape-usage` / 2 |
 | `delivery` | PR 作成と説明整備 | `cmd-create-pr`、`format-pr-description` / 2 |
 | `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
-| `code-foundations` | 呼び出し経路の整形 | `format-tracer` / 1 |
+| `code-foundations` | 呼び出し経路の調査と整形 | `code-tracer`、`format-tracer` / 2 |
 | `lego-programming` | 責務分離と部品境界の設計・実装 | `lego-programming` / 1 |
 | `design` | UI構成と変更設計 | `component-design`、`modification-design` / 2 |
 | `frontend` | CSS 実装、ビジュアルデザイン | `code-css`、`frontend-design` / 2 |
-| `testing` | テストケースの整理 | `format-test-cases` / 1 |
+| `testing` | テスト戦略とケース整理 | `code-test`、`format-test-cases` / 2 |
 | `review` | テスト差分のレビュー | `review-test-code` / 1 |
 | `documentation` | 文書と図解の作成 | `documenting`、`format-rich-html-diagram` / 2 |
 | `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
@@ -58,6 +58,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `cmd-commit` | 変更内容を確認し、適切な粒度とメッセージで安全に Git commit を作成する。 | commit 作成を依頼されたとき。未確認の変更や unrelated changes を含めず、stage 対象と message を整理する。 |
 | `cmd-create-pr` | GitHub Pull Request を安全な手順で作成または更新する。 | PR 作成、PR 提出、pull request 作成を依頼されたとき。差分確認、検証、commit、role-reviewer による PR 前レビュー、High 指摘の自動対応、grape push、PR description 作成、gh pr create / edit の順序を整理する。 |
 | `cmd-dispatch-agent` | 指定された agent を起動し、結果を待たずにタスクを投げる。 | ユーザーが agent 起動、worker への委譲、投げっぱなし実行を明示したとき。明示がなくても、単純で不明瞭な点がない自己完結タスクを任せたいとき。 |
+| `code-tracer` | 特定シンボルや関数の callers / callees / both を根拠付きで追跡する。 | 呼び出し経路、影響範囲、依存関係を Markdown や Mermaid で可視化したいとき。 |
 | `component-design` | React / Next.js / TypeScript UI の実装前に、画面構成とコンポーネント境界を設計する。 | 新規画面、大きな JSX 分割、既存 UI へのまとまった機能追加を行う前。 |
 | `documenting` | 読み手と目的に合わせて文書を作成、更新する。 | 構成を決め、文書全体の冗長さ、重複、整合性、分割の必要性を見直すとき。 |
 | `lego-programming` | 実装対象や差分を高凝集・疎結合な部品として境界づけ、組み合わせ、見直す。 | 実装、リファクタリング、コードレビュー、UI 分割、モジュール設計で責務分離や再利用単位を確認したいとき。 |
@@ -114,6 +115,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 | Skill | 概要 | 使う場面 |
 |---|---|---|
+| `code-test` | テスト戦略を選び、テストが仕様を保証し、正常な変更に耐えるかを評価する。 | テスト設計、回帰テスト追加、既存テストのレビューで、期待値、診断性、再現性、独立性、性能を判断するとき。 |
 | `review-test-code` | PR や差分のテストコードをケースごとに分析し、回帰を見逃す反例やテスト不足を根拠付きでレビューする。 | テスト差分が変更契約を実際に観測できているかを確認したいとき。 |
 
 ### C. 制約定義型

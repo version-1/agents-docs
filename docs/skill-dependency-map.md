@@ -36,7 +36,8 @@ skills
     ├── modification-design
     │   └── lego-programming
     └── review-test-code
-        └── format-test-cases
+        ├── format-test-cases
+        └── code-test
 ```
 
 ## ワークフロー系
@@ -75,12 +76,15 @@ skills
 | `modification-design` | `lego-programming` | 変更対象を高凝集・疎結合なレゴとして整理し、責務と依存方向を定義するために併用する。 |
 | `review-test-code` | `format-test-cases` | PR のテストケースを、条件、入力、操作、実際のアサーション、根拠として整理するために使う。 |
 
+| `review-test-code` | `code-test` | テストの観測範囲、モック、再現性、境界値を評価するときに併用する。 |
+
 ## 優先・ルーティング関係
 
 次の関係は、ある skill が別 skill を内部で使うという意味ではありません。ユーザーの目的に合わせて、どちらの skill を先に選ぶべきかを示します。
 
 | 起点 | 優先先 | 条件 |
 |---|---|---|
+| `format-tracer` | `code-tracer` | 整形する経路の追加調査が必要な場合。 |
 | `modification-design` | `role-planner` | 変更後の構造ではなく、実装手順、タスクリスト、Definition of Done が主目的の場合。 |
 | `modification-design` | `component-design` | React UI の詳細な component tree、props、hooks、状態管理が主目的の場合。 |
 
@@ -119,6 +123,7 @@ graph TD
     modification_design["modification-design"] --> lego_programming
 
     review_test_code["review-test-code"] --> format_test_cases["format-test-cases"]
+    review_test_code --> code_test["code-test"]
 
 ```
 

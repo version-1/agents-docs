@@ -31,9 +31,10 @@
     },
     "code-foundations": {
       "skills": [
+        "code-tracer",
         "format-tracer"
       ],
-      "description": "確認済みの呼び出し経路を整形する"
+      "description": "呼び出し経路を調査・整形する"
     },
     "lego-programming": {
       "skills": [
@@ -57,9 +58,10 @@
     },
     "testing": {
       "skills": [
+        "code-test",
         "format-test-cases"
       ],
-      "description": "テストケースを整理する"
+      "description": "テスト戦略を設計し、テストケースを整理する"
     },
     "review": {
       "skills": [
