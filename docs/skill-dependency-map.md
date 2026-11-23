@@ -27,7 +27,7 @@ skills
 │   │   └── lego-programming
 │   ├── roles plugin (`plugins/roles/skills/`)
 │   │   ├── role-documenter-playbook -> documenting
-│   │   ├── role-refactor-playbook -> modification-design, role-planner, role-implementer, role-reviewer, role-advisor
+│   │   ├── role-refactor-playbook -> modification-design
 │   │   └── role-implementer-playbook -> role-advisor
 └── code work
     ├── lego-programming
@@ -61,10 +61,6 @@ skills
 | `issue-finder-playbook` | `lego-programming` | Modification Design の責務境界を判断するときに併用する。 |
 | `role-documenter-playbook` | `documenting` | Documenter agent が文書の配置、優先順位、構成、記述スタイルを判断するときに使う。 |
 | `role-refactor-playbook` | `modification-design` | Refactor agent が変更後の責務、境界、依存方向を設計するときに併用する。 |
-| `role-refactor-playbook` | `role-planner` | Modification Design を実装可能なゴール、スコープ、DoD、検証条件へ整理する。 |
-| `role-refactor-playbook` | `role-implementer` | Modification Design を実装へ引き継ぐ。 |
-| `role-refactor-playbook` | `role-reviewer` | 実装結果が設計と既存の振る舞いを満たすか確認する。 |
-| `role-refactor-playbook` | `role-advisor` | 挙動維持を保証できない設計判断が必要なときに指示を仰ぐ。 |
 | `role-implementer-playbook` | `role-advisor` | 実装方針や技術選定で判断が必要なときに指示を仰ぐ。 |
 
 ## コード作業系
