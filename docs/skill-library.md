@@ -92,7 +92,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `role-refactor` | `refactor` agent へ構造改善の設計を委譲する。 | 挙動を維持したリファクタリングが必要なとき。 |
 | `role-refactor-playbook` | Modification Design、Implementer、Reviewer の反復手順を定義する。 | `refactor` agent が構造改善を設計・統括するとき。 |
 | `role-reviewer` | `reviewer` agent へレビューを委譲する。 | 実装済み変更のレビューが必要なとき。 |
-| `role-reviewer-playbook` | Reviewer agent のレビュー方針を定義する。 | `reviewer` agent がレビューを行うとき。 |
+| `role-reviewer-playbook` | Reviewer agent のレビュー方針を定義する。 次の開発者が変更箇所、呼び出し条件、テストの保証を読み取れるかも確認する。 | `reviewer` agent がレビューを行うとき。 |
 | `role-scouter` | `scouter` agent へ調査を委譲する。 | コードや設定の調査が必要なとき。 |
 | `role-scouter-playbook` | Scouter agent の調査方針を定義する。 | `scouter` agent が調査を行うとき。 |
 | `role-worker` | `worker` agent へ機械的な作業を委譲する。 | コマンド実行、定型操作、検証が必要なとき。 |
