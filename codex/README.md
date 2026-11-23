@@ -62,12 +62,7 @@ Codex CLI のスキル定義を配置します。各スキルはディレクト�
 
 ```text
 skills
-├── code-architect  アーキテクチャ設計・改善
-├── code-refactor   リファクタリング
-├── code-review     コードレビュー
-├── code-tracer     コードの呼び出し経路調査
-├── code-typo       typo 指摘
-├── code-general    言語をまたぐ実装の共通原則
+├── code-css        CSS 実装
 ├── documenting     ドキュメント作成
 └── testing         テスト・検証
 ```

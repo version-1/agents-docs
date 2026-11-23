@@ -5,7 +5,7 @@ description: 実装前に、既存コードや仕様を根拠として、変更�
 
 # Modification Design
 
-実装手順ではなく、変更後の責務、公開 contract、依存方向、影響をレビューできる自然言語の設計として定義する。実装計画は `role-planner`、React の詳細な component tree は `component-design`、実装済み差分の欠陥検出は `code-review` を優先する。
+実装手順ではなく、変更後の責務、公開 contract、依存方向、影響をレビューできる自然言語の設計として定義する。実装計画は `role-planner`、React の詳細な component tree は `component-design` を優先する。
 
 指定されたコード、仕様、issue、設計文書、公開 interface を先に確認し、現状を推測で断定しない。設計を左右する不明点は確認する。全体を止めない不明点は仮定または未解決事項、その影響先と risk を明示する。
 

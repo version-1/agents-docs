@@ -14,7 +14,6 @@ skills
 │   └── cmd-create-pr
 │   │   ├── cmd-commit
 │   │   ├── role-reviewer
-│   │   ├── code-review
 │   │   └── format-pr-description
 ├── role
 │   ├── finder plugin (`plugins/finder/skills/`)
@@ -28,54 +27,17 @@ skills
 │   │   └── lego-programming
 │   ├── roles plugin (`plugins/roles/skills/`)
 │   │   ├── role-documenter-playbook -> documenting
-│   │   ├── role-reviewer-playbook -> code-review
-│   │   ├── role-refactor-playbook -> code-refactor, modification-design, role-planner, role-implementer, role-reviewer, role-advisor
-│   │   └── role-implementer-playbook -> code-general, role-advisor
+│   │   ├── role-refactor-playbook -> modification-design, role-planner, role-implementer, role-reviewer, role-advisor
+│   │   └── role-implementer-playbook -> role-advisor
 └── code work
-    ├── code-general
-    │   ├── code-naming
-    │   ├── code-go
-    │   ├── code-ts
-    │   ├── code-react
-    │   ├── code-ruby
-    │   └── code-css
-    ├── language skills
-    │   ├── code-go -> code-general
-    │   ├── code-ts -> code-general
-    │   ├── code-react -> code-general, code-ts
-    │   ├── code-ruby -> code-general
-    │   └── code-css -> code-general
-    ├── component-design
-    │   ├── code-general
-    │   ├── code-react
-    │   ├── code-test
-    │   └── code-next-developer-review
     ├── lego-programming
-    │   ├── code-general
-    │   ├── code-go
-    │   ├── code-ts
-    │   ├── code-react
-    │   ├── code-ruby
     │   ├── code-css
-    │   ├── component-design
-    │   ├── code-naming
-    │   ├── code-review
-    │   └── code-next-developer-review
+    │   └── component-design
     ├── modification-design
     │   └── lego-programming
-    ├── code-naming
-    │   └── code-next-developer-review
-    ├── code-quality-review
-    ├── code-next-developer-review
-    │   └── code-review
-    ├── review-test-code
-    │   ├── format-test-cases
-    │   ├── code-review
-    │   └── code-test
-    └── code-refactor
-        ├── code-quality-review
-        ├── code-review
-        └── code-next-developer-review
+    └── review-test-code
+        ├── format-test-cases
+        └── code-test
 ```
 
 ## ワークフロー系
@@ -84,7 +46,6 @@ skills
 |---|---|---|
 | `cmd-create-pr` | `cmd-commit` | 未コミット変更や High 指摘対応後の追加差分を commit するときに使う。 |
 | `cmd-create-pr` | `role-reviewer` | PR 作成・更新前のレビューゲートとして使う。 |
-| `cmd-create-pr` | `code-review` | PR 前レビューで必要に応じて併用する。 |
 | `cmd-create-pr` | `format-pr-description` | PR description を作るときに使う。 |
 
 ## ロール系
@@ -99,55 +60,22 @@ skills
 | `issue-finder-playbook` | `modification-design` | 変更方針を確定できる課題へ変更後設計を埋め込むときに使う。 |
 | `issue-finder-playbook` | `lego-programming` | Modification Design の責務境界を判断するときに併用する。 |
 | `role-documenter-playbook` | `documenting` | Documenter agent が文書の配置、優先順位、構成、記述スタイルを判断するときに使う。 |
-| `role-reviewer-playbook` | `code-review` | Reviewer agent が検証するとき、通常レビュー観点も併せて参照する。 |
-| `role-refactor-playbook` | `code-refactor` | Modification Design の根拠となる改善シグナルと既存の振る舞いを分析する。 |
 | `role-refactor-playbook` | `modification-design` | Refactor agent が変更後の責務、境界、依存方向を設計するときに併用する。 |
 | `role-refactor-playbook` | `role-planner` | Modification Design を実装可能なゴール、スコープ、DoD、検証条件へ整理する。 |
 | `role-refactor-playbook` | `role-implementer` | Modification Design を実装へ引き継ぐ。 |
 | `role-refactor-playbook` | `role-reviewer` | 実装結果が設計と既存の振る舞いを満たすか確認する。 |
 | `role-refactor-playbook` | `role-advisor` | 挙動維持を保証できない設計判断が必要なときに指示を仰ぐ。 |
-| `role-implementer-playbook` | `code-general` | Implementer agent が実装するときの基本方針として併用する。 |
 | `role-implementer-playbook` | `role-advisor` | 実装方針や技術選定で判断が必要なときに指示を仰ぐ。 |
 
 ## コード作業系
 
 | Skill | 依存先 | 関係 |
 |---|---|---|
-| `code-general` | `code-naming` | 命名判断で迷う場合に併用する。 |
-| `code-general` | `code-go` | Go 実装や Go テストで言語別ガイドを確認するときに使う。 |
-| `code-general` | `code-ts` | TypeScript 実装や React の型設計で言語別ガイドを確認するときに使う。 |
-| `code-general` | `code-react` | React 実装でフレームワーク別ガイドを確認するときに使う。 |
-| `code-general` | `code-ruby` | Ruby / Rails 実装やテストで言語別ガイドを確認するときに使う。 |
-| `code-general` | `code-css` | CSS 実装で言語別ガイドを確認するときに使う。 |
-| `code-go` | `code-general` | Go 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
-| `code-ts` | `code-general` | TypeScript 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
-| `code-react` | `code-general` | React 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
-| `code-react` | `code-ts` | React 実装で TypeScript の型設計が必要な場合に `code-ts/references/lang.md` を読む。 |
-| `code-ruby` | `code-general` | Ruby / Rails 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
-| `code-css` | `code-general` | CSS 固有の実装ガイドを読む前に共通実装原則を確認するために使う。 |
-| `component-design` | `code-general` | UI 設計後に実装へ進む場合に併用する。 |
-| `component-design` | `code-react` | React 実装へ進む場合に、実装時の責務分離や Atomic Design の補助観点を確認するため併用する。 |
-| `component-design` | `code-test` | テスト設計やテスト追加で併用する。 |
-| `component-design` | `code-next-developer-review` | 次の開発者の読みやすさを確認する場合に併用する。 |
-| `lego-programming` | `code-general` | 実装作業で仕様、公開契約、既存構造、検証方法を確認するときに併用する。 |
-| `lego-programming` | `code-go` | Go 固有の実装判断が必要な場合に併用する。 |
-| `lego-programming` | `code-ts` | TypeScript 固有の実装判断が必要な場合に併用する。 |
-| `lego-programming` | `code-react` | React 固有の実装判断が必要な場合に併用する。 |
-| `lego-programming` | `code-ruby` | Ruby / Rails 固有の実装判断が必要な場合に併用する。 |
 | `lego-programming` | `code-css` | CSS 固有の実装判断が必要な場合に併用する。 |
 | `lego-programming` | `component-design` | React / Next.js / TypeScript UI の大きな分割で、先に画面構成やコンポーネント境界を整理するときに併用する。 |
-| `lego-programming` | `code-naming` | 作成した部品の責務を表す名前で迷う場合に併用する。 |
-| `lego-programming` | `code-review` | 実装済み差分をレビューする場合に、仕様違反や回帰リスクと部品境界の問題を分けて扱うため併用する。 |
-| `lego-programming` | `code-next-developer-review` | 実装済み差分の境界が次の開発者に伝わるか確認したい場合に併用する。 |
 | `modification-design` | `lego-programming` | 変更対象を高凝集・疎結合なレゴとして整理し、責務と依存方向を定義するために併用する。 |
-| `code-naming` | `code-next-developer-review` | 次に開発する人の理解しやすさ全体を見る場合に併用する。 |
-| `code-next-developer-review` | `code-review` | 欠陥や重大リスクを見つけた場合に通常レビュー観点として分ける。 |
 | `review-test-code` | `format-test-cases` | PR のテストケースを、条件、入力、操作、実際のアサーション、根拠として整理するために使う。 |
-| `review-test-code` | `code-review` | PR 差分の一般的なリスクと重要度を評価するときに必要に応じて併用する。 |
-| `review-test-code` | `code-test` | テストの観測範囲、mock、flake、境界値の観点を必要に応じて併用する。 |
-| `code-refactor` | `code-quality-review` | 品質レポートや quality gate の観点から改善候補を拾う。 |
-| `code-refactor` | `code-review` | 可読性、効率性、テスト容易性などのレビュー観点として使う。 |
-| `code-refactor` | `code-next-developer-review` | 保守性や次の開発者の理解しやすさの観点として使う。 |
+| `review-test-code` | `code-test` | テストの観測範囲、モック、再現性、境界値を評価するときに併用する。 |
 
 ## 優先・ルーティング関係
 
@@ -155,20 +83,9 @@ skills
 
 | 起点 | 優先先 | 条件 |
 |---|---|---|
-| `format-tracer` | `code-tracer` | 整形する経路の追加調査が必要な場合。確認済みの経路を整形するだけなら不要。 |
-| `code-general` | `code-review` | レビューのみが目的の場合。 |
-| `component-design` | `code-review` | 実装済み差分の欠陥レビューが目的の場合。 |
-| `component-design` | `code-test` | テストケース設計だけが目的の場合。 |
-| `code-naming` | `code-review` | バグ、仕様違反、セキュリティ、データ整合性のレビューが目的の場合。 |
-| `code-naming` | `code-general` | 実装変更やリネーム作業まで行う場合。 |
-| `code-quality-review` | `code-review` | 仕様違反、セキュリティ、データ破壊など即時欠陥の検出が主目的の場合。 |
-| `code-quality-review` | `code-next-developer-review` | 次の開発者の迷いやすさが主目的の場合。 |
-| `code-review` | `code-general` | 具体的なコード変更の実装方法を相談する場合。 |
-| `code-review` | `code-quality-review` | 将来的な変更容易性やコード品質を重点的に見る場合。 |
-| `code-react` | `component-design` | 画面構成、大きな JSX 分割、component tree、実装順序を先に整理する必要がある場合。 |
+| `format-tracer` | `code-tracer` | 整形する経路の追加調査が必要な場合。 |
 | `modification-design` | `role-planner` | 変更後の構造ではなく、実装手順、タスクリスト、Definition of Done が主目的の場合。 |
 | `modification-design` | `component-design` | React UI の詳細な component tree、props、hooks、状態管理が主目的の場合。 |
-| `modification-design` | `code-review` | 実装前設計ではなく、実装済み差分の欠陥検出が主目的の場合。 |
 
 ## Mermaid 図
 
@@ -189,62 +106,24 @@ graph TD
 
     cmd_create_pr["cmd-create-pr"] --> cmd_commit["cmd-commit"]
     cmd_create_pr --> role_reviewer["role-reviewer"]
-    cmd_create_pr --> code_review["code-review"]
     cmd_create_pr --> format_pr_description["format-pr-description"]
 
     role_documenter_playbook["role-documenter-playbook"] --> documenting
-    role_reviewer_playbook["role-reviewer-playbook"] --> code_review
-    role_refactor_playbook["role-refactor-playbook"] --> code_refactor["code-refactor"]
     role_refactor_playbook["role-refactor-playbook"] --> modification_design["modification-design"]
     role_refactor_playbook --> role_planner["role-planner"]
     role_refactor_playbook --> role_implementer["role-implementer"]
     role_refactor_playbook --> role_reviewer
     role_refactor_playbook --> role_advisor["role-advisor"]
-    role_implementer_playbook["role-implementer-playbook"] --> code_general["code-general"]
-    role_implementer_playbook --> role_advisor
+    role_implementer_playbook["role-implementer-playbook"] --> role_advisor
 
-    code_general --> code_naming["code-naming"]
-    code_general --> code_go["code-go"]
-    code_general --> code_ts["code-ts"]
-    code_general --> code_react["code-react"]
-    code_general --> code_ruby["code-ruby"]
-    code_general --> code_css["code-css"]
-    code_go --> code_general
-    code_ts --> code_general
-    code_react --> code_general
-    code_react --> code_ts
-    code_ruby --> code_general
-    code_css --> code_general
-
-    component_design["component-design"] --> code_general
-    component_design --> code_react
-    component_design --> code_test
-    component_design --> code_next_dev["code-next-developer-review"]
-
-    lego_programming["lego-programming"] --> code_general
-    lego_programming --> code_go
-    lego_programming --> code_ts
-    lego_programming --> code_react
-    lego_programming --> code_ruby
-    lego_programming --> code_css
-    lego_programming --> component_design
-    lego_programming --> code_naming
-    lego_programming --> code_review
-    lego_programming --> code_next_dev
+    lego_programming --> code_css["code-css"]
+    lego_programming --> component_design["component-design"]
 
     modification_design["modification-design"] --> lego_programming
 
-    code_naming --> code_next_dev
-
-    code_next_dev --> code_review
-
     review_test_code["review-test-code"] --> format_test_cases["format-test-cases"]
-    review_test_code --> code_review
-    review_test_code --> code_test
+    review_test_code --> code_test["code-test"]
 
-    code_refactor["code-refactor"] --> code_quality["code-quality-review"]
-    code_refactor --> code_review
-    code_refactor --> code_next_dev
 ```
 
 ## 更新ルール

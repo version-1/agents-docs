@@ -5,7 +5,7 @@ description: Refactor として、既存の挙動と公開契約を維持する�
 
 # Refactor Playbook
 
-`role-refactor` から委譲された Refactor agent が、機能を変えずに内部構造を改善する変更後の設計と実装・レビューの反復を導く。Modification Design では `code-refactor` と `modification-design` を併用する。バグ修正・新機能追加そのものは担当しない。
+`role-refactor` から委譲された Refactor agent が、機能を変えずに内部構造を改善する変更後の設計と実装・レビューの反復を導く。Modification Design では `modification-design` を使う。バグ修正・新機能追加そのものは担当しない。
 
 ## 対象と設計
 
@@ -15,7 +15,7 @@ description: Refactor として、既存の挙動と公開契約を維持する�
 
 ## 反復
 
-1. `code-refactor` でシグナル、既存挙動、公開契約、関連テストを分析し、根拠付き Modification Design を作る。
+1. 改善が必要な箇所、既存挙動、公開契約、関連テストを分析し、根拠付き Modification Design を作る。
 2. `role-planner` がゴール、スコープ、DoD、検証条件を整理する。
 3. Design と Planner 成果物を `role-implementer` に渡す。
 4. `role-reviewer` が Design、DoD、公開契約、既存挙動を確認する。

@@ -18,8 +18,6 @@ CI は複数の job、matrix、環境差、キャッシュ、依存サービス�
 - 同じエラーが複数 job に出ている場合は、最初の根本原因を優先する。
 - ローカル再現できる失敗は、CI を再実行する前にローカルで直す。
 - CI でだけ失敗する場合は、OS、shell、working directory、env、permissions、cache、services、secrets、toolchain version を疑う。
-- 実装修正が必要な場合は `$code-general` を併用する。
-- テストや検証コマンドの追加、flake 対策、回帰テストが必要な場合は `$code-test` を併用する。
 - PR 作成や更新まで進める場合は `$cmd-create-pr` に引き継ぐ。
 
 ## 事前確認
@@ -98,7 +96,7 @@ gh run view <run-id> --job <job-id> --log
 - CI step と同じコマンドをローカルで実行する。
 - テスト失敗は、失敗したテスト名、入力、期待値、実際値を確認する。
 - lint / typecheck は、指摘の意味を理解してから修正する。
-- 実装を変える場合は `$code-general` を使い、既存仕様と公開契約を壊さない。
+- 実装を変える場合は、既存仕様と公開契約を壊さない。
 - バグ修正なら、再発しやすい領域に回帰テストを追加するか検討する。
 
 ### CI definition failure

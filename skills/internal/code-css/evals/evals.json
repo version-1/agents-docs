@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "既存の管理画面に CSS でレスポンシブな2カラムレイアウトを追加したい。selector と cascade を崩さずに実装方針を見てから進めて。",
-      "expected_output": "code-general を前提に、CSS の layout、responsive design、selector、cascade、既存スタイルへの合わせ方を確認してから実装または方針整理に進むこと。",
+      "expected_output": "CSS の layout、responsive design、selector、cascade、既存スタイルへの合わせ方を確認してから実装または方針整理に進むこと。",
       "files": [],
       "should_fire": true
     },

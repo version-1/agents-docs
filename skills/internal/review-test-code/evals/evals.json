@@ -18,7 +18,7 @@
     {
       "id": 3,
       "prompt": "不足しているテストを実装して。",
-      "expected_output": "code-test と実装 skill を優先し、テストレビューだけで代替しない。",
+      "expected_output": "テスト設計と実装を優先し、テストレビューだけで代替しない。",
       "files": [],
       "should_fire": false
     }
