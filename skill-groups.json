@@ -31,12 +31,9 @@
     },
     "code-foundations": {
       "skills": [
-        "code-general",
-        "code-naming",
-        "code-tracer",
         "format-tracer"
       ],
-      "description": "言語共通の実装原則、命名、コード追跡に使う"
+      "description": "確認済みの呼び出し経路を整形する"
     },
     "lego-programming": {
       "skills": [
@@ -54,36 +51,21 @@
     "frontend": {
       "skills": [
         "code-css",
-        "code-react",
-        "code-ts",
         "frontend-design"
       ],
-      "description": "CSS、React、TypeScriptを使うフロントエンド実装を進める"
-    },
-    "backend": {
-      "skills": [
-        "code-go",
-        "code-ruby"
-      ],
-      "description": "GoまたはRuby/Railsのバックエンド実装とテストに使う"
+      "description": "CSS 実装とフロントエンドのビジュアルデザインに使う"
     },
     "testing": {
       "skills": [
-        "code-test",
         "format-test-cases"
       ],
-      "description": "テスト観点、既存テストの整理、回帰テスト、テスト戦略を設計する"
+      "description": "テストケースを整理する"
     },
     "review": {
       "skills": [
-        "code-merge-risk",
-        "code-review",
-        "code-quality-review",
-        "code-next-developer-review",
-        "code-refactor",
         "review-test-code"
       ],
-      "description": "仕様・品質・保守性とテスト差分をレビューし、必要なリファクタリングを行う"
+      "description": "テスト差分をレビューする"
     },
     "documentation": {
       "skills": [

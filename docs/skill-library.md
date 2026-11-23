@@ -18,13 +18,12 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | `git` | コミットと grape による Git 操作 | `cmd-commit`、`grape-usage` / 2 |
 | `delivery` | PR 作成と説明整備 | `cmd-create-pr`、`format-pr-description` / 2 |
 | `agent-orchestration` | agent への分割・委譲 | `cmd-batch`、`cmd-dispatch-agent` / 2 |
-| `code-foundations` | 共通実装原則、命名、コード追跡 | `code-general`、`code-naming`、`format-tracer` / 4 |
+| `code-foundations` | 呼び出し経路の整形 | `format-tracer` / 1 |
 | `lego-programming` | 責務分離と部品境界の設計・実装 | `lego-programming` / 1 |
 | `design` | UI構成と変更設計 | `component-design`、`modification-design` / 2 |
-| `frontend` | CSS、React、TypeScript の実装 | `code-react`、`code-ts` / 4 |
-| `backend` | Go、Ruby/Rails の実装 | `code-go`、`code-ruby` / 2 |
-| `testing` | テスト戦略、仕様保証・変更耐性の評価、既存ケースの整理 | `code-test`、`format-test-cases` / 2 |
-| `review` | 仕様、品質、保守性、テスト差分のレビュー | `code-review`、`review-test-code`、`code-refactor` / 6 |
+| `frontend` | CSS 実装、ビジュアルデザイン | `code-css`、`frontend-design` / 2 |
+| `testing` | テストケースの整理 | `format-test-cases` / 1 |
+| `review` | テスト差分のレビュー | `review-test-code` / 1 |
 | `documentation` | 文書と図解の作成 | `documenting`、`format-rich-html-diagram` / 2 |
 | `authoring` | skill 作成、改善、作業知見の再利用 | `skill-creator`、`agent-retro` / 3 |
 | `office` | PDF、プレゼン、スプレッドシート | `pdf`、`pptx`、`xlsx` / 3 |
@@ -59,9 +58,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `cmd-commit` | 変更内容を確認し、適切な粒度とメッセージで安全に Git commit を作成する。 | commit 作成を依頼されたとき。未確認の変更や unrelated changes を含めず、stage 対象と message を整理する。 |
 | `cmd-create-pr` | GitHub Pull Request を安全な手順で作成または更新する。 | PR 作成、PR 提出、pull request 作成を依頼されたとき。差分確認、検証、commit、role-reviewer による PR 前レビュー、High 指摘の自動対応、grape push、PR description 作成、gh pr create / edit の順序を整理する。 |
 | `cmd-dispatch-agent` | 指定された agent を起動し、結果を待たずにタスクを投げる。 | ユーザーが agent 起動、worker への委譲、投げっぱなし実行を明示したとき。明示がなくても、単純で不明瞭な点がない自己完結タスクを任せたいとき。 |
-| `code-refactor` | 挙動を変えずにコードを簡略化、リファクタリングする。 | レビュー指摘、quality report、diff、指定ファイルをもとに可読性、保守性、テスト容易性を改善するとき。 |
-| `code-tracer` | 特定シンボルや関数の callers / callees / both を根拠付きで追跡する。 | 呼び出し経路、影響範囲、依存関係を Markdown や Mermaid で可視化したいとき。 |
-| `code-general` | 言語固有スキルが適用できない、または言語をまたぐ実装作業の共通原則。 | 既存構造、命名、責務境界に合わせて小さく安全な差分を作るとき。言語固有の判断では該当する言語別スキルを併用する。 |
 | `component-design` | React / Next.js / TypeScript UI の実装前に、画面構成とコンポーネント境界を設計する。 | 新規画面、大きな JSX 分割、既存 UI へのまとまった機能追加を行う前。 |
 | `documenting` | 読み手と目的に合わせて文書を作成、更新する。 | 構成を決め、文書全体の冗長さ、重複、整合性、分割の必要性を見直すとき。 |
 | `lego-programming` | 実装対象や差分を高凝集・疎結合な部品として境界づけ、組み合わせ、見直す。 | 実装、リファクタリング、コードレビュー、UI 分割、モジュール設計で責務分離や再利用単位を確認したいとき。 |
@@ -118,22 +114,7 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 
 | Skill | 概要 | 使う場面 |
 |---|---|---|
-| `code-naming` | 関数名、クラス名、型名、変数名などコード要素の命名候補や改善案を出す。 | 責務、抽象度、既存語彙、検索性、ユーザーの命名の好みに沿って名前を比較・改善したいとき。 |
-| `code-next-developer-review` | 次に開発する人が困らないかという観点で差分をレビューする。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、命名、責務境界、型、テストの読みやすさ、前提知識の残し方を確認するとき。 |
-| `code-review` | 実装済み差分、PR、コミット、指定ファイルをリスク中心にレビューする。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、仕様違反、回帰、公開契約破壊、セキュリティ、データ整合性を確認するとき。 |
-| `code-test` | テスト戦略を選び、テストが仕様を保証し、正常な変更に耐えるかを評価する。 | テスト設計、回帰テスト追加、既存テストのレビューで、期待値、診断性、再現性、独立性、性能を判断するとき。 |
 | `review-test-code` | PR や差分のテストコードをケースごとに分析し、回帰を見逃す反例やテスト不足を根拠付きでレビューする。 | テスト差分が変更契約を実際に観測できているかを確認したいとき。 |
-
-#### 思想・スタイル型スキル
-
-`code-naming` は判断基準・評価型にも近いですが、ユーザーの命名の好みを反映する思想・スタイル型の性質を持ちます。主分類は判断基準・評価型に置いています。
-
-#### スコアリング・査定型スキル
-
-| Skill | 概要 | 使う場面 |
-|---|---|---|
-| `code-quality-review` | code quality report として、定量シグナル、品質スコア、scorecard、quality gate を整理する。 | 実装者の前提を鵜呑みにせず、敵対的検証を行い、complexity、coverage、重複率、lint などを補助証拠にしつつ、merge 前対応と follow-up の判断材料にしたいとき。 |
-| `code-merge-risk` | PR のマージ後の悪影響を0〜100点で採点し、根拠付き Markdown と JSON を出力する。 | 採点基準と評価手順を揃え、情報不足や必須条件を分離して将来の自動マージ候補を判定したいとき。マージは実行しない。 |
 
 ### C. 制約定義型
 
@@ -152,10 +133,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | Skill | 概要 | 使う場面 |
 |---|---|---|
 | `code-css` | CSS / `.css` / Sass / SCSS / `.scss` 実装向けの layout、responsive design、selector、cascade、保守しやすいスタイル設計の参照。 | CSS 実装を書く前に、スタイル設計の判断基準を確認するとき。 |
-| `code-go` | Go / `.go` 実装と Go テスト向けの goroutine、interface、error handling、設計、テスト方針の参照。 | Go 実装や Go テストを書く前に、実装ガイドを確認するとき。 |
-| `code-react` | React / JSX / TSX / `.jsx` / `.tsx` 実装向けの hooks、props、state、Atomic Design を補助観点にしたコンポーネント設計の参照。 | React 実装を書く前に、UI 実装ガイドを確認するとき。 |
-| `code-ruby` | Ruby / Rails / `.rb` 実装と RSpec / Minitest テスト向けの Active Record、MVC、設計、テスト方針の参照。 | Ruby / Rails 実装やテストを書く前に、実装ガイドを確認するとき。 |
-| `code-ts` | TypeScript / `.ts` / `.tsx` 実装向けの型設計、interface / type、strict typing、責務分離の参照。 | TypeScript 実装を書く前に、実装ガイドを確認するとき。 |
 
 ### E. Deprecated Internal Skills
 
@@ -168,7 +145,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `cmd-start-branch` | active skill としては配布せず、履歴保持のため deprecated へ移動した。 |
 | `beautify-commit` | active skill としては配布せず、履歴保持のため deprecated へ移動した。 |
 | `ci-fix` | active skill としては配布せず、履歴保持のため deprecated へ移動した。 |
-| `code-typo` | active skill としては配布しない。 |
 | `role-doc` | active skill としては配布しない。 |
 
 ## External Skills
@@ -194,7 +170,6 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 - 新しい internal skill を追加したら、この一覧にも追記する。
 - 追加時は [docs/guide/skill-category.md](guide/skill-category.md) を参照し、主用途に最も近い分類へ配置する。
 - 複数カテゴリにまたがる skill は、重複掲載せず主分類に置き、必要に応じて概要に複合要素を明記する。
-- `code-general` や `code-review` のようにガードレールや思想を含む skill でも、一覧では主な行動や判断の用途を優先して配置する。
 - `skills/internal/<name>/agents/openai.yaml` がある場合は、UI 表示用の説明も `SKILL.md` と矛盾しないように更新する。
 - 他 skill への明示的な依存や利用順序を追加したら、[docs/skill-dependency-map.md](skill-dependency-map.md) も更新する。
 - 配布前は `make build-plugins` と `make deploy-plugins-dry-run` で生成対象と配布予定を確認する。

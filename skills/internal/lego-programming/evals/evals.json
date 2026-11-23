@@ -10,7 +10,7 @@
     {
       "id": 2,
       "prompt": "Next.js のユーザー詳細ページが 1 ファイルで 700 行あります。プロフィール表示、権限別ボタン、監査ログ、フォーム保存、API 呼び出しが混ざっています。component-design も意識しつつ、レゴみたいに再利用できる部品へ分けたいです。",
-      "expected_output": "component-design や code-react と併用する前提で lego-programming が発火し、Page、Feature Component、Custom Hook、API Client、Presenter/ViewModel などの境界と組み合わせ方を整理すること。",
+      "expected_output": "component-design と併用する前提で lego-programming が発火し、Page、Feature Component、Custom Hook、API Client、Presenter/ViewModel などの境界と組み合わせ方を整理すること。",
       "files": []
     },
     {
@@ -22,7 +22,7 @@
     {
       "id": 4,
       "prompt": "この PR のコードレビューをしてください。バグだけでなく、差分で作った service と hook の責務境界がレゴとして自然か、あとから再利用しやすいかも見てほしいです。",
-      "expected_output": "code-review と併用して lego-programming が発火し、仕様違反や回帰リスクとは別に、service、hook、component などの責務境界、依存方向、再利用性、テスト容易性をレビュー指摘として整理すること。",
+      "expected_output": "lego-programming が発火し、仕様違反や回帰リスクとは別に、service、hook、component などの責務境界、依存方向、再利用性、テスト容易性をレビュー指摘として整理すること。",
       "files": []
     },
     {

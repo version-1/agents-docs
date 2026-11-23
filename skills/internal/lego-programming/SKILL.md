@@ -22,4 +22,4 @@ description: 設計、計画、実装方針、実装、リファクタリング�
 
 一般に Handler/Controller は protocol、UseCase/Service は操作の orchestration、Domain は不変条件、Repository/Client は外部境界、Mapper/Presenter は変換を担当する。フロントエンドでは Page/Route が組み立て、Layout が配置、Feature が UI ワークフロー、Hook が状態・副作用、API Client が I/O、ViewModel が表示変換を担う。既存プロジェクトの語彙を優先する。
 
-実装は `code-general`、言語別判断は該当する `code-*` を併用する。大きな React 分割は `component-design`、命名は `code-naming`、差分レビューは `code-review` を併用する。完了前に、主な部品の責務、入出力・副作用・依存先、上位からの隠蔽、既存構造との整合、変更理由の分離、境界に沿った検証を説明できることを確認する。
+CSS 固有の実装判断には `code-css`、大きな React 分割には `component-design` を併用する。完了前に、主な部品の責務、入出力・副作用・依存先、上位からの隠蔽、既存構造との整合、変更理由の分離、境界に沿った検証を説明できることを確認する。

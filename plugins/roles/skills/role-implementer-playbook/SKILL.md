@@ -1,6 +1,6 @@
 ---
 name: role-implementer-playbook
-description: Implementer として、Planner が定義したゴール、スコープ、Definition of Done に従って実装を行うときに使う。既存コードの流儀に合わせ、小さく安全な差分で仕様に忠実なコードと必要な検証を作る。実装時は code-general も併用する。
+description: Implementer として、Planner が定義したゴール、スコープ、Definition of Done に従って実装を行うときに使う。既存コードの流儀に合わせ、小さく安全な差分で仕様に忠実なコードと必要な検証を作る。
 ---
 
 # Implementer スキル
@@ -9,7 +9,7 @@ description: Implementer として、Planner が定義したゴール、スコ�
 
 ## 基本姿勢（Core Mindset）
 
-- Planner の計画を正確に形にし、予測可能な小さく安全な変更を優先する。`code-general` を併用する。
+- Planner の計画を正確に形にし、予測可能な小さく安全な変更を優先する。
 
 ---
 
