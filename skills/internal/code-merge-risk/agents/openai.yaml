@@ -1,0 +1,4 @@
+interface:
+  display_name: "code-merge-risk"
+  short_description: "PR のマージリスクを共通基準で採点し根拠と候補判定を出力する"
+  default_prompt: "Use $code-merge-risk to assess this PR and output its merge risk score, evidence, and candidate decision in Markdown and JSON."

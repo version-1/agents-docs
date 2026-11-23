@@ -65,9 +65,10 @@
     },
     "review": {
       "skills": [
+        "code-merge-risk",
         "review-test-code"
       ],
-      "description": "テスト差分をレビューする"
+      "description": "テスト差分をレビューし、PR のマージリスクを評価する"
     },
     "documentation": {
       "skills": [
