@@ -89,8 +89,8 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `role-implementer-playbook` | Implementer agent の実装方針を定義する。 | `implementer` agent が実装を行うとき。 |
 | `role-planner` | `planner` agent へ計画作成を委譲する。 | 実装前の計画整理が必要なとき。 |
 | `role-planner-playbook` | Planner agent の計画方針を定義する。 | `planner` agent が計画を作成するとき。 |
-| `role-refactor` | `refactor` agent へ構造改善の設計を委譲する。 | 挙動を維持したリファクタリングが必要なとき。 |
-| `role-refactor-playbook` | Modification Design、Implementer、Reviewer の反復手順を定義する。 | `refactor` agent が構造改善を設計・統括するとき。 |
+| `role-refactor` | `refactor` agent へ構造改善の設計・実装・検証を委譲する。 | 挙動を維持したリファクタリングが必要なとき。 |
+| `role-refactor-playbook` | 構造改善の完了条件と、修正・検証の反復手順を定義する。 | `refactor` agent が構造改善を行うとき。 |
 | `role-reviewer` | `reviewer` agent へレビューを委譲する。 | 実装済み変更のレビューが必要なとき。 |
 | `role-reviewer-playbook` | Reviewer agent のレビュー方針を定義する。 次の開発者が変更箇所、呼び出し条件、テストの保証を読み取れるかも確認する。 | `reviewer` agent がレビューを行うとき。 |
 | `role-scouter` | `scouter` agent へ調査を委譲する。 | コードや設定の調査が必要なとき。 |
