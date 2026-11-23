@@ -37,7 +37,7 @@ group の正本は `skill-groups.json` です。build は group plugin と各 sk
 | [`factory`](../plugins/factory/README.md) | ゴールから issue の計画・並行実装・検証・品質改善・QA・条件付きマージまで自律で進め、外部 issue の取り込み、共通スキルへの feedback、プロジェクトの運用知見の保存にも対応する | `factory`（開始・再開・承認の入口と、[Issue ごとの担当・引き継ぎ](../plugins/factory/skills/factory/references/roles.md)、進捗・取り込み・[Issue 分類](../plugins/factory/skills/factory/references/issue-classification.md)・[引き継ぎと QA](../plugins/factory/skills/factory/references/handoff.md)の契約）、[`factory-feedback`](../plugins/factory/skills/factory-feedback/SKILL.md)（agents-docs への改善 Issue）、[`factory-recap`](../plugins/factory/skills/factory-recap/SKILL.md)（project スコープのガイドライン skill 作成・更新） / 3 |
 | `finder` | 分野別の課題発見 | `issue-finder-playbook`、5 分野の finder と各 playbook / 11 |
 | `quiz-code-base` | 定期的に設計・レビュー時の認識と実コードの振る舞いのズレを発見・修正する | `quiz-code-base`（複数問の入口）、`quiz-code-base-single`（1問の対話）、`quiz-code-base-manager`（問題・履歴管理）、`quiz-code-base-analyzer`（解析・作問）、`quiz-code-base-recorder`（SQLite記録・スキーマ管理） / 5 |
-| `roles` | finder 以外の専門 agent への委譲 | `role-advisor`、`role-documenter`、`role-gardener`、`role-implementer`、`role-planner`、`role-refactor`、`role-reviewer`、`role-scouter`、`role-worker` と各 playbook / 18 |
+| `roles` | finder 以外の専門 agent への委譲 | `role-advisor`、`role-contributor`、`role-documenter`、`role-gardener`、`role-implementer`、`role-planner`、`role-refactor`、`role-reviewer`、`role-scouter`、`role-worker` と各 playbook / 20 |
 
 分類は [docs/guide/skill-category.md](guide/skill-category.md) の考え方に合わせています。複数の性質を持つ skill は、主な用途で分類しています。
 
@@ -81,6 +81,8 @@ skill 間の明示的な併用・優先関係は [docs/skill-dependency-map.md](
 | `role-documentation-finder-playbook` | 文書課題の探索観点と判定基準を定義する。 | Issue Finder agent が文書構造と整合性を調査するとき。 |
 | `role-advisor` | `advisor` agent へ技術助言を委譲する。 | 技術判断や設計相談が必要なとき。 |
 | `role-advisor-playbook` | Advisor agent の助言方針を定義する。 | `advisor` agent が技術助言を行うとき。 |
+| `role-contributor` | `contributor` agent へ変更指示を委譲する。 | 実装から構造改善、レビュー、PR 作成まで一括で進めたいとき。 |
+| `role-contributor-playbook` | 変更指示を実装し、構造改善、レビュー、PR 作成まで進める手順を定義する。 | `contributor` agent が変更を進めるとき。 |
 | `role-documenter` | `documenter` agent へ技術文書の作成・更新を委譲する。 | 調査から構成、作成、文書全体のレビューまで一貫した文書化が必要なとき。 |
 | `role-documenter-playbook` | Documenter agent の文書化手順と判断基準を定義する。 | `documenter` agent が技術文書を作成・更新するとき。 |
 | `role-gardener` | `gardener` agent へ Git / GitHub 操作を委譲する。 | 内容の解釈を伴わない repository、branch、worktree、PR、Issue の操作が必要なとき。 |
